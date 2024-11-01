@@ -1,5 +1,4 @@
-
-#Tugas Pemrogrman Basis Data Inventaris Pergudangan
+##Tugas Pemrogrman Basis Data Inventaris Pergudangan
 
 Anggota Kelompok : 
 
