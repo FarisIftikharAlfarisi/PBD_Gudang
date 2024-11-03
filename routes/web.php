@@ -7,6 +7,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\GudangController;
 use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\PenerimaanController;
 use App\Http\Controllers\RakController;
 
 Route::get('/', function () {
@@ -39,6 +40,10 @@ Route::group(['middleware'=>'auth'],function(){
     Route::get('dashboard/gudang',[GudangController::class,'index'])->name('gudang-index-page');
     Route::get('dashboard/rak',[RakController::class,'index'])->name('rak-index-page');
 
+    //penerimaan routes
+    Route::get('/dashboard/penerimaan', [PenerimaanController::class,'index'])->name('penerimaan-index-page');
+    Route::get('/dashboard/penerimaan/penerimaan-baru', [PenerimaanController::class,'create'])->name('penerimaan-create-page');
+    Route::post('/dashboard/penerimaan/create-process', [PenerimaanController::class,'store'])->name('penerimaan-store-process');
 });
 
 

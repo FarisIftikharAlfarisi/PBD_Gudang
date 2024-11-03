@@ -33,4 +33,19 @@ class Barang extends Model
     {
         return $this->belongsTo(Rak::class, 'ID_Rak');
     }
+
+    //relasi ke model penerimaan
+    public function penerimaan(){
+        return $this->hasMany(Penerimaan::class, 'ID_Barang');
+    }
+
+    //relasi ke model pengeluaran
+    public function pengeluaran(){
+        return $this->hasMany(Pengeluaran::class, 'ID_Barang');
+    }
+
+    //relasi ke model inventaris
+    public function inventaris(){
+        return $this->hasOne(Inventaris::class, 'ID_Barang');
+    }
 }
