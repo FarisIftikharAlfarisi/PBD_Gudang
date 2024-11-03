@@ -15,11 +15,6 @@ class KaryawanController extends Controller
         return view('view-karyawan.index', compact('karyawans'));
     }
 
-    public function dashboard_analitics()
-    {
-        return view('view-dashboard.index');
-    }
-
     // Menampilkan form untuk membuat karyawan baru
     public function create()
     {

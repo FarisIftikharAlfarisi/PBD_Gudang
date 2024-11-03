@@ -3,7 +3,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link {{ Route::currentRouteName() == 'Dashboard' ? 'active' : '' }}" href="{{ route('Dashboard') }}">
+        <a class="nav-link {{ Route::currentRouteName() == 'Dashboard' ? 'active' : '' }}" href="{{ route('analisis') }}">
           <i class="bi bi-grid"></i>
           <span>Dashboard</span>
         </a>
@@ -11,7 +11,7 @@
 
        <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#components-nav-barang" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-menu-button-wide"></i><span>Barang</span><i class="bi bi-chevron-down ms-auto"></i>
+          <i class="bi bi-upc"></i><span>Barang</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="components-nav-barang" class="nav-content collapse " data-bs-parent="#sidebar-nav">
 
@@ -32,7 +32,7 @@
 
        <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#components-nav-karyawan" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-menu-button-wide"></i><span>Karyawan</span><i class="bi bi-chevron-down ms-auto"></i>
+          <i class="bi bi-person-badge"></i><span>Karyawan</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="components-nav-karyawan" class="nav-content collapse " data-bs-parent="#sidebar-nav">
 
@@ -75,7 +75,21 @@
 
       <li>
         <a class="nav-link {{ Route::currentRouteName() == 'supplier-index-page' ? 'active' : '' }}" href="{{ route('supplier-index-page') }}">
-          <i class="bi bi-circle"></i><span>Supplier</span>
+          <i class="bi bi-person-lines-fill"></i><span>Supplier</span>
+        </a>
+      </li>
+
+      {{-- route pengiriman --}}
+      <li>
+        <a class="nav-link {{ Route::currentRouteName() == 'pengeluaran-index-page' ? 'active' : '' }}" href="{{ route('pengeluaran-index-page') }}">
+          <i class="bi bi-box-seam"></i><span>Pengeluaran</span>
+        </a>
+      </li>
+
+      {{-- route penerimaan --}}
+      <li>
+        <a class="nav-link {{ Route::currentRouteName() == 'penerimaan-index-page' ? 'active' : '' }}" href="{{ route('penerimaan-index-page') }}">
+          <i class="bi bi-truck "></i><span>Penerimaan</span>
         </a>
       </li>
 

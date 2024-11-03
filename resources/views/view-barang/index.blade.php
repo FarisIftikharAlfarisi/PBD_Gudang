@@ -19,7 +19,7 @@
                 <th>Kode Part</th>
                 <th>Merek</th>
                 <th>Nama Barang</th>
-                <th>Kategori</th>
+                <th>Stok</th>
                 <th>Harga</th>
                 <th>Detail</th>
               </tr>
@@ -31,7 +31,7 @@
                    <td>{{ $barang->Kode_Part }}</td>
                    <td>{{ $barang->Merek }}</td>
                    <td>{{ $barang->Nama_Barang}}</td>
-                   <td>{{ $barang->kategori->Nama_Kategori }}</td>
+                   <td>{{ $barang->inventaris->Jumlah_Barang_Aktual ?? 'Tidak Ada' }}</td>
                    <td>{{ $barang->Harga_Jual }}</td>
                    <td>
                        <!-- Tombol untuk membuka modal -->
