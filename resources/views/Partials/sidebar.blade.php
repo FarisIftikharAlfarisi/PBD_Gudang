@@ -3,7 +3,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link {{ Route::currentRouteName() == 'Dashboard' ? 'active' : '' }}" href="{{ route('Dashboard') }}">
+        <a class="nav-link {{ Route::currentRouteName() == 'Dashboard' ? 'active' : '' }}" href="{{ route('analisis') }}">
           <i class="bi bi-grid"></i>
           <span>Dashboard</span>
         </a>
@@ -81,7 +81,7 @@
 
       {{-- route pengiriman --}}
       <li>
-        <a class="nav-link {{ Route::currentRouteName() == 'pengeluaran-index-page' ? 'active' : '' }}" href="">
+        <a class="nav-link {{ Route::currentRouteName() == 'pengeluaran-index-page' ? 'active' : '' }}" href="{{ route('pengeluaran-index-page') }}">
           <i class="bi bi-box-seam"></i><span>Pengeluaran</span>
         </a>
       </li>

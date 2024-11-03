@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnalyticsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\KaryawanController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\GudangController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\PenerimaanController;
+use App\Http\Controllers\PengeluaranController;
 use App\Http\Controllers\RakController;
 
 Route::get('/', function () {
@@ -23,7 +25,8 @@ Route::group(['middleware'=>'auth'],function(){
 
     Route::resource('suppliers', SupplierController::class);
 
-    Route::get('/dashboard', [KaryawanController::class,'dashboard_analitics'])->name('Dashboard');
+    Route::get('/dashboard', [AnalyticsController::class,'analytics'])->name('analisis');
+
     Route::get('/dashboard/barang', [BarangController::class,'index'])->name('barang-index-page');
     Route::get('/dashboard/barang/kategori', [KategoriController::class,'index'])->name('kategori-index-page');
     Route::put('/dashboard/barang/kategori/update/{id}', [KategoriController::class,'update'])->name('kategori-update');
@@ -44,6 +47,12 @@ Route::group(['middleware'=>'auth'],function(){
     Route::get('/dashboard/penerimaan', [PenerimaanController::class,'index'])->name('penerimaan-index-page');
     Route::get('/dashboard/penerimaan/penerimaan-baru', [PenerimaanController::class,'create'])->name('penerimaan-create-page');
     Route::post('/dashboard/penerimaan/create-process', [PenerimaanController::class,'store'])->name('penerimaan-store-process');
+
+    //pengeluaran routes
+    Route::get('/dashboard/pengeluaran', [PengeluaranController::class,'index'])->name('pengeluaran-index-page');
+    Route::get('/dashboard/pengeluaran/pengeluaran-baru', [PengeluaranController::class,'create'])->name('pengeluaran-create-page');
+    Route::post('/dashboard/pengeluaran/create-process', [PengeluaranController::class,'store'])->name('pengeluaran-store-process');
+
 });
 
 
