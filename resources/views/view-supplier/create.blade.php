@@ -71,7 +71,7 @@
                         <!-- Submit Button -->
                         <div class="text-end">
                             <button type="submit" class="btn btn-primary">Simpan</button>
-                            <a href="{{ route('suppliers.index') }}" class="btn btn-secondary">Batal</a>
+                            <a href="{{ route('supplier-index-page') }}" class="btn btn-secondary">Batal</a>
                         </div>
                     </form><!-- End Supplier Form -->
 

@@ -17,7 +17,7 @@ class GudangController extends Controller
     // Menampilkan form untuk membuat gudang baru
     public function create()
     {
-        return view('gudangs.create');
+        return view('view-gudang.create');
     }
 
     // Menyimpan gudang baru
@@ -32,7 +32,7 @@ class GudangController extends Controller
         // Menyimpan data gudang
         Gudang::create($request->all());
 
-        return redirect()->route('gudangs.index')->with('success', 'Gudang berhasil ditambahkan.');
+        return redirect()->route('gudang-index-page')->with('success', 'Gudang berhasil ditambahkan.');
     }
 
     // Menampilkan detail gudang
@@ -62,7 +62,7 @@ class GudangController extends Controller
         $gudang = Gudang::findOrFail($id);
         $gudang->update($request->all());
 
-        return redirect()->route('gudangs.index')->with('success', 'Gudang berhasil diupdate.');
+        return redirect()->route('gudang-index-page')->with('success', 'Gudang berhasil diupdate.');
     }
 
     // Menghapus gudang
@@ -71,6 +71,6 @@ class GudangController extends Controller
         $gudang = Gudang::findOrFail($id);
         $gudang->delete();
 
-        return redirect()->route('gudangs.index')->with('success', 'Gudang berhasil dihapus.');
+        return redirect()->route('gudang-index-page')->with('success', 'Gudang berhasil dihapus.');
     }
 }

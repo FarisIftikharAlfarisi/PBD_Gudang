@@ -10,7 +10,9 @@
       </ol>
     </nav>
 </div>
-
+<div class="create-button">
+    <a href="{{ route('kategori-create-page') }}" class="btn btn-primary mb-3"> <i class="bi bi-file-earmark-plus"></i>  Kategori Baru</a>
+</div>
 <div class="card">
     <div class="card-body">
         <table class="table datatable">

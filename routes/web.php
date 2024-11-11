@@ -28,7 +28,15 @@ Route::group(['middleware'=>'auth'],function(){
     Route::get('/dashboard', [AnalyticsController::class,'analytics'])->name('analisis');
 
     Route::get('/dashboard/barang', [BarangController::class,'index'])->name('barang-index-page');
+    Route::get('/dashboard/barang/barang-baru', [BarangController::class,'create'])->name('barang-create-page');
+    Route::post('/dashboard/barang/create-process', [BarangController::class,'store'])->name('barang-store-process');
+    Route::put('/dashboard/barang/update/{id}', [BarangController::class, 'update'])->name('barang-update');
+    Route::delete('/dashboard/barang/delete/{id}', [BarangController::class,'destroy'])->name('barang-delete');
+
+
     Route::get('/dashboard/barang/kategori', [KategoriController::class,'index'])->name('kategori-index-page');
+    Route::get('/dashboard/kategori/kategori-baru', [KategoriController::class,'create'])->name('kategori-create-page');
+    Route::post('/dashboard/kategori/create-process', [KategoriController::class,'store'])->name('kategori-store-process');
     Route::put('/dashboard/barang/kategori/update/{id}', [KategoriController::class,'update'])->name('kategori-update');
     Route::delete('/dashboard/barang/kategori/delete/{id}', [KategoriController::class,'destroy'])->name('kategori-delete');
 
@@ -49,7 +57,16 @@ Route::group(['middleware'=>'auth'],function(){
 
     // penyimpanan routes (gudang sama rak)
     Route::get('dashboard/gudang',[GudangController::class,'index'])->name('gudang-index-page');
+    Route::get('/dashboard/gudang/gudang-baru', [GudangController::class,'create'])->name('gudang-create-page');
+    Route::post('/dashboard/gudang/create-process', [GudangController::class,'store'])->name('gudang-store-process');
+    Route::put('/dashboard/gudang/update/{id}', [GudangController::class, 'update'])->name('gudang-update');
+    Route::delete('/dashboard/gudang/delete/{id}', [GudangController::class,'destroy'])->name('gudang-delete');
+
     Route::get('dashboard/rak',[RakController::class,'index'])->name('rak-index-page');
+    Route::get('/dashboard/rak/rak-baru', [RakController::class,'create'])->name('rak-create-page');
+    Route::post('/dashboard/rak/create-process', [RakController::class,'store'])->name('rak-store-process');
+    Route::put('/dashboard/rak/update/{id}', [RakController::class, 'update'])->name('rak-update');
+    Route::delete('/dashboard/rak/delete/{id}', [RakController::class,'destroy'])->name('rak-delete');
 
     //penerimaan routes
     Route::get('/dashboard/penerimaan', [PenerimaanController::class,'index'])->name('penerimaan-index-page');
