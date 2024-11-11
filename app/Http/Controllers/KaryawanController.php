@@ -18,7 +18,8 @@ class KaryawanController extends Controller
     // Menampilkan form untuk membuat karyawan baru
     public function create()
     {
-        return view('karyawans.create');
+        
+        return view('view-karyawan.create');
     }
 
     // Menyimpan karyawan baru
@@ -46,7 +47,7 @@ class KaryawanController extends Controller
             'Jabatan' => $request->Jabatan,
         ]);
 
-        return redirect()->route('karyawans.index')->with('success', 'Karyawan berhasil ditambahkan.');
+        return redirect()->route('karyawan-index-page')->with('success', 'Karyawan berhasil ditambahkan.');
     }
 
     // Menampilkan detail karyawan
@@ -93,7 +94,7 @@ class KaryawanController extends Controller
             $karyawan->save();
         }
 
-        return redirect()->route('karyawans.index')->with('success', 'Karyawan berhasil diupdate.');
+        return redirect()->route('karyawan-index-page')->with('success', 'Karyawan berhasil diupdate.');
     }
 
     // Menghapus karyawan
@@ -102,6 +103,6 @@ class KaryawanController extends Controller
         $karyawan = Karyawan::findOrFail($id);
         $karyawan->delete();
 
-        return redirect()->route('karyawans.index')->with('success', 'Karyawan berhasil dihapus.');
+        return redirect()->route('karyawan-index-page')->with('success', 'Karyawan berhasil dihapus.');
     }
 }

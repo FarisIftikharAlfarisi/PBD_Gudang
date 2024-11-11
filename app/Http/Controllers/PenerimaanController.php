@@ -18,6 +18,7 @@ class PenerimaanController extends Controller
         return view('view-penerimaan.index', compact('penerimaans'));
     }
 
+
     // Menampilkan form untuk membuat penerimaan baru
     public function create()
     {
@@ -82,7 +83,7 @@ class PenerimaanController extends Controller
         $penerimaan = Penerimaan::findOrFail($id);
         $barangs = Barang::all();
         $suppliers = Supplier::all();
-        return view('Penerimaan.edit', compact('penerimaan', 'barangs', 'suppliers'));
+        return view('view-penerimaan.edit', compact('penerimaan', 'barangs', 'suppliers'));
     }
 
     // Mengupdate penerimaan

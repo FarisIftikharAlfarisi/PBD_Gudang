@@ -34,10 +34,18 @@ Route::group(['middleware'=>'auth'],function(){
 
     //karyawan routes
     Route::get('/dashboard/karyawan', [KaryawanController::class,'index'])->name('karyawan-index-page');
-    Route::get('/dashboard/karyawan', [KaryawanController::class,'index'])->name('karyawan-index-page');
+    Route::get('/dashboard/karyawan/karyawan-baru', [KaryawanController::class,'create'])->name('karyawan-create-page');
+    Route::post('/dashboard/karyawan/create-process', [KaryawanController::class,'store'])->name('karyawan-store-process');
+    Route::put('/dashboard/karyawan/update/{id}', [KaryawanController::class, 'update'])->name('karyawan-update');
+    Route::delete('/dashboard/karyawan/delete/{id}', [KaryawanController::class,'destroy'])->name('karyawan-delete');
+
 
     //supplier routes
     Route::get('/dashboard/supplier',[SupplierController::class,'index'])->name('supplier-index-page');
+    Route::get('/dashboard/supplier/supplier-baru', [SupplierController::class,'create'])->name('supplier-create-page');
+    Route::post('/dashboard/supplier/create-process', [SupplierController::class,'store'])->name('supplier-store-process');
+    Route::put('/dashboard/supplier/update/{id}', [SupplierController::class, 'update'])->name('supplier-update');
+    Route::delete('/dashboard/supplier/delete/{id}', [SupplierController::class,'destroy'])->name('supplier-delete');
 
     // penyimpanan routes (gudang sama rak)
     Route::get('dashboard/gudang',[GudangController::class,'index'])->name('gudang-index-page');
@@ -47,6 +55,10 @@ Route::group(['middleware'=>'auth'],function(){
     Route::get('/dashboard/penerimaan', [PenerimaanController::class,'index'])->name('penerimaan-index-page');
     Route::get('/dashboard/penerimaan/penerimaan-baru', [PenerimaanController::class,'create'])->name('penerimaan-create-page');
     Route::post('/dashboard/penerimaan/create-process', [PenerimaanController::class,'store'])->name('penerimaan-store-process');
+    Route::get('/dashboard/penerimaan/update/{id}', [PenerimaanController::class, 'edit'])->name('penerimaan-edit-page');
+    Route::put('/dashboard/penerimaan/{id}', [PenerimaanController::class, 'update'])->name('penerimaan-update-process');
+    Route::delete('/dashboard/penerimaan/delete/{id}', [PenerimaanController::class,'destroy'])->name('penerimaan-delete');
+
 
     //pengeluaran routes
     Route::get('/dashboard/pengeluaran', [PengeluaranController::class,'index'])->name('pengeluaran-index-page');
