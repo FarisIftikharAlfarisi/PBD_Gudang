@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AnalyticsController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\SupplierController;
@@ -13,7 +14,10 @@ use App\Http\Controllers\PengeluaranController;
 use App\Http\Controllers\RakController;
 
 Route::get('/', function () {
-    return view('welcome');
+    if (Auth::check()) {
+        return redirect()->route('analisis'); 
+    }
+    return redirect()->route('login-page');
 });
 
 Route::get('/login', [AuthenticationController::class,'login_view'])->name('login-page');

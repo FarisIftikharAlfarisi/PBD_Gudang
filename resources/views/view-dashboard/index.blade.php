@@ -9,7 +9,7 @@
       </ol>
     </nav>
   </div><!-- End Page Title -->
-<div class="row" id="filter">
+{{-- <div class="row" id="filter">
     <div class="card">
         <div class="card-title"> Filter Grafik</div>
         <div class="col-lg-11 justify-content-evenly">
@@ -150,7 +150,7 @@
         </div>
     </div>
 </div>
-</div>
+</div> --}}
 {{-- <div class="row">
     <div class="col-lg-9">
         <div class="card">

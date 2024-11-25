@@ -23,8 +23,10 @@ class DatabaseSeeder extends Seeder
             KategoriSeeder::class,
             BarangSeeder::class,
             PenerimaanSeeder::class,
+            DetailPenerimaanSeeder::class,
             InventarisSeeder::class,
             PengeluaranSeeder::class,
+            
             // Tambahkan seeder lainnya di sini
         ]);
     }

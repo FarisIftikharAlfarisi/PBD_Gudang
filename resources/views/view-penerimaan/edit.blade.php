@@ -3,98 +3,111 @@
 @section('dashboard-content')
 <div class="pagetitle">
     <h1>Edit Data Penerimaan Barang</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+            <li class="breadcrumb-item active">Penerimaan</li>
+        </ol>
+    </nav>
 </div>
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Form Edit Penerimaan Barang</h5>
 
-<section class="section">
-    <div class="row">
-        <div class="col-lg-8">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Form Edit Penerimaan Barang</h5>
-                    <form action="{{ route('penerimaan-update-process', $penerimaan->id) }}" method="POST">
-                        @csrf
-                        @method('PUT')
+        <form action="{{ route('penerimaan-update-process', $penerimaan->ID_Penerimaan) }}" method="POST">
+            @csrf
+            @method('PUT')
 
-                        <div class="mb-3">
-                            <label for="No_Faktur" class="form-label">No Faktur</label>
-                            <input type="text" class="form-control" id="No_Faktur" name="No_Faktur" value="{{ $penerimaan->No_Faktur }}" required>
-                        </div>
+            <div class="mb-3">
+                <label for="no_faktur" class="form-label">No Faktur</label>
+                <input type="text" name="No_Faktur" id="no_faktur" class="form-control" value="{{ $penerimaan->No_Faktur }}" required>
+            </div>
 
-                        <div class="mb-3">
-                            <label for="Tanggal_Penerimaan" class="form-label">Tanggal Penerimaan</label>
-                            <input type="date" class="form-control" id="Tanggal_Penerimaan" name="Tanggal_Penerimaan" value="{{ $penerimaan->Tanggal_Penerimaan }}" required>
-                        </div>
+            <div class="mb-3">
+                <label for="tanggal_penerimaan" class="form-label">Tanggal Penerimaan</label>
+                <input type="date" name="Tanggal_Penerimaan" id="tanggal_penerimaan" class="form-control" value="{{ $penerimaan->Tanggal_Penerimaan }}" required>
+            </div>
 
-                        <div class="mb-3">
-                            <label for="ID_Supplier" class="form-label">Supplier</label>
-                            <select class="form-select select2" id="ID_Supplier" name="ID_Supplier" required>
-                                <option disabled>Pilih Supplier</option>
-                                @foreach($suppliers as $supplier)
-                                    <option value="{{ $supplier->ID_Supplier }}" {{ $supplier->ID_Supplier == $penerimaan->ID_Supplier ? 'selected' : '' }}>
-                                        {{ $supplier->Nama_Supplier }}
+            <div class="mb-3">
+                <label for="supplier" class="form-label">Supplier</label>
+                <select name="ID_Supplier" id="supplier" class="form-select" required>
+                    @foreach($suppliers as $supplier)
+                        <option value="{{ $supplier->ID_Supplier }}" {{ $supplier->ID_Supplier == $penerimaan->ID_Supplier ? 'selected' : '' }}>
+                            {{ $supplier->Nama_Supplier }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <h5>Barang Yang Diterima</h5>
+                <div id="barang-container">
+                    @foreach($penerimaan->details as $detail)
+                    <div class="row mb-2 barang-row">
+                        <div class="col-md-6">
+                            <select name="barang[{{ $loop->index }}][ID_Barang]" class="form-select" required>
+                                @foreach($barangs as $barang)
+                                    <option value="{{ $barang->ID_Barang }}" {{ $barang->ID_Barang == $detail->ID_Barang ? 'selected' : '' }}>
+                                        {{ $barang->Nama_Barang }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
-
-                        <div class="card border shadow-none ps-3 pe-3 pb-3">
-                            <div id="barang-container">
-                                <div class="card-title">Barang Yang Diterima</div>
-                                @foreach($penerimaan->barangs as $barang)
-                                <div class="mb-3 barang-row">
-                                    <div class="row">
-                                        <div class="col">
-                                            <label for="ID_Barang[]" class="form-label">Barang</label>
-                                            <select class="form-select" name="ID_Barang[]" required>
-                                                <option disabled>Pilih Barang</option>
-                                                @foreach($barangs as $barangItem)
-                                                    <option value="{{ $barangItem->ID_Barang }}" {{ $barangItem->ID_Barang == $barang->ID_Barang ? 'selected' : '' }}>
-                                                        {{ $barangItem->Nama_Barang }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="col">
-                                            <label for="Jumlah[]" class="form-label">Jumlah</label>
-                                            <input type="number" class="form-control" name="Jumlah[]" value="{{ $barang->pivot->Jumlah }}" required>
-                                        </div>
-                                        <div class="col pt-2">
-                                            <button type="button" class="btn btn-danger remove-barang mt-4">Hapus</button>
-                                        </div>
-                                    </div>
-                                    <hr>
-                                </div>
-                                @endforeach
-                            </div>
+                        <div class="col-md-4">
+                            <input type="number" name="barang[{{ $loop->index }}][qty]" class="form-control" value="{{ $detail->qty }}" required>
                         </div>
-
-                        <div class="d-grid gap-2 d-md-flex justify-content-end mt-2">
-                            <button type="button" class="btn btn-secondary" id="add-barang">Tambah Barang</button>
-                            <button type="submit" class="btn btn-primary">Simpan</button>
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-danger btn-sm remove-barang">Hapus</button>
                         </div>
-                    </form>
+                    </div>
+                    @endforeach
                 </div>
+                <button type="button" id="add-barang" class="btn btn-primary btn-sm mt-2">Tambah Barang</button>
             </div>
-        </div>
+
+            <div class="text-end">
+                <button type="submit" class="btn btn-success">Simpan</button>
+            </div>
+        </form>
     </div>
-</section>
+</div>
 
 <script>
     document.getElementById('add-barang').addEventListener('click', function () {
         const container = document.getElementById('barang-container');
-        const newRow = document.querySelector('.barang-row').cloneNode(true);
-        newRow.querySelectorAll('input').forEach(input => input.value = '');
-        container.appendChild(newRow);
+        const index = container.children.length;
 
-        newRow.querySelector('.remove-barang').addEventListener('click', function () {
-            newRow.remove();
-        });
+        const row = `
+            <div class="row mb-2 barang-row">
+                <div class="col-md-6">
+                    <select name="barang[${index}][ID_Barang]" class="form-select" required>
+                        @foreach($barangs as $barang)
+                            <option value="{{ $barang->ID_Barang }}">{{ $barang->Nama_Barang }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <input type="number" name="barang[${index}][qty]" class="form-control" required>
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-danger btn-sm remove-barang">Hapus</button>
+                </div>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', row);
+
+        // Attach event listener to the new remove button
+        attachRemoveEvent();
     });
 
-    document.querySelectorAll('.remove-barang').forEach(button => {
-        button.addEventListener('click', function () {
-            button.closest('.barang-row').remove();
+    function attachRemoveEvent() {
+        document.querySelectorAll('.remove-barang').forEach(function (button) {
+            button.addEventListener('click', function () {
+                button.closest('.barang-row').remove();
+            });
         });
-    });
+    }
+
+    attachRemoveEvent();
 </script>
 @endsection

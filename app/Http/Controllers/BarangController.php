@@ -78,7 +78,7 @@ class BarangController extends Controller
             'Harga_Jual' => 'required|numeric|min:0',
             'Kode_Part' => 'required|max:100',
             'Merek' => 'required|max:100',
-        ]);
+        ]);        
 
         // Update data barang
         $barang = Barang::findOrFail($id);
