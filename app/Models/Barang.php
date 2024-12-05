@@ -20,7 +20,7 @@ class Barang extends Model
         'Harga_Jual',
         'Kode_Part',
         'Merek',
-    ];
+    ];    
 
     // Relasi ke model Kategori
     public function kategori()

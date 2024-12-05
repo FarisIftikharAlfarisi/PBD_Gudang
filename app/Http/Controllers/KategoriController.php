@@ -17,7 +17,7 @@ class KategoriController extends Controller
     // Menampilkan form untuk membuat kategori baru
     public function create()
     {
-        return view('kategoris.create');
+        return view('view-kategori.create');
     }
 
     // Menyimpan kategori baru
@@ -31,7 +31,7 @@ class KategoriController extends Controller
         // Menyimpan data kategori
         Kategori::create($request->all());
 
-        return redirect()->route('kategoris.index')->with('success', 'Kategori berhasil ditambahkan.');
+        return redirect()->route('kategori-index-page')->with('success', 'Kategori berhasil ditambahkan.');
     }
 
     // Menampilkan detail kategori
@@ -45,7 +45,7 @@ class KategoriController extends Controller
     public function edit($id)
     {
         $kategori = Kategori::findOrFail($id);
-        return view('kategoris.edit', compact('kategori'));
+        return view('kategori.update', compact('kategori'));
     }
 
     // Mengupdate kategori
@@ -60,7 +60,7 @@ class KategoriController extends Controller
         $kategori = Kategori::findOrFail($id);
         $kategori->update($request->all());
 
-        return redirect()->route('kategoris.index')->with('success', 'Kategori berhasil diupdate.');
+        return redirect()->route('kategori-index-page')->with('success', 'Kategori berhasil diupdate.');
     }
 
     // Menghapus kategori
@@ -69,6 +69,6 @@ class KategoriController extends Controller
         $kategori = Kategori::findOrFail($id);
         $kategori->delete();
 
-        return redirect()->route('kategoris.index')->with('success', 'Kategori berhasil dihapus.');
+        return redirect()->route('kategori-index-page')->with('success', 'Kategori berhasil dihapus.');
     }
 }

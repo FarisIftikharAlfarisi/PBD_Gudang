@@ -11,15 +11,16 @@ class RakController extends Controller
     // Menampilkan daftar rak
     public function index()
     {
-        $raks = Rak::with('gudang')->get();
-        return view('view-rak.index', compact('raks'));
+        $raks = Rak::with('gudang')->get(); // Eager load the related Gudang
+        $gudangs = Gudang::all(); // Fetch all Gudangs for the dropdown in the view
+        return view('view-rak.index', compact('raks', 'gudangs')); // Pass both variables to the view
     }
 
     // Menampilkan form untuk membuat rak baru
     public function create()
     {
         $gudangs = Gudang::all(); // Mengambil daftar gudang untuk dropdown
-        return view('raks.create', compact('gudangs'));
+        return view('view-rak.create', compact('gudangs'));
     }
 
     // Menyimpan rak baru
@@ -30,14 +31,14 @@ class RakController extends Controller
             'Nomor_Rak' => 'required|max:50',
             'Lokasi_Rak' => 'required',
             'Kapasitas_Rak' => 'required|integer',
-            'Status_Rak' => 'required|in:available,maintenance',
+            'Status_Rak' => 'required|in:Aktif,Tidak Aktif',
             'ID_Gudang' => 'required|exists:gudangs,ID_Gudang',
         ]);
 
         // Menyimpan data rak
         Rak::create($request->all());
 
-        return redirect()->route('raks.index')->with('success', 'Rak berhasil ditambahkan.');
+        return redirect()->route('rak-index-page')->with('success', 'Rak berhasil ditambahkan.');
     }
 
     // Menampilkan detail rak
@@ -63,7 +64,7 @@ class RakController extends Controller
             'Nomor_Rak' => 'required|max:50',
             'Lokasi_Rak' => 'required',
             'Kapasitas_Rak' => 'required|integer',
-            'Status_Rak' => 'required|in:available,maintenance',
+            'Status_Rak' => 'required|in:Aktif,Tidak Aktif',
             'ID_Gudang' => 'required|exists:gudangs,ID_Gudang',
         ]);
 
@@ -71,7 +72,7 @@ class RakController extends Controller
         $rak = Rak::findOrFail($id);
         $rak->update($request->all());
 
-        return redirect()->route('raks.index')->with('success', 'Rak berhasil diupdate.');
+        return redirect()->route('rak-index-page')->with('success', 'Rak berhasil diupdate.');
     }
 
     // Menghapus rak
@@ -80,6 +81,6 @@ class RakController extends Controller
         $rak = Rak::findOrFail($id);
         $rak->delete();
 
-        return redirect()->route('raks.index')->with('success', 'Rak berhasil dihapus.');
+        return redirect()->route('rak-index-page')->with('success', 'Rak berhasil dihapus.');
     }
 }

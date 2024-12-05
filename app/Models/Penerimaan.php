@@ -13,20 +13,20 @@ class Penerimaan extends Model
     protected $fillable = [
         'No_Faktur',
         'Tanggal_Penerimaan',
-        'ID_Barang',
         'ID_Supplier',
-        'Jumlah',
+        'jumlah_jenis_barang',
     ];
 
-    // Relasi ke model Barang
-    public function barang()
-    {
-        return $this->belongsTo(Barang::class, 'ID_Barang');
-    }
 
     // Relasi ke model Supplier
     public function supplier()
     {
-        return $this->belongsTo(Supplier::class, 'ID_Supplier');
+        return $this->belongsTo(Supplier::class, 'ID_Supplier', 'ID_Supplier');
     }
+
+    public function details()
+    {
+        return $this->hasMany(Detail_Penerimaan::class, 'ID_Penerimaan', 'ID_Penerimaan');
+    }
+
 }
