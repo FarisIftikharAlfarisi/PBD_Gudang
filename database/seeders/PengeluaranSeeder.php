@@ -13,7 +13,7 @@ class PengeluaranSeeder extends Seeder
             [
                 'No_Faktur' => 'FKT-001-2024',
                 'Tanggal_Pengeluaran' => '2024-10-01',
-                'ID_Barang' => 2, // Sesuaikan dengan ID_Barang yang ada
+                'ID_Barang' => 8, // Sesuaikan dengan ID_Barang yang ada
                 'ID_Karyawan' => 1, // Sesuaikan dengan ID_Karyawan yang ada
                 'Jumlah' => 5,
                 'Nama_Penerima' => 'Budi Santoso',
@@ -24,7 +24,7 @@ class PengeluaranSeeder extends Seeder
             [
                 'No_Faktur' => 'FKT-002-2024',
                 'Tanggal_Pengeluaran' => '2024-10-02',
-                'ID_Barang' => 5,
+                'ID_Barang' => 9,
                 'ID_Karyawan' => 2,
                 'Jumlah' => 7,
                 'Nama_Penerima' => 'Siti Aminah',

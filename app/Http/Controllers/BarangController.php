@@ -13,7 +13,9 @@ class BarangController extends Controller
     public function index()
     {
         $barangs = Barang::with(['kategori', 'rak'])->get();
-        return view('view-barang.index', compact('barangs'));
+        $kategoris = Kategori::all(); // Retrieve all categories
+        $raks = Rak::all(); // Retrieve all racks
+        return view('view-barang.index', compact('barangs', 'kategoris', 'raks'));
     }
 
     // Menampilkan form untuk membuat barang baru
@@ -21,7 +23,7 @@ class BarangController extends Controller
     {
         $kategoris = Kategori::all(); // Daftar kategori untuk dropdown
         $raks = Rak::all(); // Daftar rak untuk dropdown
-        return view('barang.create', compact('kategoris', 'raks'));
+        return view('view-barang.create', compact('kategoris', 'raks'));
     }
 
     // Menyimpan barang baru
@@ -43,7 +45,7 @@ class BarangController extends Controller
         // Menyimpan data barang
         Barang::create($request->all());
 
-        return redirect()->route('barangs.index')->with('success', 'Barang berhasil ditambahkan.');
+        return redirect()->route('barang-index-page')->with('success', 'Barang berhasil ditambahkan.');
     }
 
     // Menampilkan detail barang
@@ -57,9 +59,9 @@ class BarangController extends Controller
     public function edit($id)
     {
         $barang = Barang::findOrFail($id);
-        $kategoris = Kategori::all();
-        $raks = Rak::all();
-        return view('barangs.edit', compact('barang', 'kategoris', 'raks'));
+        $kategoris = Kategori::all(); // Retrieve all categories
+        $raks = Rak::all(); // Retrieve all racks
+        return view('barang-update', compact('barang', 'kategoris', 'raks'));
     }
 
     // Mengupdate barang
@@ -76,13 +78,13 @@ class BarangController extends Controller
             'Harga_Jual' => 'required|numeric|min:0',
             'Kode_Part' => 'required|max:100',
             'Merek' => 'required|max:100',
-        ]);
+        ]);        
 
         // Update data barang
         $barang = Barang::findOrFail($id);
         $barang->update($request->all());
 
-        return redirect()->route('barangs.index')->with('success', 'Barang berhasil diupdate.');
+        return redirect()->route('barang-index-page')->with('success', 'Barang berhasil diupdate.');
     }
 
     // Menghapus barang
@@ -91,6 +93,6 @@ class BarangController extends Controller
         $barang = Barang::findOrFail($id);
         $barang->delete();
 
-        return redirect()->route('barangs.index')->with('success', 'Barang berhasil dihapus.');
+        return redirect()->route('barang-index-page')->with('success', 'Barang berhasil dihapus.');
     }
 }

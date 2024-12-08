@@ -10,6 +10,16 @@
         </a>
       </div><!-- End Logo -->
 
+
+      @if(session('error'))
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>Pesan<strong> {{ session('error') }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      @endif
+
       <div class="card mb-3">
 
         <div class="card-body">
@@ -19,12 +29,12 @@
             <p class="text-center small">Gunakan email dan password anda untuk login.</p>
           </div>
 
-          <form action="{{ route('login-process') }}" method="POST" class="row g-3 needs-validation" novalidate>
+          <form action="{{ route('login-process') }}" method="POST" class="row g-3 needs-validation">
             @csrf
             <div class="col-12">
               <label for="yourUsername" class="form-label">Email</label>
               <div class="input-group has-validation">
-                <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
+                <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" id="email"
                 value="{{ old('email') }}" required>
                 @error('email')
                     <div class="invalid-feedback">

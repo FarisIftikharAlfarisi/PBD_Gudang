@@ -17,7 +17,7 @@ class SupplierController extends Controller
     // Menampilkan form untuk membuat supplier baru
     public function create()
     {
-        return view('suppliers.create');
+        return view('view-supplier.create');
     }
 
     // Menyimpan supplier baru ke database

@@ -15,18 +15,18 @@ class AuthenticationController extends Controller
     //proses login handling
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        // Validasi input
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
 
-        // Cek autentikasi
-        if (Auth::attempt($credentials)) {
-            // dd('Anda Login');
-            return redirect()->intended('dashboard')->with(['success','Selamat Datang, Anda Berhasil Login']);
+        if (Auth::guard('karyawan')->attempt($request->only('email', 'password'))) {
+            return redirect()->route('analisis');
         }
 
-        // Jika login gagal, redirect kembali dengan pesan error
-        return redirect()->back()->withErrors([
-            'error' => 'Email atau password salah!',
-        ]);
+        // Jika login gagal, redirect dengan error
+        return redirect()->back()->withErrors(['error' => 'Email atau password salah!']);
     }
 
     public function logout()
