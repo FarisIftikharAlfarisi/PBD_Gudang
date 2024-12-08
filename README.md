@@ -3,7 +3,6 @@
 ## 📋 Deskripsi Proyek
 Proyek ini merupakan tugas mata kuliah **Pemrograman Basis Data** yang berfokus pada sistem inventaris pergudangan. Sistem ini dibangun menggunakan framework Laravel untuk memudahkan pengelolaan data dalam basis data pergudangan.
 
----
 
 ## 👥 Anggota Kelompok
 - **10122045** Fadly Fatwa Winata AlQoeruddin  
@@ -11,7 +10,6 @@ Proyek ini merupakan tugas mata kuliah **Pemrograman Basis Data** yang berfokus 
 - **10122056** Dhika Munawar  
 - **10122070** Tri Ayu Zahidah  
 
----
 
 ---
 
