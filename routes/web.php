@@ -11,21 +11,34 @@ use App\Http\Controllers\GudangController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\PenerimaanController;
 use App\Http\Controllers\PengeluaranController;
+use App\Http\Controllers\KasirController;
 use App\Http\Controllers\RakController;
 
-Route::get('/', function () {
-    if (Auth::check()) {
-        return redirect()->route('analisis'); 
-    }
-    return redirect()->route('login-page');
-});
+// Route::get('/', function () {
+//     if (Auth::check()) {
+//         return redirect()->route('analisis');
+//     }
+//     return redirect()->route('login-page');
+// });
 
 Route::get('/login', [AuthenticationController::class,'login_view'])->name('login-page');
 Route::post('/login-process', [AuthenticationController::class,'login'])->name('login-process');
 Route::get('/logout', [AuthenticationController::class,'logout'])->name('logout');
 
+
+
 //route untuk yang sudah login
-Route::group(['middleware'=>'auth'],function(){
+
+Route::middleware([App\Http\Middleware\KaryawanAuth::class, 'cek_role:Staff'])->group(function (){
+    //kasir routes
+    Route::get('/dashboard-kasir', [KasirController::class,'index'])->name('kasir-index-page');
+    Route::post('/store-pesanan', [KasirController::class,'storePesanan'])->name('store-pesanan');
+    //end kasir routes
+});
+
+
+//Hak akses Owner
+Route::middleware([App\Http\Middleware\KaryawanAuth::class, 'cek_role:Owner'])->group(function (){
 
     Route::resource('suppliers', SupplierController::class);
 
@@ -51,6 +64,7 @@ Route::group(['middleware'=>'auth'],function(){
     Route::put('/dashboard/karyawan/update/{id}', [KaryawanController::class, 'update'])->name('karyawan-update');
     Route::delete('/dashboard/karyawan/delete/{id}', [KaryawanController::class,'destroy'])->name('karyawan-delete');
 
+    //end karyawan routes
 
     //supplier routes
     Route::get('/dashboard/supplier',[SupplierController::class,'index'])->name('supplier-index-page');

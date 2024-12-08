@@ -47,7 +47,7 @@ class PengeluaranController extends Controller
 
             // Cari record inventaris untuk barang ini dan update jumlah aktual
             $inventaris = Inventaris::where('ID_Barang', $ID_Barang)
-                                    ->where('ID_Karyawan', Auth::user()->ID_Karyawan)
+                                    ->where('ID_Karyawan', Auth::guard('karyawan')->user()->ID_Karyawan)
                                     ->first();
 
             if ($inventaris && $inventaris->Jumlah_Barang_Aktual >= $jumlah) {
@@ -61,7 +61,7 @@ class PengeluaranController extends Controller
                     'Tanggal_Pengeluaran' => $request->Tanggal_Pengeluaran,
                     'ID_Barang' => $ID_Barang,
                     'Jumlah' => $jumlah,
-                    'ID_Karyawan' => Auth::user()->ID_Karyawan,
+                    'ID_Karyawan' => Auth::guard('karyawan')->user()->ID_Karyawan,
                     'Nama_Penerima' => $request->Nama_Penerima,
                     'Tujuan' => $request->Tujuan,
                 ]);

@@ -24,7 +24,7 @@
                 <th>Nama Barang</th>
                 <th>Stok</th>
                 <th>Harga</th>
-                <th>Detail</th>
+                <th>Aksi</th>
               </tr>
             </thead>
             <tbody>
@@ -38,20 +38,20 @@
                    <td>{{ $barang->Harga_Jual }}</td>
                    <td>
                        <!-- Tombol untuk membuka modal -->
-                       <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal{{ $barang->ID_Barang }}">
-                           Lihat Detail
+                       <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal{{ $barang->ID_Barang }}" title="Detail">
+                        <i class="bi bi-list-ul"></i>
                        </button>
                         <!-- Edit Modal Trigger -->
-                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal{{ $barang->ID_Barang }}">
-                            Edit
-                        </button>
-                
-                        <!-- Delete Modal Trigger -->
-                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $barang->ID_Barang }}">
-                            Hapus
+                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal{{ $barang->ID_Barang }}" title="Edit">
+                            <i class="bi bi-pencil-square"></i>
                         </button>
 
-                        
+                        <!-- Delete Modal Trigger -->
+                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $barang->ID_Barang }}" title="Hapus" >
+                            <i class="bi bi-trash3"></i>
+                        </button>
+
+
                        <!-- Detail Modal -->
                         <div class="modal fade" id="detailModal{{ $barang->ID_Barang }}" tabindex="-1" aria-labelledby="detailModalLabel{{ $barang->ID_Barang }}" aria-hidden="true">
                             <div class="modal-dialog">
@@ -75,7 +75,7 @@
                                 </div>
                             </div>
                         </div>
-                
+
                         <!-- Edit Modal -->
                         <div class="modal fade" id="editModal{{ $barang->ID_Barang }}" tabindex="-1" aria-labelledby="editModalLabel{{ $barang->ID_Barang }}" aria-hidden="true">
                             <div class="modal-dialog">

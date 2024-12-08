@@ -139,7 +139,7 @@ private function updateInventaris($ID_Barang, $jumlah)
             'No_Faktur' => $request->No_Faktur,
             'Tanggal_Penerimaan' => $request->Tanggal_Penerimaan,
             'ID_Supplier' => $request->ID_Supplier,
-            
+
 
         ]);
 
@@ -163,16 +163,16 @@ private function updateInventaris($ID_Barang, $jumlah)
     {
         // Cari penerimaan yang akan dihapus
         $penerimaan = Penerimaan::findOrFail($id);
-    
+
         // Hapus semua detail terkait penerimaan ini
         $penerimaan->details()->delete();
-    
+
         // Perbarui inventaris jika diperlukan
         foreach ($penerimaan->details as $detail) {
             $inventaris = Inventaris::where('ID_Barang', $detail->ID_Barang)
-                                    ->where('ID_Karyawan', Auth::user()->ID_Karyawan)
+                                    ->where('ID_Karyawan', Auth::guard('karyawan')->user()->ID_Karyawan)
                                     ->first();
-    
+
             if ($inventaris) {
                 // Kurangi jumlah barang aktual dengan jumlah penerimaan
                 $inventaris->Jumlah_Barang_Aktual -= $detail->qty;
@@ -182,12 +182,12 @@ private function updateInventaris($ID_Barang, $jumlah)
                 $inventaris->save();
             }
         }
-    
+
         // Hapus penerimaan
         $penerimaan->delete();
-    
+
         return redirect()->route('penerimaan-index-page')->with('success', 'Penerimaan berhasil dihapus.');
     }
-    
+
 
 }
