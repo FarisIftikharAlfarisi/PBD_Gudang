@@ -14,7 +14,9 @@ class PengeluaranController extends Controller
     // Menampilkan daftar pengeluaran
     public function index()
     {
-        $pengeluarans = Pengeluaran::with(['barang', 'karyawan'])->get();
+        $pengeluarans = Pengeluaran::with(['karyawan','details.barang']) 
+            ->orderBy('id_pengeluaran', 'desc')
+            ->get();
         return view('view-pengeluaran.index', compact('pengeluarans'));
     }
 
@@ -33,10 +35,6 @@ class PengeluaranController extends Controller
         $request->validate([
             'No_Faktur' => 'required|max:100',
             'Tanggal_Pengeluaran' => 'required|date',
-            'ID_Barang' => 'required|array|min:1',
-            'ID_Barang.*' => 'required|exists:barangs,ID_Barang',
-            'Jumlah' => 'required|array|min:1',
-            'Jumlah.*' => 'required|integer|min:1',
             'Nama_Penerima' => 'required|max:255',
             'Tujuan' => 'required|max:255',
         ]);
@@ -59,8 +57,6 @@ class PengeluaranController extends Controller
                 Pengeluaran::create([
                     'No_Faktur' => $request->No_Faktur,
                     'Tanggal_Pengeluaran' => $request->Tanggal_Pengeluaran,
-                    'ID_Barang' => $ID_Barang,
-                    'Jumlah' => $jumlah,
                     'ID_Karyawan' => Auth::user()->ID_Karyawan,
                     'Nama_Penerima' => $request->Nama_Penerima,
                     'Tujuan' => $request->Tujuan,

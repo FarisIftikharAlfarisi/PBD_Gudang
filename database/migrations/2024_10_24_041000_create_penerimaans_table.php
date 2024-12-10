@@ -19,7 +19,6 @@ return new class extends Migration
             $table->unsignedBigInteger('ID_Supplier');
             $table->foreign('ID_Supplier')->references('ID_Supplier')->on('suppliers')->onDelete('cascade');
 
-            $table->integer('jumlah_jenis_barang');
             $table->timestamps();
         });
 

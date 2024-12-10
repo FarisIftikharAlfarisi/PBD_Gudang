@@ -13,9 +13,7 @@ class Pengeluaran extends Model
     protected $fillable = [
         'No_Faktur',
         'Tanggal_Pengeluaran',
-        'ID_Barang',
         'ID_Karyawan',
-        'Jumlah',
         'Nama_Penerima',
         'Tujuan',
     ];

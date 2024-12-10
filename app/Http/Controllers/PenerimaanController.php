@@ -42,7 +42,6 @@ class PenerimaanController extends Controller
         'Tanggal_Penerimaan' => 'required|date',
         'ID_Supplier' => 'required|exists:suppliers,ID_Supplier',
         'ID_Barang.*' => 'required|exists:barangs,ID_Barang',
-        'Jumlah.*' => 'required|integer|min:1',
     ]);
 
     // Simpan data utama ke tabel `penerimaans`
@@ -50,7 +49,6 @@ class PenerimaanController extends Controller
         'No_Faktur' => $request->No_Faktur,
         'Tanggal_Penerimaan' => $request->Tanggal_Penerimaan,
         'ID_Supplier' => $request->ID_Supplier,
-        'jumlah_jenis_barang' => count($request->ID_Barang), // Total jenis barang
         'created_at' => now(),
         'updated_at' => now(),
     ]);
@@ -61,7 +59,6 @@ class PenerimaanController extends Controller
         $details[] = [
             'ID_Penerimaan' => $penerimaanId, // ID dari penerimaan yang baru dibuat
             'ID_Barang' => $ID_Barang,
-            'qty' => $request->Jumlah[$index],
             'created_at' => now(),
             'updated_at' => now(),
         ];

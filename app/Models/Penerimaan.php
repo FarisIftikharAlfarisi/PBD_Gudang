@@ -14,7 +14,6 @@ class Penerimaan extends Model
         'No_Faktur',
         'Tanggal_Penerimaan',
         'ID_Supplier',
-        'jumlah_jenis_barang',
     ];
 
 
