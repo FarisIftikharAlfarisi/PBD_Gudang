@@ -22,7 +22,20 @@ class AuthenticationController extends Controller
         ]);
 
         if (Auth::guard('karyawan')->attempt($request->only('email', 'password'))) {
-            return redirect()->route('analisis');
+
+            if(Auth::guard('karyawan')->user()->Jabatan === "Staff"){
+                //route untuk kasir
+                return redirect()->route('kasir-index-page');
+
+
+            }else if( Auth::guard('karyawan')->user()->Jabatan === "Owner" ){
+                //route untuk Owner
+                return redirect()->route('analisis');
+            }else{
+                return redirect()->route('analisis');
+            }
+
+
         }
 
         // Jika login gagal, redirect dengan error

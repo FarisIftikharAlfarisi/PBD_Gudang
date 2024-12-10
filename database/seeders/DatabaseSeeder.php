@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             DetailPenerimaanSeeder::class,
             InventarisSeeder::class,
             PengeluaranSeeder::class,
+            LoyalCustSeeder::class,
 
             // Tambahkan seeder lainnya di sini
         ]);

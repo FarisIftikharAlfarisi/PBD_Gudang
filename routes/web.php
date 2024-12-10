@@ -33,6 +33,7 @@ Route::middleware([App\Http\Middleware\KaryawanAuth::class, 'cek_role:Staff'])->
     //kasir routes
     Route::get('/dashboard-kasir', [KasirController::class,'index'])->name('kasir-index-page');
     Route::post('/store-pesanan', [KasirController::class,'storePesanan'])->name('store-pesanan');
+    Route::get('/dashboard-kasir/nota/', [KasirController::class,'printNota'])->name('kasir-nota-page');
     //end kasir routes
 });
 

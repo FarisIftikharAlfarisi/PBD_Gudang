@@ -14,7 +14,7 @@ class PenerimaanSeeder extends Seeder
                 'No_Faktur' => 'FKT-101-2024',
                 'Tanggal_Penerimaan' => '2024-10-05',
                 'ID_Supplier' => 1, // Sesuaikan dengan ID_Supplier yang ada
-                'jumlah_jenis_barang' => 1,
+                'jumlah_jenis_barang' => 10,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -22,7 +22,7 @@ class PenerimaanSeeder extends Seeder
                 'No_Faktur' => 'FKT-102-2024',
                 'Tanggal_Penerimaan' => '2024-10-06',
                 'ID_Supplier' => 2,
-                'jumlah_jenis_barang' => 1,
+                'jumlah_jenis_barang' => 10,
                 'created_at' => now(),
                 'updated_at' => now()
             ]
