@@ -142,6 +142,11 @@ class KasirController extends Controller
         return view('view-kasir.nota-print', compact('order', 'orderDetail'));
     }
 
+    public function updatePesanan(Request $request, $nomor_nota){
+        $order = Order::where('Nomor_Nota', $nomor_nota)->first();
+        $order->update($request->all());
+        return redirect()->route('kasir-index-page');
+    }
 
 }
 

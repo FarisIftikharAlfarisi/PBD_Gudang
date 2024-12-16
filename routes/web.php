@@ -39,6 +39,7 @@ Route::middleware([App\Http\Middleware\KaryawanAuth::class, 'cek_role:Staff'])->
     Route::get('/dashboard-kasir', [KasirController::class,'index'])->name('kasir-index-page');
     Route::get('/get-loyal-customer', [KasirController::class,'daftar_customer'])->name('daftar-customer');
     Route::post('/store-pesanan', [KasirController::class,'storePesanan'])->name('store-pesanan');
+    Route::put('/update-pesanan/{nomor_nota}', [KasirController::class,'updatePesanan'])->name('update-pesanan');
     Route::get('/dashboard-kasir/nota/', [KasirController::class,'printNota'])->name('kasir-nota-page');
     //end kasir routes
 });
