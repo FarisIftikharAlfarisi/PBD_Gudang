@@ -1,12 +1,24 @@
 <aside id="sidebar" class="sidebar">
   <ul class="sidebar-nav" id="sidebar-nav">
-    
+
+    <!--Kasir-->
+    @if (Auth::guard('karyawan')->user()->Jabatan == 'Staff')
+    <li class="nav-item">
+        <a class="nav-link {{ Route::currentRouteName() == 'kasir-index-page' ? 'active' : 'collapsed' }}" href="{{ route('kasir-index-page') }}">
+            <i class="bi bi-cart4"></i><span>Pemesanan</span>
+        </a>
+    </li>
+    @endif
+    <!--End Kasir-->
+
+    @if(Auth::guard('karyawan')->user()->Jabatan == 'Owner') <!--Hak akses Owner : Analisis Penjualan -->
+
     <!-- Dashboard -->
     <li class="nav-item">
-      <a class="nav-link {{ Route::currentRouteName() == 'analisis' ? 'active' : 'collapsed' }}" href="{{ route('analisis') }}">
-        <i class="bi bi-grid"></i>
-        <span>Dashboard</span>
-      </a>
+        <a class="nav-link {{ Route::currentRouteName() == 'analisis' ? 'active' : 'collapsed' }}" href="{{ route('analisis') }}">
+            <i class="bi bi-grid"></i>
+            <span>Dashboard</span>
+        </a>
     </li>
 
     <!-- Barang -->
@@ -77,5 +89,6 @@
       </a>
     </li>
 
+    @endif
   </ul>
 </aside>

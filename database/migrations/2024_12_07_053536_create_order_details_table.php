@@ -11,14 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('inventaris', function (Blueprint $table) {
+        Schema::create('order_details', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('ID_Barang');
-            $table->foreign('ID_Barang')->references('ID_Barang')->on('barangs')->onDelete('cascade');
-            $table->integer('Jumlah_Barang_Aktual');
             $table->timestamps();
         });
-
     }
 
     /**
@@ -26,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('inventaris');
+        Schema::dropIfExists('order_details');
     }
 };

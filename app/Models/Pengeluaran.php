@@ -18,15 +18,15 @@ class Pengeluaran extends Model
         'Tujuan',
     ];
 
-    // Relasi ke model Barang
-    public function barang()
-    {
-        return $this->belongsTo(Barang::class, 'ID_Barang');
-    }
 
     // Relasi ke model Karyawan
     public function karyawan()
     {
         return $this->belongsTo(Karyawan::class, 'ID_Karyawan');
+    }
+
+    public function details()
+    {
+        return $this->hasMany(Detail_Pengeluaran::class, 'ID_Pengeluaran', 'ID_Pengeluaran');
     }
 }

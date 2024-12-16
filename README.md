@@ -1,34 +1,50 @@
-##Tugas Pemrogrman Basis Data Inventaris Pergudangan
+# Tugas Pemrograman Basis Data Inventaris Pergudangan
 
-Anggota Kelompok : 
+## 📋 Deskripsi Proyek
+Proyek ini merupakan tugas mata kuliah **Pemrograman Basis Data** yang berfokus pada sistem inventaris pergudangan. Sistem ini dibangun menggunakan framework Laravel untuk memudahkan pengelolaan data dalam basis data pergudangan.
 
-10122045 Fadly Fatwa Winata AlQoeruddin
 
-10122050 Faris Iftikhar Alfarisi 
+## 👥 Anggota Kelompok
+- **10122045** Fadly Fatwa Winata AlQoeruddin  
+- **10122050** Faris Iftikhar Alfarisi  
+- **10122056** Dhika Munawar  
+- **10122070** Tri Ayu Zahidah  
 
-10122056 Dhika Munawar 	
 
-10122070 Tri Ayu Zahidah 	
+---
 
-#How To Clone 
-Step 1 : akses folder tempat kalian nyimpen project laravel
-misal D:/projek/tugas/tugasbasisdata> 
+## Requirement :
+- PHP 8.2 keatas
+- Laravel 11
+- composer versi terupdate
 
-terus copas ini git clone https://github.com/FarisIftikharAlfarisi/PBD_Gudang.git
+---
 
-jadi nanti kaya gini
-D:/projek/tugas/tugasbasisdata> git clone https://github.com/FarisIftikharAlfarisi/PBD_Gudang.git
+## 🚀 Cara Clone Repository
 
-Step 2: kalo udah nanti coba ketik 
-composer install 
-atau
-composer install --ignore-platform-reqs
+Langkah Langkah Ngeclone
 
-jadi nanti kaya gini 
-D:/projek/tugas/tugasbasisdata> composer install 
+### Step 1: Clone Repository
+1. Akses folder tempat menyimpan project project laravel.  
+   Misalnya:  
+   ```bash
+   D:/projek/tugas/tugasbasisdata>
+   ```
+   Nanti ketik kode dibawah jadi seperti ini :
+   ```bash
+    D:/projek/tugas/tugasbasisdata> git clone https://github.com/FarisIftikharAlfarisi/PBD_Gudang.git
+   ```
 
-Step 3 : abis selesai composer install dari cloning coba ketik 
-php artisan key:generate
-
-jadi nanti kaya gini 
-D:/projek/tugas/tugasbasisdata> php artisan key:generate
+### Step 2: Install Dependencies
+1. Install Dependencies
+   setelah ngeclone, masuk lagi ke akses folder yang sama, terus ketik dibawah untuk install dependensi:
+   ```bash
+   D:/projek/tugas/tugasbasisdata/PBD_Gudang> composer install --ignore-platform-reqs
+   ```
+   Biar nanti semua masalah compatible bisa di ignore.
+   
+### Step 3 : Generate Application Key 
+1. Setelah ngeclone dan install dependensi, ketik dibawah ini untuk men-generate seluruh application key
+   ```bash
+   D:/projek/tugas/tugasbasisdata/PBD_Gudang> php artisan key:generate
+   ```

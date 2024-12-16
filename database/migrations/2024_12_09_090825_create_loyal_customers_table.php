@@ -4,6 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+use function Laravel\Prompts\table;
+
 return new class extends Migration
 {
     /**
@@ -11,14 +13,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('inventaris', function (Blueprint $table) {
+        Schema::create('loyal_customers', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('ID_Barang');
-            $table->foreign('ID_Barang')->references('ID_Barang')->on('barangs')->onDelete('cascade');
-            $table->integer('Jumlah_Barang_Aktual');
+            $table->string('Nama_Pelanggan');
+            $table->string('No_Telepon');
+            $table->string('Tanggal_Berlangganan');
             $table->timestamps();
         });
-
     }
 
     /**
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('inventaris');
+        Schema::dropIfExists('loyal_customers');
     }
 };

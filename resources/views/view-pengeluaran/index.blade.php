@@ -24,9 +24,8 @@
             <th>No.Faktur</th>
             <th>Penerima</th>
             <th>Alamat</th>
-            <th>Barang</th>
-            <th>Jumlah</th>
             <th data-type="date" data-format="DD/MM/YYYY">Tanggal Transaksi</th>
+            <th>Aksi</th>
           </tr>
         </thead>
         @foreach ($pengeluarans as $pengeluaran)
@@ -34,14 +33,84 @@
             <td>{{ $pengeluaran->No_Faktur }}</td>
             <td>{{ $pengeluaran->Nama_Penerima }}</td>
             <td>{{ $pengeluaran->Tujuan }}</td>
-            <td>{{ $pengeluaran->barang->Nama_Barang }}</td>
-            <td>{{ $pengeluaran->Jumlah }}</td>
             <td>{{ $pengeluaran->Tanggal_Pengeluaran }}</td>
-        </tr>
-        @endforeach
-      </table>
-      <!-- End Table with stripped rows -->
-
-    </div>
+            <td>
+              <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal{{ $pengeluaran->ID_Pengeluaran }}">
+                  Detail
+              </button>
+              <a href="{{ route('pengeluaran-edit-page', $pengeluaran->ID_Pengeluaran) }}" class="btn btn-warning btn-sm">
+                  <i class="bi bi-pencil-square"></i> Edit
+              </a>
+              <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $pengeluaran->ID_Pengeluaran }}">
+                  Hapus
+              </button>
+              <a href="{{ route('pengeluaran-invoice', $pengeluaran->ID_Pengeluaran) }}" class="btn btn-primary" target="_blank">
+                Cetak Invoice
+            </a>                       
+          </td>
+      </tr>
+      @endforeach
+      </tbody>
+    </table>
   </div>
+</div>
+
+<!-- Modals -->
+@foreach ($pengeluarans as $pengeluaran)
+<div class="modal fade" id="detailModal{{ $pengeluaran->ID_Pengeluaran }}" tabindex="-1" aria-labelledby="detailModalLabel{{ $pengeluaran->ID_Pengeluaran }}" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="detailModalLabel{{ $pengeluaran->ID_Pengeluaran }}">Detail Barang - No Faktur {{ $pengeluaran->No_Faktur }}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <table class="table">
+                  <thead>
+                      <tr>
+                          <th>Nama Barang</th>
+                          <th>Jumlah</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                  @foreach ($pengeluaran->details as $detail)
+                  <tr>
+                      <td>{{ $detail->barang->Nama_Barang }}</td>
+                      <td>{{ $detail->qty }}</td>
+                  </tr>
+                  @endforeach
+                  </tbody>
+              </table>
+          </div>
+      </div>
+  </div>
+</div>
+@endforeach
+@foreach ($pengeluarans as $pengeluaran)
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal{{ $pengeluaran->ID_Pengeluaran }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $pengeluaran->ID_Pengeluaran }}" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="deleteModalLabel{{ $pengeluaran->ID_Pengeluaran }}">Konfirmasi Hapus</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              Apakah Anda yakin ingin menghapus penerimaan dengan No Faktur <strong>{{ $pengeluaran->No_Faktur }}</strong>?
+          </div>
+          <div class="modal-footer">
+              <form action="{{ route('pengeluaran-delete', $pengeluaran->ID_Pengeluaran ) }}" method="POST">
+                  @csrf
+                  @method('DELETE')
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                  <button type="submit" class="btn btn-danger">Hapus</button>
+              </form>
+          </div>
+      </div>
+  </div>
+</div>
+@endforeach
+
+
 @endsection
+

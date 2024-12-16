@@ -7,6 +7,7 @@ use App\Models\Barang;
 use App\Models\Supplier;
 use App\Models\Inventaris;
 use App\Models\Penerimaan;
+use App\Models\Karyawan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +18,7 @@ class PenerimaanController extends Controller
     // Menampilkan daftar penerimaan
     public function index()
 {
-    $penerimaans = Penerimaan::with(['supplier', 'details.barang'])
+    $penerimaans = Penerimaan::with(['supplier','karyawan', 'details.barang'])
         ->orderBy('id_penerimaan', 'desc')
         ->get();
     return view('view-penerimaan.index', compact('penerimaans'));
@@ -29,8 +30,9 @@ class PenerimaanController extends Controller
     public function create()
     {
         $barangs = Barang::all(); // Daftar barang untuk dropdown
-        $suppliers = Supplier::all(); // Daftar supplier untuk dropdown
-        return view('view-penerimaan.create', compact('barangs', 'suppliers'));
+        $suppliers = Supplier::all();
+        $karyawans = Karyawan::all(); // Daftar supplier untuk dropdown
+        return view('view-penerimaan.create', compact('barangs', 'suppliers','karyawans'));
     }
 
     // Menyimpan penerimaan baru
@@ -43,12 +45,15 @@ class PenerimaanController extends Controller
         'ID_Supplier' => 'required|exists:suppliers,ID_Supplier',
         'ID_Barang.*' => 'required|exists:barangs,ID_Barang',
     ]);
+    $karyawan = Auth::guard('karyawan')->user(); // Menggunakan guard karyawan
+    $karyawan_id = $karyawan->ID_Karyawan;
 
     // Simpan data utama ke tabel `penerimaans`
     $penerimaanId = DB::table('penerimaans')->insertGetId([
         'No_Faktur' => $request->No_Faktur,
         'Tanggal_Penerimaan' => $request->Tanggal_Penerimaan,
         'ID_Supplier' => $request->ID_Supplier,
+        'ID_Karyawan' => $karyawan_id,
         'created_at' => now(),
         'updated_at' => now(),
     ]);
@@ -59,6 +64,7 @@ class PenerimaanController extends Controller
         $details[] = [
             'ID_Penerimaan' => $penerimaanId, // ID dari penerimaan yang baru dibuat
             'ID_Barang' => $ID_Barang,
+            'qty' => $request->Jumlah[$index], // Menambahkan qty (Jumlah)
             'created_at' => now(),
             'updated_at' => now(),
         ];
@@ -83,32 +89,29 @@ class PenerimaanController extends Controller
  */
 private function updateInventaris($ID_Barang, $jumlah)
 {
+    // Cari data inventaris berdasarkan ID_Barang dan ID_Karyawan
     $inventaris = DB::table('inventaris')
         ->where('ID_Barang', $ID_Barang)
-        ->where('ID_Karyawan', Auth::user()->ID_Karyawan)
         ->first();
 
     if (!$inventaris) {
-        // Jika barang belum ada di inventaris, tambahkan
+        // Jika barang belum ada di inventaris, tambahkan data baru
         DB::table('inventaris')->insert([
             'ID_Barang' => $ID_Barang,
-            'ID_Karyawan' => Auth::user()->ID_Karyawan,
             'Jumlah_Barang_Aktual' => $jumlah,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
     } else {
-        // Jika sudah ada, perbarui jumlah barang
+        // Jika barang sudah ada, update jumlah barang aktualnya
         DB::table('inventaris')
             ->where('ID_Barang', $ID_Barang)
-            ->where('ID_Karyawan', Auth::user()->ID_Karyawan)
             ->update([
                 'Jumlah_Barang_Aktual' => $inventaris->Jumlah_Barang_Aktual + $jumlah,
                 'updated_at' => now(),
             ]);
     }
 }
-
 
 
     // Menampilkan detail penerimaan
@@ -129,62 +132,46 @@ private function updateInventaris($ID_Barang, $jumlah)
     }
 
     public function update(Request $request, $id)
-    {
-        $penerimaan = Penerimaan::findOrFail($id);
+{
+    $penerimaan = Penerimaan::with('details')->findOrFail($id);
 
-        $penerimaan->update([
-            'No_Faktur' => $request->No_Faktur,
-            'Tanggal_Penerimaan' => $request->Tanggal_Penerimaan,
-            'ID_Supplier' => $request->ID_Supplier,
-            
+    // Rollback stok sebelumnya menggunakan metode updateInventaris
+    foreach ($penerimaan->details as $detail) {
+        $this->updateInventaris($detail->ID_Barang, -$detail->qty); // Kurangi stok sebelumnya
+    }
 
+    // Update data penerimaan
+    $penerimaan->update([
+        'No_Faktur' => $request->No_Faktur,
+        'Tanggal_Penerimaan' => $request->Tanggal_Penerimaan,
+        'ID_Supplier' => $request->ID_Supplier,
+    ]);
+
+    // Hapus detail lama
+    $penerimaan->details()->delete();
+
+    // Tambahkan detail baru dan perbarui stok menggunakan metode updateInventaris
+    foreach ($request->barang as $barang) {
+        $penerimaan->details()->create([
+            'ID_Barang' => $barang['ID_Barang'],
+            'qty' => $barang['qty'],
         ]);
 
-        // Delete old details
-        $penerimaan->details()->delete();
-
-        // Add new details
-        foreach ($request->barang as $barang) {
-            $penerimaan->details()->create([
-                'ID_Barang' => $barang['ID_Barang'],
-                'qty' => $barang['qty'],
-            ]);
-        }
-
-        return redirect()->route('penerimaan-index-page')->with('success', 'Penerimaan berhasil diperbarui.');
+        // Tambahkan stok baru
+        $this->updateInventaris($barang['ID_Barang'], $barang['qty']);
     }
 
+    return redirect()->route('penerimaan-index-page')->with('success', 'Penerimaan berhasil diperbarui.');
+}
+     // Menghapus pengeluaran
+     public function destroy($id)
+     {
+         $penerimaan = Penerimaan::findOrFail($id);
+         $penerimaan->delete();
+ 
+         return redirect()->route('penerimaan-index-page')->with('success', 'Penerimaan berhasil dihapus.');
+     }
+ 
 
-    // Menghapus penerimaan
-    public function destroy($id)
-    {
-        // Cari penerimaan yang akan dihapus
-        $penerimaan = Penerimaan::findOrFail($id);
-    
-        // Hapus semua detail terkait penerimaan ini
-        $penerimaan->details()->delete();
-    
-        // Perbarui inventaris jika diperlukan
-        foreach ($penerimaan->details as $detail) {
-            $inventaris = Inventaris::where('ID_Barang', $detail->ID_Barang)
-                                    ->where('ID_Karyawan', Auth::user()->ID_Karyawan)
-                                    ->first();
-    
-            if ($inventaris) {
-                // Kurangi jumlah barang aktual dengan jumlah penerimaan
-                $inventaris->Jumlah_Barang_Aktual -= $detail->qty;
-                if ($inventaris->Jumlah_Barang_Aktual < 0) {
-                    $inventaris->Jumlah_Barang_Aktual = 0;
-                }
-                $inventaris->save();
-            }
-        }
-    
-        // Hapus penerimaan
-        $penerimaan->delete();
-    
-        return redirect()->route('penerimaan-index-page')->with('success', 'Penerimaan berhasil dihapus.');
-    }
-    
 
 }

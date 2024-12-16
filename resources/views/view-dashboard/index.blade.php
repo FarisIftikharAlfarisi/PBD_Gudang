@@ -1,7 +1,7 @@
 @extends('Partials.dashboard-template-main')
 @section('dashboard-content')
 <div class="pagetitle">
-    <h1>Halo Selamat Datang, {{ Auth::user()->Nama_Karyawan }}</h1>
+    <h1>Halo Selamat Datang, {{ Auth::guard('karyawan')->user()->Nama_Karyawan }}</h1>
     <nav>
       <ol class="breadcrumb">
         <li class="breadcrumb-item">Dashboard</a></li>

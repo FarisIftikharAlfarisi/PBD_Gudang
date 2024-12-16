@@ -11,16 +11,14 @@ class InventarisSeeder extends Seeder
     {
         DB::table('inventaris')->insert([
             [
-                'ID_Barang' => 3, // Barang pertama
-                'ID_Karyawan' => 1, // Karyawan yang bertanggung jawab
-                'Jumlah_Barang_Aktual' => 100, // Jumlah awal barang
+                'ID_Barang' => 1, // Barang pertama
+                'Jumlah_Barang_Aktual' => 10, // Jumlah awal barang
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'ID_Barang' => 4, // Barang kedua
-                'ID_Karyawan' => 2,
-                'Jumlah_Barang_Aktual' => 50,
+                'ID_Barang' => 2, // Barang kedua
+                'Jumlah_Barang_Aktual' => 5,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]
