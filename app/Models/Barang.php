@@ -20,7 +20,7 @@ class Barang extends Model
         'Harga_Jual',
         'Kode_Part',
         'Merek',
-    ];    
+    ];
 
     // Relasi ke model Kategori
     public function kategori()
@@ -47,5 +47,10 @@ class Barang extends Model
     //relasi ke model inventaris
     public function inventaris(){
         return $this->hasOne(Inventaris::class, 'ID_Barang');
+    }
+
+    //relasi ke order detail
+    public function orderdetail() {
+        return $this->hasMany(OrderDetail::class, 'ID_Barang');
     }
 }
