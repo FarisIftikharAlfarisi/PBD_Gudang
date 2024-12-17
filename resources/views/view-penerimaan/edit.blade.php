@@ -10,8 +10,12 @@
         </ol>
     </nav>
 </div>
-<div class="card">
-    <div class="card-body">
+
+<section class="section">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
         <h5 class="card-title">Form Edit Penerimaan Barang</h5>
 
         <form action="{{ route('penerimaan-update-process', $penerimaan->ID_Penerimaan) }}" method="POST">
@@ -71,7 +75,6 @@
         </form>
     </div>
 </div>
-
 <script>
     document.getElementById('add-barang').addEventListener('click', function () {
         const container = document.getElementById('barang-container');

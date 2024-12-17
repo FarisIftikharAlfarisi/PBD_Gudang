@@ -14,7 +14,7 @@ class Penerimaan extends Model
         'No_Faktur',
         'Tanggal_Penerimaan',
         'ID_Supplier',
-        'jumlah_jenis_barang',
+        'ID_Karyawan',
     ];
 
 
@@ -22,6 +22,11 @@ class Penerimaan extends Model
     public function supplier()
     {
         return $this->belongsTo(Supplier::class, 'ID_Supplier', 'ID_Supplier');
+    }
+
+    public function karyawan()
+    {
+        return $this->belongsTo(Karyawan::class, 'ID_Karyawan','ID_Karyawan');
     }
 
     public function details()
