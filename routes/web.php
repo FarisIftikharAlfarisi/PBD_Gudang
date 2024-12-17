@@ -106,6 +106,11 @@ Route::middleware([App\Http\Middleware\KaryawanAuth::class, 'cek_role:Owner'])->
     Route::get('/dashboard/pengeluaran', [PengeluaranController::class,'index'])->name('pengeluaran-index-page');
     Route::get('/dashboard/pengeluaran/pengeluaran-baru', [PengeluaranController::class,'create'])->name('pengeluaran-create-page');
     Route::post('/dashboard/pengeluaran/create-process', [PengeluaranController::class,'store'])->name('pengeluaran-store-process');
+    Route::get('/dashboard/pengeluaran/update/{id}', [PengeluaranController::class, 'edit'])->name('pengeluaran-edit-page');
+    Route::put('/dashboard/pengeluaran/{id}', [PengeluaranController::class, 'update'])->name('pengeluaran-update-process');
+    Route::delete('/dashboard/pengeluaran/delete/{id}', [PengeluaranController::class,'destroy'])->name('pengeluaran-delete');
+    Route::get('dashboard/pengeluaran/{id}/invoice', [PengeluaranController::class, 'generateInvoice'])->name('pengeluaran-invoice');
+
 
 });
 

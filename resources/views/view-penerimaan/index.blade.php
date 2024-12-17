@@ -21,7 +21,6 @@
           <tr>
             <th>No.Faktur</th>
             <th>Supplier</th>
-            <th>Jumlah Jenis Barang</th>
             <th>Tanggal Masuk</th>
             <th>Aksi</th>
           </tr>
@@ -31,7 +30,6 @@
         <tr>
             <td>{{ $penerimaan->No_Faktur }}</td>
             <td>{{ $penerimaan->supplier->Nama_Supplier }}</td>
-            <td>{{ $penerimaan->jumlah_jenis_barang }}</td> <!-- Ganti sesuai nama atribut yang menghitung jumlah jenis barang -->
             <td>{{ $penerimaan->Tanggal_Penerimaan }}</td>
             <td>
                 <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal{{ $penerimaan->ID_Penerimaan }}">

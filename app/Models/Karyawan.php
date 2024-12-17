@@ -15,6 +15,7 @@ class Karyawan extends Authenticatable
 
     // Kolom yang diizinkan untuk mass assignment
     protected $fillable = [
+        'ID_Karyawan',
         'Nomor_karyawan',
         'email',
         'password',

@@ -18,11 +18,9 @@ return new class extends Migration
 
             $table->unsignedBigInteger('ID_Supplier');
             $table->foreign('ID_Supplier')->references('ID_Supplier')->on('suppliers')->onDelete('cascade');
-
-            $table->unsignedBigInteger('ID_Karyawan')->nullable();
+            $table->unsignedBigInteger('ID_Karyawan');
             $table->foreign('ID_Karyawan')->references('ID_Karyawan')->on('karyawans')->onDelete('cascade');
 
-            $table->integer('jumlah_jenis_barang');
             $table->timestamps();
         });
 
