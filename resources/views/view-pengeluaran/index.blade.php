@@ -36,17 +36,20 @@
             <td>{{ $pengeluaran->Tanggal_Pengeluaran }}</td>
             <td>
               <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal{{ $pengeluaran->ID_Pengeluaran }}">
-                  Detail
+                  <i class="bi bi-list-ul"></i>
               </button>
               <a href="{{ route('pengeluaran-edit-page', $pengeluaran->ID_Pengeluaran) }}" class="btn btn-warning btn-sm">
-                  <i class="bi bi-pencil-square"></i> Edit
+                  <i class="bi bi-pencil-square"></i>
               </a>
               <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $pengeluaran->ID_Pengeluaran }}">
-                  Hapus
+                  <i class="bi bi-trash3"></i>
               </button>
-              <a href="{{ route('pengeluaran-invoice', $pengeluaran->ID_Pengeluaran) }}" class="btn btn-primary" target="_blank">
-                Cetak Invoice
-            </a>                       
+              <a href="{{ route('pengeluaran-invoice', $pengeluaran->ID_Pengeluaran) }}" class="btn btn-primary btn-sm" target="_blank">
+                <i class="bi bi-file-earmark-ruled"></i> Invoice
+            </a>
+              <a href="{{ route('pengeluaran-surat-jalan', $pengeluaran->ID_Pengeluaran) }}" class="btn btn-primary btn-sm" target="_blank">
+                <i class="bi bi-file-earmark-ruled"></i> Surat Jalan
+            </a>
           </td>
       </tr>
       @endforeach

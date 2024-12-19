@@ -9,14 +9,14 @@ use App\Models\Pengeluaran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Barryvdh\DomPDF\Facade\Pdf; 
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PengeluaranController extends Controller
 {
     // Menampilkan daftar pengeluaran
     public function index()
     {
-        $pengeluarans = Pengeluaran::with(['karyawan','details.barang']) 
+        $pengeluarans = Pengeluaran::with(['karyawan','details.barang'])
             ->orderBy('id_pengeluaran', 'desc')
             ->get();
         return view('view-pengeluaran.index', compact('pengeluarans'));
@@ -25,9 +25,24 @@ class PengeluaranController extends Controller
     // Menampilkan form untuk membuat pengeluaran baru
     public function create()
     {
-        $barangs = Barang::all(); // Daftar barang untuk dropdown
+
+        // Pembuat nomor faktur
+        $penanggung_jawab = Auth::guard('karyawan')->user()->Nomor_karyawan;
+        $date = date('dmY');
+        $time = date('His');
+        $count = Pengeluaran::where('created_at', $date)->count();
+        $count = $count + 1;
+        $count = str_pad($count, 4, '0', STR_PAD_LEFT);
+
+        $nomor_faktur = 'FK/'.$date.'/JDM/SV/'.$penanggung_jawab.'/'.$count;
+
+
+        $barangs = DB::table('inventaris')
+            ->join('barangs', 'inventaris.ID_Barang', '=', 'barangs.ID_Barang')
+            ->select('barangs.*' ,'inventaris.Jumlah_Barang_Aktual')
+            ->where('inventaris.Jumlah_Barang_Aktual', '>', 0)->get();
         $karyawans = Karyawan::all(); // Daftar karyawan untuk dropdown
-        return view('view-pengeluaran.create', compact('barangs', 'karyawans'));
+        return view('view-pengeluaran.create', compact('barangs', 'karyawans','nomor_faktur'));
     }
 
     // Menyimpan pengeluaran baru
@@ -193,4 +208,20 @@ public function generateInvoice($id)
     return $pdf->stream("invoice_pengeluaran_{$pengeluaran->No_Faktur}.pdf");
 }
 
+public function generateSuratJalan($id)
+{
+
+    return view('error-pages.pages-error-404');
+    // // Ambil data pengeluaran berdasarkan ID
+    // $pengeluaran = Pengeluaran::with(['details.barang', 'karyawan'])->findOrFail($id);
+
+    // // Data tambahan
+    // $karyawan = Auth::guard('karyawan')->user(); // Karyawan yang sedang login
+
+    // // Render view ke PDF menggunakan DomPDF
+    // $pdf = Pdf::loadView('view-pengeluaran.surat_jalan', compact('pengeluaran', 'karyawan'));
+
+    // // Return file PDF untuk diunduh atau ditampilkan
+    // return $pdf->stream("surat_jalan_pengeluaran_{$pengeluaran->No_Faktur}.pdf");
+}
 }

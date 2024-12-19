@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Karyawan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class KaryawanController extends Controller
@@ -15,10 +16,16 @@ class KaryawanController extends Controller
         return view('view-karyawan.index', compact('karyawans'));
     }
 
+    public function profil(){
+        //dapatkan data karyawan yang sedang login
+        $data_karyawan = Auth::guard('karyawan')->user();
+        return view('view-user-profile.index', compact('data_karyawan'));
+    }
+
     // Menampilkan form untuk membuat karyawan baru
     public function create()
     {
-        
+
         return view('view-karyawan.create');
     }
 

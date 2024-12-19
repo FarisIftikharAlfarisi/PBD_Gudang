@@ -31,14 +31,14 @@
                    <td>
                      <!-- Tombol Edit dengan Modal -->
                      <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal-{{ $kategori->ID_Kategori }}">
-                         Edit
+                        <i class="bi bi-pencil-square"></i>
                      </button>
 
                      <!-- Tombol untuk hapus -->
                      <form action="{{ route('kategori-delete', ['id'=>$kategori->ID_Kategori]) }}" method="POST" style="display:inline;">
                          @csrf
                          @method('DELETE')
-                         <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah kamu yakin ingin menghapus kategori ini?')">Hapus</button>
+                         <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah kamu yakin ingin menghapus kategori ini?')"> <i class="bi bi-trash3"></i></button>
                      </form>
                    </td>
                </tr>

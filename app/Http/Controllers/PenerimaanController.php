@@ -24,8 +24,6 @@ class PenerimaanController extends Controller
     return view('view-penerimaan.index', compact('penerimaans'));
 }
 
-
-
     // Menampilkan form untuk membuat penerimaan baru
     public function create()
     {
@@ -37,48 +35,61 @@ class PenerimaanController extends Controller
 
     // Menyimpan penerimaan baru
     public function store(Request $request)
-{
-    // Validasi data input
-    $request->validate([
-        'No_Faktur' => 'required|string|unique:penerimaans,no_faktur',
-        'Tanggal_Penerimaan' => 'required|date',
-        'ID_Supplier' => 'required|exists:suppliers,ID_Supplier',
-        'ID_Barang.*' => 'required|exists:barangs,ID_Barang',
-    ]);
-    $karyawan = Auth::guard('karyawan')->user(); // Menggunakan guard karyawan
-    $karyawan_id = $karyawan->ID_Karyawan;
+    {
+        // Debugging request untuk melihat data yang diterima
+        // dd($request->all());
 
-    // Simpan data utama ke tabel `penerimaans`
-    $penerimaanId = DB::table('penerimaans')->insertGetId([
-        'No_Faktur' => $request->No_Faktur,
-        'Tanggal_Penerimaan' => $request->Tanggal_Penerimaan,
-        'ID_Supplier' => $request->ID_Supplier,
-        'ID_Karyawan' => $karyawan_id,
-        'created_at' => now(),
-        'updated_at' => now(),
-    ]);
+        // Validasi data input
+        $request->validate([
+            'No_Faktur' => 'required|string|unique:penerimaans,no_faktur',
+            'Tanggal_Penerimaan' => 'required|date',
+            'ID_Supplier' => 'required|exists:suppliers,ID_Supplier',
+            'ID_Barang.*' => 'required|exists:barangs,ID_Barang',
+            'Jumlah.*' => 'required|numeric',
+        ]);
 
-    // Simpan detail penerimaan langsung ke tabel `detail_penerimaans`
-    $details = [];
-    foreach ($request->ID_Barang as $index => $ID_Barang) {
-        $details[] = [
-            'ID_Penerimaan' => $penerimaanId, // ID dari penerimaan yang baru dibuat
-            'ID_Barang' => $ID_Barang,
-            'qty' => $request->Jumlah[$index], // Menambahkan qty (Jumlah)
+        $karyawan = Auth::guard('karyawan')->user(); // Menggunakan guard karyawan
+        $karyawan_id = $karyawan->ID_Karyawan;
+
+        // Simpan data utama ke tabel `penerimaans`
+        $penerimaanId = DB::table('penerimaans')->insertGetId([
+            'No_Faktur' => $request->No_Faktur,
+            'Tanggal_Penerimaan' => $request->Tanggal_Penerimaan,
+            'ID_Supplier' => $request->ID_Supplier,
+            'ID_Karyawan' => $karyawan_id,
             'created_at' => now(),
             'updated_at' => now(),
-        ];
+        ]);
 
-        // Update atau tambah jumlah barang di tabel `inventaris`
-        $this->updateInventaris($ID_Barang, $request->Jumlah[$index]);
+        // Simpan detail penerimaan langsung ke tabel `detail_penerimaans`
+        $details = [];
+        foreach ($request->ID_Barang as $index => $ID_Barang) {
+            $details[] = [
+                'ID_Penerimaan' => $penerimaanId, // ID dari penerimaan yang baru dibuat
+                'ID_Barang' => $ID_Barang,
+                'qty' => $request->Jumlah[$index], // Menambahkan qty (Jumlah)
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+
+            // Update atau tambah jumlah barang di tabel `inventaris`
+            $this->updateInventaris($ID_Barang, $request->Jumlah[$index]);
+
+            // Periksa apakah ada harga baru untuk barang ini
+            if (!is_null($request->Harga_Baru[$index])) {
+                DB::table('barangs')
+                    ->where('ID_Barang', $ID_Barang)
+                    ->update(['Harga_Pokok' => $request->Harga_Baru[$index], 'updated_at' => now()]);
+            }
+        }
+
+        // Batch insert ke tabel `detail_penerimaans`
+        DB::table('detail_penerimaans')->insert($details);
+
+        // Redirect ke halaman index dengan pesan sukses
+        return redirect()->route('penerimaan-index-page')->with('success', 'Penerimaan berhasil disimpan.');
     }
 
-    // Batch insert ke tabel `detail_penerimaans`
-    DB::table('detail_penerimaans')->insert($details);
-
-    // Redirect ke halaman index dengan pesan sukses
-    return redirect()->route('penerimaan-index-page')->with('success', 'Penerimaan berhasil disimpan.');
-}
 
 /**
  * Fungsi untuk memperbarui atau menambah data inventaris.
@@ -168,10 +179,10 @@ private function updateInventaris($ID_Barang, $jumlah)
      {
          $penerimaan = Penerimaan::findOrFail($id);
          $penerimaan->delete();
- 
+
          return redirect()->route('penerimaan-index-page')->with('success', 'Penerimaan berhasil dihapus.');
      }
- 
+
 
 
 }
