@@ -83,8 +83,9 @@
             <div class="card">
                 <div class="card-body">
                     <div class="card-title">Transaksi</div>
-                    <form action="" method="post">
+                    <form action="{{ route('update-pesanan'['nomor_nota' => $order->Nomor_Nota]) }}">
                         @csrf
+                        @method('put')
                         <div class="form-group">
                             <label for="Metode_Pembayaran"> Metode Pembayaran </label>
                             <select name="Metode_Pembayaran" id="metodePembayaran" class="form-control">
@@ -110,6 +111,7 @@
                             <label for="qris_image" class="form-label">Scan QR Code</label>
                             <img id="qris_image" src="/path/to/qris.png" alt="QR Code" style="width: 200px;">
                         </div>
+                        <button type="submit" class="btn btn-primary">Bayar</button>
                     </form>
                 </div>
             </div>
@@ -128,28 +130,41 @@
             const kembalianDisplay = document.getElementById('kembalian-display');
 
             // Fungsi untuk memformat angka dengan pemisah ribuan
+            // Fungsi untuk menghapus format angka
+            function unformatNumber(value) {
+                return value.replace(/[^0-9]/g, ''); // Hapus semua kecuali angka
+            }
+
+            // Fungsi untuk memformat angka dengan tanda ribuan
             function formatNumber(value) {
                 return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             }
 
-            // Fungsi untuk menghapus format angka ke nilai asli
-            function unformatNumber(value) {
-                return value.replace(/\./g, "");
-            }
 
             // Event untuk memformat input uang masuk
             uangMasuk.addEventListener('input', function() {
-                const rawValue = unformatNumber(this.value); // Hapus format saat mengetik
-                const uangMasukValue = parseInt(rawValue) || 0;
+                // Ambil nilai mentah (tanpa format)
+                const rawValue = unformatNumber(this.value);
 
-                // Tampilkan format angka di input
+                // Pastikan input angka yang valid
+                if (rawValue === "") {
+                    this.value = ""; // Jika kosong, biarkan kosong
+                    return;
+                }
+
+                // Ubah raw value ke integer dan format ulang
+                const uangMasukValue = parseInt(rawValue, 10) || 0;
+
+                // Update nilai input dengan format angka
                 this.value = formatNumber(rawValue);
 
                 // Hitung kembalian
                 const hasilKembalian = uangMasukValue - totalBayar;
-                const formattedKembalian = hasilKembalian >= 0 ? formatNumber(hasilKembalian) : "0";
+                const formattedKembalian = hasilKembalian >= 0 ? formatNumber(hasilKembalian.toString()) :
+                    "0";
 
                 // Update kembalian di input dan elemen change-price
+                uangMasuk.value = uangMasukValue
                 kembalian.value = formattedKembalian;
                 kembalianDisplay.textContent = formattedKembalian;
             });
@@ -193,42 +208,10 @@
                     return;
                 }
 
-                // Data yang akan dikirim ke backend
-                const data = {
-                    Metode_Pembayaran: metode,
-                    Uang_Masuk: uangMasukValue,
-                    Kembalian: kembalianValue,
-                    _token: "{{ csrf_token() }}" // Tambahkan CSRF token untuk keamanan
-                };
-
-                // Kirim data menggunakan fetch (AJAX)
-                fetch(`/update-pesanan/${nomorNota}`, {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                        },
-                        body: JSON.stringify({
-                            _method: "PUT", // Spoofing method
-                            Metode_Pembayaran: metodePembayaran,
-                            Uang_Masuk: uangMasuk,
-                            Kembalian: kembalian
-                        })
-                    })
-                    .then(response => {
-                        if (response.ok) {
-                            alert("Pesanan berhasil diperbarui.");
-                            location.reload(); // Reload halaman jika berhasil
-                        } else {
-                            alert("Gagal memperbarui pesanan.");
-                        }
-                    })
-                    .catch(error => console.error("Error:", error));
-            }
-
             // Event Listener untuk tombol Print Nota
             document.getElementById('btnPrintNota').addEventListener('click', printNota);
         });
+
 
         function cetakNota() {
             // Ambil elemen yang akan dicetak
@@ -255,6 +238,7 @@
 
             window.location.href = "{{ route('kasir-index-page') }}";
 
-        }
+        };
+
     </script>
 @endsection
