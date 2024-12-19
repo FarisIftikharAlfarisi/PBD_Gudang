@@ -33,13 +33,13 @@
             <td>{{ $penerimaan->Tanggal_Penerimaan }}</td>
             <td>
                 <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal{{ $penerimaan->ID_Penerimaan }}">
-                    Detail
+                    <i class="bi bi-list-ul"></i>
                 </button>
                 <a href="{{ route('penerimaan-edit-page', $penerimaan->ID_Penerimaan) }}" class="btn btn-warning btn-sm">
-                    <i class="bi bi-pencil-square"></i> Edit
+                    <i class="bi bi-pencil-square"></i>
                 </a>
                 <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $penerimaan->ID_Penerimaan }}">
-                    Hapus
+                    <i class="bi bi-trash3"></i>
                 </button>
             </td>
         </tr>

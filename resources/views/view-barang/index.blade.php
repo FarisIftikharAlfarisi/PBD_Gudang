@@ -23,7 +23,10 @@
                 <th>Merek</th>
                 <th>Nama Barang</th>
                 <th>Stok</th>
-                <th>Harga</th>
+                <th>Harga Pokok</th>
+                @if (Auth::guard('karyawan')->user()->Jabatan == 'Owner')
+                <th>Harga Jual</th>
+                @endif
                 <th>Aksi</th>
               </tr>
             </thead>
@@ -35,21 +38,27 @@
                    <td>{{ $barang->Merek }}</td>
                    <td>{{ $barang->Nama_Barang}}</td>
                    <td>{{ $barang->inventaris->Jumlah_Barang_Aktual ?? 'Tidak Ada' }}</td>
-                   <td>{{ $barang->Harga_Jual }}</td>
+                   @if (Auth::guard('karyawan')->user()->Jabatan == 'Owner')
+                       <td> Rp.{{ number_format($barang->Harga_Pokok, 0, ',', '.') }} </td>
+                   @endif
+                   <td>Rp.{{ number_format($barang->Harga_Jual, 0, ',', '.') }}</td>
                    <td>
                        <!-- Tombol untuk membuka modal -->
                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal{{ $barang->ID_Barang }}" title="Detail">
                         <i class="bi bi-list-ul"></i>
                        </button>
-                        <!-- Edit Modal Trigger -->
-                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal{{ $barang->ID_Barang }}" title="Edit">
-                            <i class="bi bi-pencil-square"></i>
+
+                       @if (Auth::guard('karyawan')->user()->Jabatan == 'Owner')
+                       <!-- Edit Modal Trigger -->
+                       <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal{{ $barang->ID_Barang }}" title="Edit">
+                           <i class="bi bi-pencil-square"></i>
                         </button>
 
                         <!-- Delete Modal Trigger -->
                         <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $barang->ID_Barang }}" title="Hapus" >
                             <i class="bi bi-trash3"></i>
                         </button>
+                        @endif
 
 
                        <!-- Detail Modal -->

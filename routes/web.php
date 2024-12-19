@@ -39,7 +39,11 @@ Route::middleware([App\Http\Middleware\KaryawanAuth::class, 'cek_role:Staff'])->
     Route::get('/dashboard-kasir', [KasirController::class,'index'])->name('kasir-index-page');
     Route::get('/get-loyal-customer', [KasirController::class,'daftar_customer'])->name('daftar-customer');
     Route::post('/store-pesanan', [KasirController::class,'storePesanan'])->name('store-pesanan');
-    Route::get('/dashboard-kasir/nota/', [KasirController::class,'printNota'])->name('kasir-nota-page');
+    Route::put('/update-pesanan/{nomor_nota}', [KasirController::class,'updatePesanan'])->name('update-pesanan');
+    Route::get('/dashboard-kasir/nota', [KasirController::class,'printNota'])->name('kasir-nota-page');
+    Route::get('/dashboard-kasir/riwayat', [KasirController::class,'riwayat'])->name('riwayat-pembelian-kasir');
+    Route::get('/barang', [BarangController::class,'index'])->name('barang-index-page');
+
     //end kasir routes
 });
 
@@ -110,6 +114,7 @@ Route::middleware([App\Http\Middleware\KaryawanAuth::class, 'cek_role:Owner'])->
     Route::put('/dashboard/pengeluaran/{id}', [PengeluaranController::class, 'update'])->name('pengeluaran-update-process');
     Route::delete('/dashboard/pengeluaran/delete/{id}', [PengeluaranController::class,'destroy'])->name('pengeluaran-delete');
     Route::get('dashboard/pengeluaran/{id}/invoice', [PengeluaranController::class, 'generateInvoice'])->name('pengeluaran-invoice');
+    Route::get('dashboard/pengeluaran/{id}/surat-jalan', [PengeluaranController::class, 'generateSuratJalan'])->name('pengeluaran-surat-jalan');
 
 
 });

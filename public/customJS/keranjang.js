@@ -26,6 +26,49 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+    // Ambil elemen modal beli
+    const modalBeli = document.getElementById("modalBeli");
+    const inputJumlah = modalBeli.getElementById("jumlahBeli"); // Input jumlah barang di modal
+    const tombolSubmit = modalBeli.getElementById("btnTambahBarang"); // Tombol submit pesanan
+
+    // Tambahkan event listener ke semua tombol "Beli"
+    document.querySelectorAll(".btn-beli").forEach(button => {
+        button.addEventListener("click", function () {
+            // Ambil stok barang dari tombol
+            const stokBarang = parseInt(this.getAttribute("data-stok"));
+
+            // Reset input jumlah saat modal dibuka
+            inputJumlah.value = 1;
+            inputJumlah.max = stokBarang; // Set nilai maksimum pada input jumlah
+
+            // Tampilkan informasi stok di modal (opsional)
+            modalBeli.querySelector("#stokTersedia").textContent = stokBarang;
+
+            // Validasi input jumlah saat berubah
+            inputJumlah.addEventListener("input", function () {
+                const jumlahInput = parseInt(this.value);
+
+                if (jumlahInput > stokBarang) {
+                    this.value = stokBarang; // Batasi jumlah ke stok maksimum
+                    alert("Jumlah barang tidak boleh melebihi stok yang tersedia!");
+                } else if (jumlahInput < 1 || isNaN(jumlahInput)) {
+                    this.value = 1; // Batasi jumlah minimal ke 1
+                }
+            });
+
+            // Validasi sebelum submit
+            tombolSubmit.addEventListener("click", function (e) {
+                if (inputJumlah.value > stokBarang) {
+                    e.preventDefault();
+                    alert("Jumlah barang melebihi stok. Harap perbaiki input Anda.");
+                }
+            });
+        });
+    });
+});
+
+
 document.addEventListener("DOMContentLoaded", () => {
     const searchBar = document.getElementById("searchBar");
     const items = document.querySelectorAll(".item-card");
