@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Karyawan;
 
 class AuthenticationController extends Controller
 {
@@ -34,13 +35,21 @@ class AuthenticationController extends Controller
             }else{
                 return redirect()->route('analisis');
             }
+        }else{
+            $user_email = Karyawan::where('email', $request->email)->first();
+            $user_password = Karyawan::where('password', $request->password)->first();
 
-
+            if($request->email != $user_email){
+                return redirect()->back()->with(['error' => 'Email tidak terdaftar']);
+            }else if($request->password != $user_password){
+                return redirect()->back()->with(['error'=> 'Password salah']);
+            }else{
+                return redirect()->back()->with(['error' => 'Email dan Password tidak sesuai']);
+            }
         }
-
         // Jika login gagal, redirect dengan error
         return redirect()->back()->withErrors(['error' => 'Email atau password salah!']);
-    }
+}
 
     public function logout()
     {

@@ -53,4 +53,5 @@ class Barang extends Model
     public function orderdetail() {
         return $this->hasMany(OrderDetail::class, 'ID_Barang');
     }
+
 }

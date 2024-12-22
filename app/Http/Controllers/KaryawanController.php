@@ -112,4 +112,19 @@ class KaryawanController extends Controller
 
         return redirect()->route('karyawan-index-page')->with('success', 'Karyawan berhasil dihapus.');
     }
+
+    public function updatePassword(Request $request, $id)
+    {
+        // Validasi input
+        $request->validate([
+            'password' => 'required|min:6',
+        ]);
+
+        // Update password karyawan
+        $karyawan = Karyawan::findOrFail($id);
+        $karyawan->password = Hash::make($request->password);
+        $karyawan->save();
+
+        return redirect()->route('profil')->with('success', 'Password berhasil diubah.');
+    }
 }
