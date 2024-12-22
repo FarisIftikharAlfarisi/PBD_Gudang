@@ -83,7 +83,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="card-title">Transaksi</div>
-                    <form action="{{ route('update-pesanan', ['nomor_nota' => $order->Nomor_Nota]) }}" method="POST">
+                    <form action="{{ route('update-pesanan'['nomor_nota' => $order->Nomor_Nota]) }}">
                         @csrf
                         @method('put')
                         <div class="form-group">
@@ -112,7 +112,7 @@
                             <img id="qris_image" src="/path/to/qris.png" alt="QR Code" style="width: 200px;">
                         </div>
                         <button type="submit" class="btn btn-primary">Bayar</button>
-                    </form>                    
+                    </form>
                 </div>
             </div>
         </div>
@@ -129,7 +129,6 @@
             const kembalian = document.getElementById('kembalian');
             const kembalianDisplay = document.getElementById('kembalian-display');
 
-            // Fungsi untuk memformat angka dengan pemisah ribuan
             // Fungsi untuk menghapus format angka
             function unformatNumber(value) {
                 return value.replace(/[^0-9]/g, ''); // Hapus semua kecuali angka
@@ -140,31 +139,21 @@
                 return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             }
 
-
             // Event untuk memformat input uang masuk
             uangMasuk.addEventListener('input', function() {
-                // Ambil nilai mentah (tanpa format)
                 const rawValue = unformatNumber(this.value);
-
-                // Pastikan input angka yang valid
                 if (rawValue === "") {
-                    this.value = ""; // Jika kosong, biarkan kosong
+                    this.value = "";
                     return;
                 }
 
-                // Ubah raw value ke integer dan format ulang
                 const uangMasukValue = parseInt(rawValue, 10) || 0;
-
-                // Update nilai input dengan format angka
                 this.value = formatNumber(rawValue);
 
-                // Hitung kembalian
                 const hasilKembalian = uangMasukValue - totalBayar;
                 const formattedKembalian = hasilKembalian >= 0 ? formatNumber(hasilKembalian.toString()) :
                     "0";
 
-                // Update kembalian di input dan elemen change-price
-                uangMasuk.value = uangMasukValue
                 kembalian.value = formattedKembalian;
                 kembalianDisplay.textContent = formattedKembalian;
             });
@@ -184,10 +173,10 @@
                 }
             });
 
-            // Fungsi untuk mengirimkan data ke backend
-            function printNota() {
-                const metode = metodePembayaran.value;
+            // Fungsi untuk fallback form submission
+            function fallbackFormSubmission() {
                 const nomorNota = "{{ $order->Nomor_Nota }}"; // Ambil nomor nota dari backend
+                const metode = metodePembayaran.value;
 
                 let uangMasukValue = 0;
                 let kembalianValue = 0;
@@ -201,7 +190,7 @@
                         return;
                     }
                 } else if (metode === "Transfer" || metode === "QRIS") {
-                    uangMasukValue = totalBayar; // Total pembayaran langsung
+                    uangMasukValue = totalBayar;
                     kembalianValue = 0;
                 } else {
                     alert("Pilih metode pembayaran terlebih dahulu.");
@@ -210,36 +199,35 @@
 
             // Event Listener untuk tombol Print Nota
             document.getElementById('btnPrintNota').addEventListener('click', printNota);
-            }
         });
 
 
-        function cetakNota() {
-            // Ambil elemen yang akan dicetak
-            const printContent = document.getElementById('notaPrintArea');
 
-            if (!printContent) {
-                console.error("Elemen dengan ID 'notaPrintArea' tidak ditemukan!");
-                return;
-            }
+        // function cetakNota() {
+        //     // Ambil elemen yang akan dicetak
+        //     const printContent = document.getElementById('notaPrintArea');
 
-            // Simpan konten halaman asli untuk dikembalikan setelah print
-            const originalContent = document.body.innerHTML;
+        //     if (!printContent) {
+        //         console.error("Elemen dengan ID 'notaPrintArea' tidak ditemukan!");
+        //         return;
+        //     }
 
-            // Ganti isi halaman dengan elemen yang akan dicetak
-            document.body.innerHTML = printContent.innerHTML;
+        //     // Simpan konten halaman asli untuk dikembalikan setelah print
+        //     const originalContent = document.body.innerHTML;
 
-            // Cetak halaman
-            window.print();
+        //     // Ganti isi halaman dengan elemen yang akan dicetak
+        //     document.body.innerHTML = printContent.innerHTML;
 
-            // Kembalikan isi halaman seperti semula
-            document.body.innerHTML = originalContent;
+        //     // Cetak halaman
+        //     window.print();
 
-            location.reload();
+        //     // Kembalikan isi halaman seperti semula
+        //     document.body.innerHTML = originalContent;
 
-            window.location.href = "{{ route('kasir-index-page') }}";
+        //     location.reload();
 
-        };
+        //     window.location.href = "{{ route('kasir-index-page') }}";
 
+        // };
     </script>
 @endsection

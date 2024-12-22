@@ -7,6 +7,7 @@ use App\Http\Controllers\BarangController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\GudangController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\PenerimaanController;
@@ -39,7 +40,7 @@ Route::middleware([App\Http\Middleware\KaryawanAuth::class, 'cek_role:Staff'])->
     Route::get('/dashboard-kasir', [KasirController::class,'index'])->name('kasir-index-page');
     Route::get('/get-loyal-customer', [KasirController::class,'daftar_customer'])->name('daftar-customer');
     Route::post('/store-pesanan', [KasirController::class,'storePesanan'])->name('store-pesanan');
-    Route::put('/update-pesanan/{nomor_nota}', [KasirController::class,'updatePesanan'])->name('update-pesanan');
+    Route::put('/update-pesanan/{Nomor_Nota}', [KasirController::class,'updatePesanan'])->name('update-pesanan');
     Route::get('/dashboard-kasir/nota', [KasirController::class,'printNota'])->name('kasir-nota-page');
     Route::get('/dashboard-kasir/riwayat', [KasirController::class,'riwayat'])->name('riwayat-pembelian-kasir');
     Route::get('/barang', [BarangController::class,'index'])->name('barang-index-page');
@@ -119,4 +120,8 @@ Route::middleware([App\Http\Middleware\KaryawanAuth::class, 'cek_role:Owner'])->
 
 });
 
-
+// API ROUTES
+// // data warehouse API
+// Route::prefix('api')->middleware('api')->group(function () {
+//     Route::get('/pipeline', [ChatController::class, 'pipeline']);
+// });
