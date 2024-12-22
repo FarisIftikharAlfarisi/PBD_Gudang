@@ -16,6 +16,7 @@ class PengeluaranSeeder extends Seeder
                 'ID_Karyawan' => 1, // Sesuaikan dengan ID_Karyawan yang ada
                 'Nama_Penerima' => 'Budi Santoso',
                 'Tujuan' => 'Jakarta',
+                'Total' => 700000,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -25,6 +26,7 @@ class PengeluaranSeeder extends Seeder
                 'ID_Karyawan' => 2,
                 'Nama_Penerima' => 'Siti Aminah',
                 'Tujuan' => 'Surabaya',
+                'Total' => 225000,
                 'created_at' => now(),
                 'updated_at' => now()
             ]

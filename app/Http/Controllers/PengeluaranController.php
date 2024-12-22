@@ -25,16 +25,19 @@ class PengeluaranController extends Controller
     // Menampilkan form untuk membuat pengeluaran baru
     public function create()
     {
-
         // Pembuat nomor faktur
         $penanggung_jawab = Auth::guard('karyawan')->user()->Nomor_karyawan;
-        $date = date('dmY');
-        $time = date('His');
-        $count = Pengeluaran::where('created_at', $date)->count();
-        $count = $count + 1;
-        $count = str_pad($count, 4, '0', STR_PAD_LEFT);
+        $date = date('Y-m-d'); // Format tanggal standar (YYYY-MM-DD) untuk filter
+        $formattedDate = date('dmY'); // Format tanggal untuk nomor faktur
 
-        $nomor_faktur = 'FK/'.$date.'/JDM/SV/'.$penanggung_jawab.'/'.$count;
+        // Hitung jumlah pengeluaran pada tanggal tersebut
+        $count = Pengeluaran::whereDate('created_at', $date)->count();
+        $count = $count + 1; // Tambahkan 1 untuk faktur berikutnya
+        $count = str_pad($count, 4, '0', STR_PAD_LEFT); // Tambahkan padding jika perlu
+
+        // Buat nomor faktur
+        $nomor_faktur = 'FK/' . $formattedDate . '/JDM/SV/' . $penanggung_jawab . '/' . $count;
+
 
 
         $barangs = DB::table('inventaris')
@@ -71,6 +74,7 @@ class PengeluaranController extends Controller
         'ID_Karyawan' => $karyawan_id,
         'Nama_Penerima' => $request->Nama_Penerima,
         'Tujuan' => $request->Tujuan,
+        'Total' => $request->grand_total,
         'created_at' => now(),
         'updated_at' => now(),
     ]);
@@ -82,6 +86,9 @@ class PengeluaranController extends Controller
             'ID_Pengeluaran' => $pengeluaranId, // ID dari pengeluaran yang baru dibuat
             'ID_Barang' => $ID_Barang,
             'qty' => $request->Jumlah[$index], // Menambahkan qty (Jumlah)
+            'Harga_Jual' => $request->Harga[$index],
+            'Diskon' => $request->Diskon[$index],
+            'Total' => $request->Subtotal[$index],
             'created_at' => now(),
             'updated_at' => now(),
         ];
@@ -174,6 +181,9 @@ private function updateInventaris($ID_Barang, $jumlah)
         $pengeluaran->details()->create([
             'ID_Barang' => $barang['ID_Barang'],
             'qty' => $barang['qty'],
+            'Harga_Jual' => $barang['Harga'],
+            'Diskon' => $barang['Diskon'],
+            'Subtotal' => $barang['Subtotal']
         ]);
 
         // Tambahkan stok baru
@@ -186,42 +196,53 @@ private function updateInventaris($ID_Barang, $jumlah)
     // Menghapus pengeluaran
     public function destroy($id)
     {
-        $pengeluaran = Pengeluaran::findOrFail($id);
+        $pengeluaran = Pengeluaran::with('details')->findOrFail($id);
+        foreach ($pengeluaran->details as $detail) {
+            $this->updateInventaris($detail->ID_Barang, -$detail->qty); // Tambahkan stok lama
+        }
         $pengeluaran->delete();
 
         return redirect()->route('pengeluaran-index-page')->with('success', 'Pengeluaran berhasil dihapus.');
     }
 
 
-public function generateInvoice($id)
-{
+    public function generateInvoice($id)
+    {
     // Ambil data pengeluaran berdasarkan ID
     $pengeluaran = Pengeluaran::with(['details.barang', 'karyawan'])->findOrFail($id);
 
     // Data tambahan
     $karyawan = Auth::guard('karyawan')->user(); // Karyawan yang sedang login
 
-    // Render view ke PDF menggunakan DomPDF
-    $pdf = Pdf::loadView('view-pengeluaran.invoice', compact('pengeluaran', 'karyawan'));
+    // Ganti karakter yang tidak diizinkan dalam nama file (misal "/")
+    $safeNoFaktur = str_replace(['/', '\\'], '_', $pengeluaran->No_Faktur);
+
+    // Render view ke PDF menggunakan DomPDF dengan orientasi landscape
+    $pdf = Pdf::loadView('view-pengeluaran.invoice', compact('pengeluaran', 'karyawan'))
+              ->setPaper('a4', 'landscape');  // Atur ukuran kertas dan orientasi
 
     // Return file PDF untuk diunduh atau ditampilkan
-    return $pdf->stream("invoice_pengeluaran_{$pengeluaran->No_Faktur}.pdf");
-}
+    return $pdf->stream("invoice_pengeluaran_{$safeNoFaktur}.pdf");
+    }
+
+    
 
 public function generateSuratJalan($id)
 {
 
-    return view('error-pages.pages-error-404');
-    // // Ambil data pengeluaran berdasarkan ID
-    // $pengeluaran = Pengeluaran::with(['details.barang', 'karyawan'])->findOrFail($id);
+   
+    // Ambil data pengeluaran berdasarkan ID
+    $pengeluaran = Pengeluaran::with(['details.barang', 'karyawan'])->findOrFail($id);
 
-    // // Data tambahan
-    // $karyawan = Auth::guard('karyawan')->user(); // Karyawan yang sedang login
+    // Data tambahan
+    $karyawan = Auth::guard('karyawan')->user(); // Karyawan yang sedang login
 
-    // // Render view ke PDF menggunakan DomPDF
-    // $pdf = Pdf::loadView('view-pengeluaran.surat_jalan', compact('pengeluaran', 'karyawan'));
+    $safeNoFaktur = str_replace(['/', '\\'], '_', $pengeluaran->No_Faktur);
 
-    // // Return file PDF untuk diunduh atau ditampilkan
-    // return $pdf->stream("surat_jalan_pengeluaran_{$pengeluaran->No_Faktur}.pdf");
+    // Render view ke PDF menggunakan DomPDF
+    $pdf = Pdf::loadView('view-pengeluaran.surjal', compact('pengeluaran', 'karyawan'));
+
+    // Return file PDF untuk diunduh atau ditampilkan
+    return $pdf->stream("surat_jalan_pengeluaran_{$pengeluaran->safeNo_Faktur}.pdf");
 }
 }

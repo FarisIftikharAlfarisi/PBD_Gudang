@@ -83,7 +83,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="card-title">Transaksi</div>
-                    <form action="{{ route('update-pesanan'['nomor_nota' => $order->Nomor_Nota]) }}">
+                    <form action="{{ route('update-pesanan', ['nomor_nota' => $order->Nomor_Nota]) }}" method="POST">
                         @csrf
                         @method('put')
                         <div class="form-group">
@@ -99,7 +99,7 @@
                             <label for="uang_masuk" class="form-label">Uang Masuk</label>
                             <input type="number" class="form-control" id="uang_masuk" name="uang_masuk"
                                 placeholder="Masukkan Uang Masuk">
-
+                    
                             <label for="kembalian" class="form-label mt-3">Kembalian</label>
                             <input type="text" class="form-control" id="kembalian" name="kembalian" readonly>
                         </div>
@@ -112,7 +112,7 @@
                             <img id="qris_image" src="/path/to/qris.png" alt="QR Code" style="width: 200px;">
                         </div>
                         <button type="submit" class="btn btn-primary">Bayar</button>
-                    </form>
+                    </form>                    
                 </div>
             </div>
         </div>
@@ -210,6 +210,7 @@
 
             // Event Listener untuk tombol Print Nota
             document.getElementById('btnPrintNota').addEventListener('click', printNota);
+            }
         });
 
 
