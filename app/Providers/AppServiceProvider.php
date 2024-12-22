@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\Penerimaan;
 use App\Models\Pengeluaran;
 use App\Observers\PenerimaanObserver;
+use Illuminate\Support\Facades\Route;
 use App\Observers\PengeluaranObserver;
 use Illuminate\Support\ServiceProvider;
 

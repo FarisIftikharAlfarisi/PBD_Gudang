@@ -22,4 +22,9 @@ class Order extends Model
     public function customreRelation(){
         return $this->belongsTo(LoyalCustomer::class);
     }
+
+    public function order_details()
+    {
+        return $this->hasMany(OrderDetail::class, 'Nomor_Nota', 'Nomor_Nota');
+    }
 }

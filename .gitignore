@@ -20,3 +20,6 @@ yarn-error.log
 /.idea
 /.vscode
 /.zed
+
+# abaikan cache dari llm
+python_llm_service/__pycache__/

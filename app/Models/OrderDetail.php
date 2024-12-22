@@ -22,4 +22,9 @@ class OrderDetail extends Model
     public function relasibarang() {
         return $this->belongsTo('App\Models\Barang', 'ID_Barang', 'ID_Barang');
     }
+
+    public function order()
+    {
+        return $this->belongsTo(OrderDetail::class, 'Nomor_Nota', 'Nomor_Nota');
+    }
 }
