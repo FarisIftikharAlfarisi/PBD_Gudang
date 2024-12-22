@@ -34,4 +34,5 @@ class Penerimaan extends Model
         return $this->hasMany(Detail_Penerimaan::class, 'ID_Penerimaan', 'ID_Penerimaan');
     }
 
+
 }

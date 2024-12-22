@@ -2,12 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\DB;
+use App\Models\Order;
+use App\Models\Penerimaan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AnalyticsController extends Controller
 {
     public function analytics(Request $request){
+
+        $data_penerimaan = Penerimaan::all();
+        $data_order = Order::all();
+
+        $data_pengeluaran = DB::table('pengeluarans')->get();
+
+        return view('view-dashboard.index', compact('data_penerimaan', 'data_order'));
+
     // // Ambil filter dari request, jika tidak ada gunakan nilai default (misalnya tahun saat ini)
     // $tahun = $request->input('tahun', date('Y'));
     // $bulan = $request->input('bulan', null);
@@ -94,7 +104,7 @@ class AnalyticsController extends Controller
     // // ->take(10)
     // // ->get();
 
-    return view('view-dashboard.index');
+    // return view('view-dashboard.index');
     }
 
 }
