@@ -1,0 +1,8 @@
+Flask==2.2.3                 # Web framework untuk aplikasi API
+Flask-Cors==3.1.1            # Jika kamu perlu mengatur CORS (Cross-Origin Resource Sharing)
+requests==2.28.2             # Untuk melakukan HTTP request, misalnya untuk mengirim data ke Groq API
+pandas==1.5.3                # Untuk pengolahan data (terutama jika bekerja dengan file Excel)
+python-dotenv==0.21.0        # Untuk menangani variabel lingkungan (API key, DB credentials)
+gunicorn==20.1.0             # Server WSGI untuk produksi (digunakan oleh Flask)
+langchain-community==0.3.10  # menggunakan fungsi fungsi natural language processing dari langchain
+langchain==0.3.10            # menggunakan fungsi fungsi natural language processing dari lang
