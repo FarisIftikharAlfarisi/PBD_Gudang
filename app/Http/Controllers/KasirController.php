@@ -153,23 +153,38 @@ class KasirController extends Controller
     }
 
     public function updatePesanan(Request $request, $nomor_nota){
-    $validatedData = $request->validate([
-        'Metode_Pembayaran' => 'required|string',
-        'uang_masuk' => 'nullable|numeric',
-        'kembalian' => 'nullable|numeric',
-    ]);
 
     $order = Order::where('Nomor_Nota', $nomor_nota)->firstOrFail();
 
     // Debug data yang diterima
-    dd($validatedData);
+    // dd($request->all());
 
-    // Update pesanan
-    $order->update([
-        'Metode_Pembayaran' => $validatedData['Metode_Pembayaran'],
-        'Uang_Masuk' => $validatedData['uang_masuk'] ?? 0,
-        'Kembalian' => $validatedData['kembalian'] ?? 0,
+    $request->validate([
+        'nomor_nota' => 'required|string',
+        'metode_pembayaran' => 'required|string',
+        'uang_masuk' => 'required_if:metode_pembayaran,Tunai|numeric',
+        'kembalian' => 'nullable|numeric',
     ]);
+
+    //jika metode pembayarannya tunai maka update bagian kembalian dan uang masuk
+    if($request->metode_pembayaran == 'Tunai'){
+
+        $order->update([
+            'Metode_Pembayaran' => $request->metode_pembayaran,
+            'Uang_Masuk' => $request->uang_masuk,
+            'Kembalian' => $request->uang_masuk == $order->Total_Pembayaran ? 0 : $request->uang_masuk - $order->Total_Pembayaran
+        ]);
+    }else if( $request->metode_pembayaran == 'Transfer' || $request->metode_pembayaran == 'QRIS'){
+        $order->update([
+            'Metode_Pembayaran' => $request->metode_pembayaran,
+            'Uang_Masuk' => $order->Total_Pembayaran,
+            'Kembalian' => 0
+        ]);
+    }else{
+        return response()->json(['message' => 'Metode pembayaran tidak ditemukan'], 400);
+    }
+
+    $order->save();
 
     return redirect()->route('kasir-index-page')->with('success', 'Pesanan berhasil diperbarui.');
 }

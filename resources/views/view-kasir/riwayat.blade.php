@@ -12,8 +12,8 @@
 </div>
 
 <div class="card">
-    <div class="card-title"> Riwayat Transaksi dari {{ Auth::guard('karyawan')->user()->Kode_Karyawan }} </div>
     <div class="card-body">
+        <div class="card-title"> Riwayat Transaksi dari {{ Auth::guard('karyawan')->user()->Kode_Karyawan }} </div>
         <table class="table datatable">
             <thead>
                 <tr>
@@ -30,8 +30,9 @@
                 <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $r->Nomor_Nota }}</td>
-                    <td>{{ $r->Tanggal_Pembelian}}</td>
-                    <td>{{ $r->Total_Pembayaran}}</td>
+                    <td>{{ \Carbon\Carbon::createFromFormat('dmY', $r->Tanggal_Pembelian)->isoFormat('dddd, D MMMM YYYY') }}
+                    </td>
+                    <td>Rp. {{ number_format($r->Total_Pembayaran, 0, ',', '.') }}</td>
                     <td>{{ $r->Metode_Pembayaran }}</td>
                     <td>
 
