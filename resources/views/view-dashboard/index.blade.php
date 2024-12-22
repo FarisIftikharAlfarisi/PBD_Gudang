@@ -9,6 +9,80 @@
       </ol>
     </nav>
   </div><!-- End Page Title -->
+
+  <div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Surplus Barang</h5>
+
+              <!-- Default Tabs -->
+              <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Unit Kasir</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Unit Pengeluaran</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Unit Penerimaan</button>
+                </li>
+              </ul>
+              <div class="tab-content pt-2" id="myTabContent">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>No. Dokumen</th>
+                                <th>Tanggal</th>
+                                <th>Nilai Transaksi</th>
+                                <th>Metode Pembayaran</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>No. Dokumen</th>
+                                <th>Tanggal</th>
+                                <th>Nilai Transaksi</th>
+                                <th>Penerima</th>
+                                <th>Tujuan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>No. Dokumen</th>
+                                <th>Tanggal</th>
+                                <th>Nilai Transaksi</th>
+                                <th>Barang Diterima</th>
+                                <th>Nama Supplier</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+              </div><!-- End Default Tabs -->
+
+            </div>
+          </div>
+    </div>
+  </div>
+
 {{-- <div class="row" id="filter">
     <div class="card">
         <div class="card-title"> Filter Grafik</div>

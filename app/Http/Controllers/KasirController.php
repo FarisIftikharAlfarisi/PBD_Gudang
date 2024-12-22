@@ -129,6 +129,7 @@ class KasirController extends Controller
             'Jumlah' => $jumlah,
             'Harga_Jual' => $pesanan['harga'],
             'Diskon_Per_Items' => $diskon,
+            'Harga_Akhir' => $pesanan['harga'] - $diskon,
             'Subtotal' => $pesanan['subTotal'],
             'created_at' => now(),
             'updated_at' => now(),

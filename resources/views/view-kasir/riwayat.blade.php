@@ -35,7 +35,6 @@
                     <td>Rp. {{ number_format($r->Total_Pembayaran, 0, ',', '.') }}</td>
                     <td>{{ $r->Metode_Pembayaran }}</td>
                     <td>
-
                     </td>
                 </tr>
                 @endforeach
