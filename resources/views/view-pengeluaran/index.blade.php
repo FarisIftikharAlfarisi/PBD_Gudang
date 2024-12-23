@@ -73,6 +73,9 @@
                       <tr>
                           <th>Nama Barang</th>
                           <th>Jumlah</th>
+                          <th>Harga</th>
+                          <th>Diskon</th>
+                          <th>Total</th>
                       </tr>
                   </thead>
                   <tbody>
@@ -80,6 +83,9 @@
                   <tr>
                       <td>{{ $detail->barang->Nama_Barang }}</td>
                       <td>{{ $detail->qty }}</td>
+                      <td>{{ $detail->Harga_Jual }}</td>
+                      <td>{{ $detail->Diskon }}</td>
+                      <td>{{ $detail->Total }}</td>
                   </tr>
                   @endforeach
                   </tbody>

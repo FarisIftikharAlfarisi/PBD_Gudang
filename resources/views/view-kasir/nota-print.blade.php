@@ -83,7 +83,9 @@
             <div class="card">
                 <div class="card-body">
                     <div class="card-title">Transaksi</div>
-                    <form>
+                    <form action="{{ route('update-pesanan'['nomor_nota' => $order->Nomor_Nota]) }}">
+                        @csrf
+                        @method('put')
                         <div class="form-group">
                             <label for="Metode_Pembayaran"> Metode Pembayaran </label>
                             <select name="Metode_Pembayaran" id="metodePembayaran" class="form-control">
@@ -97,7 +99,7 @@
                             <label for="uang_masuk" class="form-label">Uang Masuk</label>
                             <input type="number" class="form-control" id="uang_masuk" name="uang_masuk"
                                 placeholder="Masukkan Uang Masuk">
-
+                    
                             <label for="kembalian" class="form-label mt-3">Kembalian</label>
                             <input type="text" class="form-control" id="kembalian" name="kembalian" readonly>
                         </div>
@@ -109,17 +111,8 @@
                             <label for="qris_image" class="form-label">Scan QR Code</label>
                             <img id="qris_image" src="/path/to/qris.png" alt="QR Code" style="width: 200px;">
                         </div>
+                        <button type="submit" class="btn btn-primary">Bayar</button>
                     </form>
-                    <form id="fallbackForm" action="{{ route('update-pesanan', $order->Nomor_Nota) }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="_method" value="PUT"> <!-- Alternatif untuk @method('PUT') -->
-                        <input type="hidden" id="nomor_nota_form" name="nomor_nota" value="{{ $order->Nomor_Nota }}">
-                        <input type="hidden" id="metode_pembayaran_form" name="metode_pembayaran">
-                        <input type="hidden" id="uang_masuk_form" name="uang_masuk">
-                        <input type="hidden" id="kembalian_form" name="kembalian">
-                        {{-- <button type="submit" id="btnBayar" class="btn btn-primary">Bayar</button> --}}
-                    </form>
-                    <button type="submit" id="btnBayar" class="btn btn-primary">Bayar</button>
                 </div>
             </div>
         </div>
@@ -204,18 +197,8 @@
                     return;
                 }
 
-                // Isi nilai pada form fallback
-                document.getElementById("nomor_nota_form").value = nomorNota;
-                document.getElementById("metode_pembayaran_form").value = metode;
-                document.getElementById("uang_masuk_form").value = uangMasukValue;
-                document.getElementById("kembalian_form").value = kembalianValue;
-
-                // Submit form fallback
-                document.getElementById("fallbackForm").submit();
-            }
-
-            // Event Listener untuk tombol bayar
-            document.getElementById('btnBayar').addEventListener('click', fallbackFormSubmission);
+            // Event Listener untuk tombol Print Nota
+            document.getElementById('btnPrintNota').addEventListener('click', printNota);
         });
 
 

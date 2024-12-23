@@ -61,7 +61,7 @@
                                                 </select>
                                             </div>
 
-                                            <div class="col-3 pe-2">
+                                            <div class="col-2 pe-2">
                                                 <label for="Harga" class="form-label">Harga (Rp)</label>
                                                 <input type="number" class="form-control" name="Harga[]" readonly>
                                             </div>
@@ -72,11 +72,15 @@
                                                     required>
                                             </div>
 
-                                            <div class="col-3 pe-2">
-                                                <label for="diskon" class="form-label">Diskon (Rp)</label>
-                                                <input type="number" class="form-control" name="diskon[]" min="1"
+                                            <div class="col-2 pe-2">
+                                                <label for="Diskon" class="form-label">Diskon (Rp)</label>
+                                                <input type="number" class="form-control" name="Diskon[]" min="1"
                                                     required>
                                             </div>
+                                            <div class="col-2 pe-2">
+                                                <label for="Subtotal" class="form-label">Subtotal (Rp)</label>
+                                                <input type="number" class="form-control" name="Subtotal[]" readonly>
+                                            </div>                                            
 
                                             <div class="col-2 mt-4 pt-2">
                                                 <button type="button" class="btn btn-danger remove-barang"><i
@@ -89,6 +93,11 @@
                                         <button type="button" class="btn btn-secondary mb-3" id="add-barang"><i
                                                 class="bi bi-plus"></i> Barang </button>
                                     </div>
+                                    <div class="text-end mt-3">
+                                        <h5>Grand Total: Rp <span id="grand_total2">0</span></h5>
+                                        <input type="hidden" id="grand_total" name="grand_total" class="form-control" readonly>
+                                    </div>
+                                    
                                 </div>
                             </div>
 
@@ -135,7 +144,7 @@
                     const hargaInput = event.target.closest(".barang-row").querySelector(
                         'input[name="Harga[]"]');
                     const diskonInput = event.target.closest(".barang-row").querySelector(
-                        'input[name="diskon[]"]');
+                        'input[name="Diskon[]"]');
                     const jumlahInput = event.target.closest(".barang-row").querySelector(
                         'input[name="Jumlah[]"]');
 
@@ -152,28 +161,45 @@
                 }
             });
 
-            // Event listener ketika diskon atau jumlah diubah
+            // Event listener ketika Diskon atau jumlah diubah
             document.getElementById("barang-container").addEventListener("input", function(event) {
-                if (event.target.matches('input[name="diskon[]"], input[name="Jumlah[]"]')) {
+                if (event.target.matches('input[name="Diskon[]"], input[name="Jumlah[]"], select[name="ID_Barang[]"]')) {
                     updateHargaTotal(event.target.closest(".barang-row"));
                 }
             });
 
-            // Fungsi untuk menghitung harga total setelah diskon
+            // Fungsi untuk menghitung harga total setelah Diskon
             function updateHargaTotal(row) {
-                const hargaInput = row.querySelector('input[name="Harga[]"]');
-                const diskonInput = row.querySelector('input[name="diskon[]"]');
-                const jumlahInput = row.querySelector('input[name="Jumlah[]"]');
+                let grandTotal = 0;
 
-                let hargaAwal = parseFloat(hargaInput.value);
-                let diskon = parseInt(diskonInput.value) || 0;
-                let jumlah = parseInt(jumlahInput.value) || 1;
+                // Iterasi setiap baris barang
+                document.querySelectorAll('.barang-row').forEach(row => {
+                    const hargaInput = row.querySelector('input[name="Harga[]"]');
+                    const diskonInput = row.querySelector('input[name="Diskon[]"]');
+                    const jumlahInput = row.querySelector('input[name="Jumlah[]"]');
+                    const subtotalInput = row.querySelector('input[name="Subtotal[]"]');
 
-                // Hitung harga setelah diskon per unit
-                const hargaSetelahDiskon = hargaAwal - diskon;
+                    // Ambil nilai harga, Diskon, dan jumlah
+                    let hargaAwal = parseFloat(hargaInput.value) || 0;
+                    let Diskon = parseInt(diskonInput.value) || 0;
+                    let jumlah = parseInt(jumlahInput.value) || 1;
 
-                // Update harga total berdasarkan jumlah barang
-                hargaInput.value = hargaSetelahDiskon;
+                    // Hitung harga setelah Diskon dan subtotal
+                    const hargaSetelahDiskon = hargaAwal - Diskon;
+                    const subtotal = hargaSetelahDiskon * jumlah;
+
+                    // Perbarui nilai subtotal pada input
+                    subtotalInput.value = subtotal;
+
+                    // Tambahkan subtotal ke Grand Total
+                    grandTotal += subtotal;
+                });
+
+                // Perbarui tampilan Grand Total
+                document.getElementById('grand_total2').textContent = grandTotal.toLocaleString('id-ID');
+                // Perbarui nilai Grand Total di input
+                document.getElementById('grand_total').value = grandTotal;
+
             }
         });
 
@@ -201,10 +227,12 @@
             newRow.querySelector('.remove-barang').addEventListener('click', function() {
                 newRow.remove();
                 updateRemoveButtonState();
+                updateHargaTotal(event.target.closest(".barang-row"));
             });
 
             container.appendChild(newRow);
             updateRemoveButtonState(); // Perbarui status tombol hapus
+            updateHargaTotal(event.target.closest(".barang-row"));
         });
 
         // Menambahkan event listener ke setiap tombol "Hapus" yang sudah ada saat halaman dimuat
@@ -212,10 +240,12 @@
             button.addEventListener('click', function() {
                 button.closest('.barang-row').remove();
                 updateRemoveButtonState();
+                updateHargaTotal(event.target.closest(".barang-row"));
             });
         });
 
         // Perbarui status tombol hapus saat halaman dimuat
         updateRemoveButtonState();
+        updateHargaTotal(event.target.closest(".barang-row"));
     </script>
 @endsection

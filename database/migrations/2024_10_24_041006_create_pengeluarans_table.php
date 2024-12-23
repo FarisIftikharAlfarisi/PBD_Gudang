@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('ID_Karyawan');
             $table->foreign('ID_Karyawan')->references('ID_Karyawan')->on('karyawans')->onDelete('cascade');
             $table->string('Nama_Penerima');
+            $table->decimal('Total');
             $table->string('Tujuan', 255);
             $table->timestamps();
         });
