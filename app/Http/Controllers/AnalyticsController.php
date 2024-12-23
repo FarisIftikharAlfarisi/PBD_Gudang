@@ -4,19 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\Penerimaan;
+use App\Models\Pengeluaran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class AnalyticsController extends Controller
 {
-    public function analytics(Request $request){
+    public function analytics(Request $request)
+{
+    $data_penerimaan = Penerimaan::with('details.barang')->get();
+    $data_order = Order::all();
+    $metode_order = Order::select('Metode_Pembayaran', DB::raw('count(*) as count'))
+                        ->groupBy('Metode_Pembayaran')
+                        ->get();
+    $data_pengeluaran = Pengeluaran::with('details.barang')->get();
 
-        $data_penerimaan = Penerimaan::all();
-        $data_order = Order::all();
+    return view('view-dashboard.index', compact('data_penerimaan', 'data_order', 'metode_order', 'data_pengeluaran'));
 
-        $data_pengeluaran = DB::table('pengeluarans')->get();
-
-        return view('view-dashboard.index', compact('data_penerimaan', 'data_order'));
 
     // // Ambil filter dari request, jika tidak ada gunakan nilai default (misalnya tahun saat ini)
     // $tahun = $request->input('tahun', date('Y'));

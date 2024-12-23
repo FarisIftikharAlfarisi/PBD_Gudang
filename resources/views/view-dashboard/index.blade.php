@@ -1,4 +1,5 @@
 @extends('Partials.dashboard-template-main')
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 @section('dashboard-content')
 <div class="pagetitle">
     <h1>Halo Selamat Datang, {{ Auth::guard('karyawan')->user()->Nama_Karyawan }}</h1>
@@ -40,9 +41,28 @@
                             </tr>
                         </thead>
                         <tbody>
-
+                            @foreach($data_order as $r)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $r->Nomor_Nota }}</td>
+                                <td>{{ \Carbon\Carbon::createFromFormat('dmY', $r->Tanggal_Pembelian)->isoFormat('dddd, D MMMM YYYY') }}</td>
+                                <td>Rp. {{ number_format($r->Total_Pembayaran, 0, ',', '.') }}</td>
+                                <td>{{ $r->Metode_Pembayaran }}</td>
+                            </tr>
+                            @endforeach
                         </tbody>
-                    </table>
+                    </table>                    
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Metode Pembayaran</h5>
+                                    <div id="paymentMethodChart"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                     <table class="table table-sm">
@@ -53,11 +73,23 @@
                                 <th>Nilai Transaksi</th>
                                 <th>Penerima</th>
                                 <th>Tujuan</th>
+                                <th>Total</th>
                             </tr>
                         </thead>
                         <tbody>
-
-                        </tbody>
+                            @foreach ($data_pengeluaran as $pengeluaran)
+                                @foreach ($pengeluaran->details as $detail)
+                                <tr>
+                                    <td>{{ $pengeluaran->No_Faktur }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($pengeluaran->Tanggal)->isoFormat('D MMMM YYYY') }}</td>
+                                    <td>{{ number_format($pengeluaran->Total, 0, ',', '.') }}</td>
+                                    <td>{{ $pengeluaran->Nama_Penerima ?? 'N/A' }}</td>
+                                    <td>{{ $pengeluaran->Tujuan }}</td>
+                                    <td>{{ number_format($detail->Total, 0, ',', '.') }}</td>
+                                </tr>
+                                @endforeach
+                            @endforeach
+                        </tbody>                        
                     </table>
                 </div>
                 <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
@@ -66,13 +98,19 @@
                             <tr>
                                 <th>No. Dokumen</th>
                                 <th>Tanggal</th>
-                                <th>Nilai Transaksi</th>
-                                <th>Barang Diterima</th>
+                                {{-- <th>Nilai Transaksi</th>
+                                <th>Barang Diterima</th> --}}
                                 <th>Nama Supplier</th>
                             </tr>
                         </thead>
                         <tbody>
-
+                            @foreach ($data_penerimaan as $penerimaan)
+                            <tr>
+                                <td>{{ $penerimaan->No_Faktur }}</td>
+                                <td>{{ $penerimaan->Tanggal_Penerimaan }}</td>
+                                <td>{{ $penerimaan->supplier->Nama_Supplier }}</td>
+                            </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -299,3 +337,58 @@
 
 </div> --}}
 @endsection
+
+                                    
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+   const paymentMethodsData = @json($metode_order);  // Use $metode_order here
+   const paymentMethods = paymentMethodsData.map(item => item.Metode_Pembayaran);
+   const counts = paymentMethodsData.map(item => item.count);
+
+   if (paymentMethods.length > 0 && counts.length > 0) {
+       new ApexCharts(document.querySelector("#paymentMethodChart"), {
+           series: [{
+               name: 'Jumlah Transaksi',
+               data: counts
+           }],
+           chart: {
+               type: 'bar',
+               height: 350
+           },
+           plotOptions: {
+               bar: {
+                   borderRadius: 4,
+                   horizontal: false,
+               }
+           },
+           dataLabels: {
+               enabled: false
+           },
+           xaxis: {
+               categories: paymentMethods, // Payment methods
+               title: {
+                   text: 'Metode Pembayaran'
+               }
+           },
+           yaxis: {
+               title: {
+                   text: 'Jumlah Transaksi'
+               }
+           },
+           fill: {
+               opacity: 1
+           },
+           tooltip: {
+               y: {
+                   formatter: function(val) {
+                       return val + " transaksi";
+                   }
+               }
+           }
+       }).render();
+   } else {
+       console.log('No data available to display in the chart');
+   }
+});
+
+</script>

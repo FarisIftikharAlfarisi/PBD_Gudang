@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\LoyalCustomer;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class KasirController extends Controller
 {
@@ -190,12 +191,29 @@ class KasirController extends Controller
     return redirect()->route('kasir-index-page')->with('success', 'Pesanan berhasil diperbarui.');
 }
 
-    public function riwayat(){
-        $riwayat = Order::all();
-        $orderDetail = OrderDetail::all();
+public function riwayat()
+{
+    $riwayat = Order::with('order_details')->get(); // Eager load orderDetails
+    return view('view-kasir.riwayat', compact('riwayat'));
+}
 
-        return view('view-kasir.riwayat', compact('riwayat', 'orderDetail'));
-    }
 
+    public function generateNota($id)
+{
+    // Ambil data order berdasarkan ID
+    $order = Order::with(['order_details.relasibarang'])->findOrFail($id); // Memuat relasi dengan detail barang
+
+    // Data tambahan, seperti karyawan yang sedang login
+    $karyawan = Auth::guard('karyawan')->user();
+
+    // Format nomor nota yang aman untuk digunakan dalam nama file
+    $safeNoNota = str_replace(['/', '\\'], '_', $order->Nomor_Nota);
+
+    // Render view ke PDF menggunakan DomPDF
+    $pdf = PDF::loadView('view-kasir.cetak', compact('order', 'karyawan'));
+
+    // Return file PDF untuk diunduh atau ditampilkan
+    return $pdf->stream("nota_pembayaran_{$safeNoNota}.pdf");
+}
 }
 

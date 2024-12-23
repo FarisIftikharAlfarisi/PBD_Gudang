@@ -44,8 +44,9 @@ Route::middleware([App\Http\Middleware\KaryawanAuth::class, 'cek_role:Staff'])->
     Route::get('/dashboard-kasir/nota', [KasirController::class,'printNota'])->name('kasir-nota-page');
     Route::get('/dashboard-kasir/riwayat', [KasirController::class,'riwayat'])->name('riwayat-pembelian-kasir');
     Route::get('/barang', [BarangController::class,'index'])->name('barang-index-page');
+    Route::get('/dashboard-kasir/cetak-nota/{id}', [KasirController::class, 'generateNota'])->name('cetak-nota');
+    
 
-    //end kasir routes
 });
 
 
