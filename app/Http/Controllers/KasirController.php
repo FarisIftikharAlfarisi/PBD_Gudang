@@ -18,7 +18,8 @@ class KasirController extends Controller
         $barang = Barang::all();
         $inventaris = Inventaris::all();
         $pelanggans = LoyalCustomer::all();
-        return view("view-kasir.index", compact('barang', 'pelanggans','inventaris'));
+        $data_order = Order::all();
+        return view("view-kasir.index", compact('barang', 'pelanggans','inventaris','data_order'));
     }
 
     public function storePesanan(Request $request) {

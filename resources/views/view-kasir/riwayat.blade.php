@@ -38,14 +38,14 @@
                         <button class="btn btn-sm btn-primary" onclick="window.open('{{ route('cetak-nota', $r->id) }}', '_blank')">Print</button>
 
                         <!-- Tombol View Details untuk melihat detail transaksi -->
-                        <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#transactionModal"
+                        {{-- <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#transactionModal"
                             data-id="{{ $r->id }}"
                             data-nomor-nota="{{ $r->Nomor_Nota }}"
                             data-tanggal="{{ \Carbon\Carbon::createFromFormat('dmY', $r->Tanggal_Pembelian)->isoFormat('dddd, D MMMM YYYY') }}"
                             data-total-pembayaran="{{ number_format($r->Total_Pembayaran, 0, ',', '.') }}"
                             data-metode-pembayaran="{{ $r->Metode_Pembayaran }}">
                             View Details
-                        </button>
+                        </button> --}}
                     </td>
                 </tr>
                 @endforeach

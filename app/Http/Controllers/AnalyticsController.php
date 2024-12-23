@@ -18,6 +18,7 @@ class AnalyticsController extends Controller
                         ->groupBy('Metode_Pembayaran')
                         ->get();
     $data_pengeluaran = Pengeluaran::with('details.barang')->get();
+    
 
     return view('view-dashboard.index', compact('data_penerimaan', 'data_order', 'metode_order', 'data_pengeluaran'));
 
