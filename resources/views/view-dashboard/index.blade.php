@@ -8,9 +8,110 @@
         <li class="breadcrumb-item active">Analisis Penjualan</li>
       </ol>
     </nav>
-  </div><!-- End Page Title -->
+</div><!-- End Page Title -->
 
-  <div class="row">
+<div class="row">
+    <!-- Left side columns -->
+    <div class="col-lg-12">
+        <div class="row">
+
+            <!-- Pie Chart: Dominasi Customer -->
+            <div class="col-xxl-4 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Dominasi Customer</h5>
+                        <div id="customerPieChart"></div>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                new ApexCharts(document.querySelector("#customerPieChart"), {
+                                    series: [70, 30], // Replace with dynamic data
+                                    chart: {
+                                        type: 'pie',
+                                        height: 350
+                                    },
+                                    labels: ['Pelanggan Tetap', 'Pelanggan Biasa'],
+                                    colors: ['#2eca6a', '#ff771d'],
+                                }).render();
+                            });
+                        </script>
+                    </div>
+                </div>
+            </div><!-- End Pie Chart -->
+
+            <!-- Line Chart: Revenue Penjualan -->
+            <div class="col-xxl-8 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Revenue Penjualan</h5>
+                        <div class="filter">
+                            <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                <li class="dropdown-header text-start"><h6>Filter</h6></li>
+                                <li><a class="dropdown-item" href="#" onclick="updateRevenueChart('daily')">Harian</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="updateRevenueChart('monthly')">Bulanan</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="updateRevenueChart('yearly')">Tahunan</a></li>
+                            </ul>
+                        </div>
+                        <div id="revenueLineChart"></div>
+                        <script>
+                            const revenueData = {
+                                daily: [150, 200, 170, 250, 300, 180],
+                                monthly: [3000, 4000, 5000, 6000, 7000],
+                                yearly: [40000, 50000, 60000, 70000, 80000]
+                            };
+
+                            document.addEventListener("DOMContentLoaded", () => {
+                                window.revenueChart = new ApexCharts(document.querySelector("#revenueLineChart"), {
+                                    series: [{ name: 'Revenue', data: revenueData.daily }],
+                                    chart: { type: 'line', height: 350 },
+                                    xaxis: { categories: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'] },
+                                    stroke: { curve: 'smooth', width: 2 },
+                                    colors: ['#4154f1'],
+                                });
+                                window.revenueChart.render();
+                            });
+
+                            function updateRevenueChart(filter) {
+                                const categories = filter === 'daily' ? ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'] :
+                                    filter === 'monthly' ? ['Jan', 'Feb', 'Mar', 'Apr', 'Mei'] : ['2019', '2020', '2021', '2022'];
+                                window.revenueChart.updateOptions({
+                                    series: [{ name: 'Revenue', data: revenueData[filter] }],
+                                    xaxis: { categories }
+                                });
+                            }
+                        </script>
+                    </div>
+                </div>
+            </div><!-- End Line Chart -->
+
+            <!-- Bar Chart: Barang Terlaris -->
+            <div class="col-xxl-12 col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Barang Terlaris</h5>
+                        <div id="bestSellingBarChart"></div>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                new ApexCharts(document.querySelector("#bestSellingBarChart"), {
+                                    series: [{
+                                        name: 'Jumlah Penjualan',
+                                        data: [120, 95, 80, 60, 40] // Replace with dynamic data
+                                    }],
+                                    chart: { type: 'bar', height: 350 },
+                                    xaxis: { categories: ['Oli', 'Ban', 'Aki', 'Lampu', 'Sparepart Lain'] },
+                                    colors: ['#ff771d'],
+                                }).render();
+                            });
+                        </script>
+                    </div>
+                </div>
+            </div><!-- End Bar Chart -->
+
+        </div>
+    </div><!-- End Left side columns -->
+</div>
+
+
     <div class="col-lg-12">
         <div class="card">
             <div class="card-body">
