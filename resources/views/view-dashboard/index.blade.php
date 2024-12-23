@@ -3,40 +3,35 @@
 <div class="pagetitle">
     <h1>Halo Selamat Datang, {{ Auth::guard('karyawan')->user()->Nama_Karyawan }}</h1>
     <nav>
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item">Dashboard</a></li>
-        <li class="breadcrumb-item active">Analisis Penjualan</li>
-      </ol>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">Dashboard</li>
+            <li class="breadcrumb-item active">Analisis Penjualan</li>
+        </ol>
     </nav>
-</div><!-- End Page Title -->
+</div>
 
 <div class="row">
-    <!-- Left side columns -->
     <div class="col-lg-12">
         <div class="row">
-
-            <!-- Pie Chart: Dominasi Customer -->
+            <!-- Pie Chart: Dominasi Metode Pembayaran -->
             <div class="col-xxl-4 col-md-6">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Dominasi Customer</h5>
+                        <h5 class="card-title">Dominasi Metode Pembayaran</h5>
                         <div id="customerPieChart"></div>
                         <script>
                             document.addEventListener("DOMContentLoaded", () => {
                                 new ApexCharts(document.querySelector("#customerPieChart"), {
-                                    series: [70, 30], // Replace with dynamic data
-                                    chart: {
-                                        type: 'pie',
-                                        height: 350
-                                    },
-                                    labels: ['Pelanggan Tetap', 'Pelanggan Biasa'],
-                                    colors: ['#2eca6a', '#ff771d'],
+                                    series: @json($metode_chart_data->pluck('count')),
+                                    chart: { type: 'pie', height: 350 },
+                                    labels: @json($metode_chart_data->pluck('label')),
+                                    colors: ['#2eca6a', '#ff771d', '#ff455f'],
                                 }).render();
                             });
                         </script>
                     </div>
                 </div>
-            </div><!-- End Pie Chart -->
+            </div>
 
             <!-- Line Chart: Revenue Penjualan -->
             <div class="col-xxl-8 col-md-6">
@@ -55,11 +50,10 @@
                         <div id="revenueLineChart"></div>
                         <script>
                             const revenueData = {
-                                daily: [150, 200, 170, 250, 300, 180],
-                                monthly: [3000, 4000, 5000, 6000, 7000],
-                                yearly: [40000, 50000, 60000, 70000, 80000]
+                                daily: @json($revenue_daily->pluck('revenue')),
+                                monthly: @json($revenue_monthly->pluck('revenue')),
+                                yearly: @json($revenue_yearly->pluck('revenue'))
                             };
-
                             document.addEventListener("DOMContentLoaded", () => {
                                 window.revenueChart = new ApexCharts(document.querySelector("#revenueLineChart"), {
                                     series: [{ name: 'Revenue', data: revenueData.daily }],
@@ -72,8 +66,8 @@
                             });
 
                             function updateRevenueChart(filter) {
-                                const categories = filter === 'daily' ? ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'] :
-                                    filter === 'monthly' ? ['Jan', 'Feb', 'Mar', 'Apr', 'Mei'] : ['2019', '2020', '2021', '2022'];
+                                const categories = filter === 'daily' ? @json($revenue_daily->pluck('date')) :
+                                    filter === 'monthly' ? ['Jan', 'Feb', 'Mar', 'Apr', 'Mei'] : @json($revenue_yearly->pluck('year'));
                                 window.revenueChart.updateOptions({
                                     series: [{ name: 'Revenue', data: revenueData[filter] }],
                                     xaxis: { categories }
@@ -82,7 +76,7 @@
                         </script>
                     </div>
                 </div>
-            </div><!-- End Line Chart -->
+            </div>
 
             <!-- Bar Chart: Barang Terlaris -->
             <div class="col-xxl-12 col-md-12">
@@ -91,26 +85,26 @@
                         <h5 class="card-title">Barang Terlaris</h5>
                         <div id="bestSellingBarChart"></div>
                         <script>
-                            document.addEventListener("DOMContentLoaded", () => {
-                                new ApexCharts(document.querySelector("#bestSellingBarChart"), {
-                                    series: [{
-                                        name: 'Jumlah Penjualan',
-                                        data: [120, 95, 80, 60, 40] // Replace with dynamic data
-                                    }],
-                                    chart: { type: 'bar', height: 350 },
-                                    xaxis: { categories: ['Oli', 'Ban', 'Aki', 'Lampu', 'Sparepart Lain'] },
-                                    colors: ['#ff771d'],
-                                }).render();
-                            });
+                           document.addEventListener("DOMContentLoaded", () => {
+                            new ApexCharts(document.querySelector("#bestSellingBarChart"), {
+                                series: [{
+                                    name: 'Jumlah Penjualan',
+                                    data: @json($best_selling_items->pluck('total_sold'))
+                                }],
+                                chart: { type: 'bar', height: 350 },
+                                xaxis: { 
+                                    categories: @json($best_selling_items->pluck('Nama_Barang'))  // Use Nama_Barang directly
+                                },
+                                colors: ['#ff771d'],
+                            }).render();
+                        });
                         </script>
                     </div>
                 </div>
-            </div><!-- End Bar Chart -->
-
+            </div>
         </div>
-    </div><!-- End Left side columns -->
+    </div>
 </div>
-
 
     <div class="col-lg-12">
         <div class="card">
@@ -138,21 +132,44 @@
                                 <th>Tanggal</th>
                                 <th>Nilai Transaksi</th>
                                 <th>Metode Pembayaran</th>
+                                <th>Aksi </th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($data_order as $r)
-                <tr>
-                    <td>{{ $r->Nomor_Nota }}</td>
-                    <td>{{ \Carbon\Carbon::createFromFormat('dmY', $r->Tanggal_Pembelian)->isoFormat('dddd, D MMMM YYYY') }}</td>
-                    <td>Rp. {{ number_format($r->Total_Pembayaran, 0, ',', '.') }}</td>
-                    <td>{{ $r->Metode_Pembayaran }}</td>
-                </tr>
-                @endforeach
+                            <tr>
+                                <td>{{ $r->Nomor_Nota }}</td>
+                                <td>{{ \Carbon\Carbon::createFromFormat('dmY', $r->Tanggal_Pembelian)->isoFormat('dddd, D MMMM YYYY') }}</td>
+                                <td>Rp. {{ number_format($r->Total_Pembayaran, 0, ',', '.') }}</td>
+                                <td>{{ $r->Metode_Pembayaran }}</td>
+                                <td>
+                                    <!-- Tombol untuk membuka modal detail -->
+                                    <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#modalDetail" 
+                                            onclick="loadDetail('{{ $r->id }}')">Detail</button>
+                                    <button class="btn btn-sm btn-primary" onclick="window.open('{{ route('cetak-nota', $r->id) }}', '_blank')">Print</button>
+                                </td>
+                            </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
-                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            </div>
+            
+            <!-- Modal Detail -->
+            <div class="modal fade" id="modalDetail" tabindex="-1" aria-labelledby="modalDetailLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalDetailLabel">Detail Transaksi</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="detailContent">Memuat detail...</div>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                     <table class="table table-sm">
                         <thead>
                             <tr>
@@ -198,12 +215,8 @@
                         </tbody>
                     </table>
                 </div>
-              </div><!-- End Default Tabs -->
+            </div><!-- End Default Tabs -->
 
-            </div>
-          </div>
-    </div>
-  </div>
 
 {{-- <div class="row" id="filter">
     <div class="card">
@@ -421,3 +434,60 @@
 
 </div> --}}
 @endsection
+<script>
+    function loadDetail(id) {
+        const detailContent = document.getElementById('detailContent');
+        detailContent.innerHTML = 'Memuat detail...';
+    
+        fetch(`/transaksi/detail/${id}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    let html = `
+                        <p><strong>Nomor Nota:</strong> ${data.detail.Nomor_Nota}</p>
+                        <p><strong>Tanggal Transaksi:</strong> ${data.detail.Tanggal_Pembelian}</p>
+                        <p><strong>Metode Pembayaran:</strong> ${data.detail.Metode_Pembayaran}</p>
+                        <h5>Detail Barang:</h5>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nama Barang</th>
+                                    <th>Jumlah</th>
+                                    <th>Harga</th>
+                                    <th>Diskon Per Barang</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>`;
+                    data.detail.items.forEach((item, index) => {
+                        html += `
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td>${item.nama_barang}</td>
+                                <td>${item.jumlah}</td>
+                                <td>Rp. ${item.harga}</td>
+                                <td>Rp. ${item.diskon}</td>
+                                <td>Rp. ${item.subtotal}</td>
+                            </tr>`;
+                    });
+                    html += `</tbody></table>`;
+    
+                    // Now add the payment details below the table
+                    html += `
+                        <div>
+                            <p><strong>Total Pembayaran:</strong> Rp. ${data.detail.Total_Pembayaran}</p>
+                            <p><strong>Cash:</strong> Rp. ${data.detail.Uang_Masuk}</p>
+                            <p><strong>Kembalian:</strong> Rp. ${data.detail.Kembalian}</p>
+                        </div>`;
+    
+                    detailContent.innerHTML = html;
+                } else {
+                    detailContent.innerHTML = 'Gagal memuat detail.';
+                }
+            })
+            .catch(() => {
+                detailContent.innerHTML = 'Terjadi kesalahan saat memuat detail.';
+            });
+    }
+    </script>

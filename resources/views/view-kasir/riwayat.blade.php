@@ -34,18 +34,10 @@
                     <td>Rp. {{ number_format($r->Total_Pembayaran, 0, ',', '.') }}</td>
                     <td>{{ $r->Metode_Pembayaran }}</td>
                     <td>
-                        <!-- Tombol Print untuk mencetak nota -->
+                        <!-- Tombol untuk membuka modal detail -->
+                        <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#modalDetail" 
+                                onclick="loadDetail('{{ $r->id }}')">Detail</button>
                         <button class="btn btn-sm btn-primary" onclick="window.open('{{ route('cetak-nota', $r->id) }}', '_blank')">Print</button>
-
-                        <!-- Tombol View Details untuk melihat detail transaksi -->
-                        {{-- <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#transactionModal"
-                            data-id="{{ $r->id }}"
-                            data-nomor-nota="{{ $r->Nomor_Nota }}"
-                            data-tanggal="{{ \Carbon\Carbon::createFromFormat('dmY', $r->Tanggal_Pembelian)->isoFormat('dddd, D MMMM YYYY') }}"
-                            data-total-pembayaran="{{ number_format($r->Total_Pembayaran, 0, ',', '.') }}"
-                            data-metode-pembayaran="{{ $r->Metode_Pembayaran }}">
-                            View Details
-                        </button> --}}
                     </td>
                 </tr>
                 @endforeach
@@ -54,42 +46,78 @@
     </div>
 </div>
 
-<!-- Modal Detail Transaksi -->
-<div class="modal fade" id="transactionModal" tabindex="-1" aria-labelledby="transactionModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<!-- Modal Detail -->
+<div class="modal fade" id="modalDetail" tabindex="-1" aria-labelledby="modalDetailLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="transactionModalLabel">Detail Transaksi</h5>
+                <h5 class="modal-title" id="modalDetailLabel">Detail Transaksi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p><strong>Nomor Nota:</strong> <span id="nomor-nota"></span></p>
-                <p><strong>Tanggal Transaksi:</strong> <span id="tanggal"></span></p>
-                <p><strong>Nilai Transaksi:</strong> Rp. <span id="total-pembayaran"></span></p>
-                <p><strong>Metode Pembayaran:</strong> <span id="metode-pembayaran"></span></p>
+                <div id="detailContent">Memuat detail...</div>
             </div>
         </div>
     </div>
 </div>
 
-@section('scripts')
 <script>
-    // JavaScript untuk memuat data ke modal ketika tombol "View Details" diklik
-    $('#transactionModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget); // tombol yang memicu modal
-        var id = button.data('id');
-        var nomorNota = button.data('nomor-nota');
-        var tanggal = button.data('tanggal');
-        var totalPembayaran = button.data('total-pembayaran');
-        var metodePembayaran = button.data('metode-pembayaran');
+    function loadDetail(id) {
+        const detailContent = document.getElementById('detailContent');
+        detailContent.innerHTML = 'Memuat detail...';
+    
+        fetch(`/transaksi/detail/${id}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    let html = `
+                        <p><strong>Nomor Nota:</strong> ${data.detail.Nomor_Nota}</p>
+                        <p><strong>Tanggal Transaksi:</strong> ${data.detail.Tanggal_Pembelian}</p>
+                        <p><strong>Metode Pembayaran:</strong> ${data.detail.Metode_Pembayaran}</p>
+                        <h5>Detail Barang:</h5>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nama Barang</th>
+                                    <th>Jumlah</th>
+                                    <th>Harga</th>
+                                    <th>Diskon Per Barang</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>`;
+                    data.detail.items.forEach((item, index) => {
+                        html += `
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td>${item.nama_barang}</td>
+                                <td>${item.jumlah}</td>
+                                <td>Rp. ${item.harga}</td>
+                                <td>Rp. ${item.diskon}</td>
+                                <td>Rp. ${item.subtotal}</td>
+                            </tr>`;
+                    });
+                    html += `</tbody></table>`;
+    
+                    // Now add the payment details below the table
+                    html += `
+                        <div>
+                            <p><strong>Total Pembayaran:</strong> Rp. ${data.detail.Total_Pembayaran}</p>
+                            <p><strong>Cash:</strong> Rp. ${data.detail.Uang_Masuk}</p>
+                            <p><strong>Kembalian:</strong> Rp. ${data.detail.Kembalian}</p>
+                        </div>`;
+    
+                    detailContent.innerHTML = html;
+                } else {
+                    detailContent.innerHTML = 'Gagal memuat detail.';
+                }
+            })
+            .catch(() => {
+                detailContent.innerHTML = 'Terjadi kesalahan saat memuat detail.';
+            });
+    }
+    </script>
+    
 
-        // Isi data ke dalam modal
-        var modal = $(this);
-        modal.find('#nomor-nota').text(nomorNota);
-        modal.find('#tanggal').text(tanggal);
-        modal.find('#total-pembayaran').text(totalPembayaran);
-        modal.find('#metode-pembayaran').text(metodePembayaran);
-    });
-</script>
-@endsection
 @endsection

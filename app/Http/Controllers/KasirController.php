@@ -90,7 +90,7 @@ class KasirController extends Controller
         // Redirect ke nota print
         return redirect()->route('kasir-nota-page');
     }
-
+    
     // Fungsi tambahan untuk proses pesanan
     private function prosesPesanan($nomor_nota, $pesanan) {
         $ID_Barang = $pesanan['id'];
@@ -216,5 +216,37 @@ public function riwayat()
     // Return file PDF untuk diunduh atau ditampilkan
     return $pdf->stream("nota_pembayaran_{$safeNoNota}.pdf");
 }
+// App\Http\Controllers\TransaksiController.php
+
+public function getDetail($id)
+    {
+        $order = Order::with('order_details.relasibarang')->find($id);
+
+        if (!$order) {
+            return response()->json(['success' => false, 'message' => 'Transaksi tidak ditemukan.']);
+        }
+
+        return response()->json([
+            'success' => true,
+            'detail' => [
+                'Nomor_Nota' => $order->Nomor_Nota,
+                'Tanggal_Pembelian' => $order->Tanggal_Pembelian,
+                'Total_Pembayaran' => number_format($order->Total_Pembayaran, 0, ',', '.'),
+                'Uang_Masuk' => number_format($order->Uang_Masuk, 0, ',', '.'),
+                'Kembalian' => number_format($order->Kembalian, 0, ',', '.'),
+                'Metode_Pembayaran' => $order->Metode_Pembayaran,
+                'items' => $order->order_details->map(function ($item) {
+                    return [
+                        'nama_barang' => $item->relasibarang->Nama_Barang, // Asumsi ID_Barang adalah nama barang yang harus Anda ubah sesuai dengan model Anda
+                        'jumlah' => $item->Jumlah,
+                        'harga' => number_format($item->Harga_Jual, 0, ',', '.'),
+                        'diskon' => number_format($item->Diskon_Per_Items, 0, ',', '.'),
+                        'subtotal' => number_format($item->Subtotal, 0, ',', '.'),
+                    ];
+                }),
+            ],
+        ]);
+    }
+
 }
 
