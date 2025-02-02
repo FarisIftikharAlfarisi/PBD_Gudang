@@ -44,7 +44,7 @@
                    <td>Rp.{{ number_format($barang->Harga_Jual, 0, ',', '.') }}</td>
                    <td>
                        <!-- Tombol untuk membuka modal -->
-                       <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal{{ $barang->ID_Barang }}" title="Detail">
+                       <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal{{ $barang->ID_Barang }}" title="Detail">
                         <i class="bi bi-list-ul"></i>
                        </button>
 
@@ -89,7 +89,7 @@
                         <div class="modal fade" id="editModal{{ $barang->ID_Barang }}" tabindex="-1" aria-labelledby="editModalLabel{{ $barang->ID_Barang }}" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
-                                    <form action="{{ route('barang-update', $barang->ID_Barang) }}" method="POST">
+                                    <form action="{{ route('barang-update', ['id'=>$barang->ID_Barang]) }}" method="POST">
                                         @csrf
                                         @method('PUT')
                                         <div class="modal-header">

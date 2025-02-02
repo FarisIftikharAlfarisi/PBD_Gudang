@@ -36,8 +36,8 @@
                     <td>
                         <!-- Tombol untuk membuka modal detail -->
                         <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#modalDetail" 
-                                onclick="loadDetail('{{ $r->id }}')">Detail</button>
-                        <button class="btn btn-sm btn-primary" onclick="window.open('{{ route('cetak-nota', $r->id) }}', '_blank')">Print</button>
+                                onclick="loadDetail('{{ $r->id }}')"><i class="bi bi-list-ul"></i></button>
+                        <button class="btn btn-sm btn-primary" onclick="window.open('{{ route('cetak-nota', $r->id) }}', '_blank')"><i class="bi bi-file-earmark-ruled"></i></button>
                     </td>
                 </tr>
                 @endforeach

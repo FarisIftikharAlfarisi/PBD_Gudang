@@ -194,9 +194,11 @@ class KasirController extends Controller
 
 public function riwayat()
 {
-    $riwayat = Order::with('order_details')->get(); // Eager load orderDetails
+    // Menampilkan data dengan urutan descending berdasarkan created_at atau id
+    $riwayat = Order::with('order_details')->orderBy('created_at', 'desc')->get(); // Eager load orderDetails dan urutkan berdasarkan created_at descending
     return view('view-kasir.riwayat', compact('riwayat'));
 }
+
 
 
     public function generateNota($id)

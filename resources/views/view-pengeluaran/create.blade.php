@@ -75,7 +75,7 @@
                                             <div class="col-2 pe-2">
                                                 <label for="Diskon" class="form-label">Diskon (Rp)</label>
                                                 <input type="number" class="form-control" name="Diskon[]" min="1"
-                                                    required>
+                                                    >
                                             </div>
                                             <div class="col-2 pe-2">
                                                 <label for="Subtotal" class="form-label">Subtotal (Rp)</label>
@@ -180,7 +180,7 @@
                     const subtotalInput = row.querySelector('input[name="Subtotal[]"]');
 
                     // Ambil nilai harga, Diskon, dan jumlah
-                    let hargaAwal = parseFloat(hargaInput.value) || 0;
+                    let hargaAwal = parseInt(hargaInput.value) || 1;
                     let Diskon = parseInt(diskonInput.value) || 0;
                     let jumlah = parseInt(jumlahInput.value) || 1;
 

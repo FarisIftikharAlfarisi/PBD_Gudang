@@ -35,16 +35,16 @@
                    <td>
                      <!-- Tombol Detail -->
                      <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal-{{ $karyawan->ID_Karyawan }}">
-                         Lihat Detail
+                        <i class="bi bi-list-ul"></i> 
                      </button>
                      
                      <!-- Tombol Edit -->
                      <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal-{{ $karyawan->ID_Karyawan }}">
-                         Edit
+                        <i class="bi bi-pencil-square"></i>
                      </button>
 
                      <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal-{{ $karyawan->ID_Karyawan }}">
-                        Hapus
+                        <i class="bi bi-trash3"></i>
                     </button>
                   </td>
                    </td>

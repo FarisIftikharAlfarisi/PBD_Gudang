@@ -16,9 +16,9 @@ return new class extends Migration
             $table->unsignedBigInteger('ID_Pengeluaran');
             $table->unsignedBigInteger('ID_Barang');
             $table->integer('qty');
-            $table->decimal('Harga_Jual');
-            $table->decimal('Diskon');
-            $table->decimal('Total');
+            $table->integer('Harga_Jual');
+            $table->integer('Diskon');
+            $table->integer('Total');
             $table->timestamps();
 
             $table->foreign('ID_Pengeluaran')->references('ID_Pengeluaran')->on('pengeluarans')->onDelete('cascade');

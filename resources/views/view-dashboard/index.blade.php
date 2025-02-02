@@ -125,7 +125,7 @@
               </ul>
               <div class="tab-content pt-2" id="myTabContent">
                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                    <table class="table table-sm">
+                    <table class="table datatable">
                         <thead>
                             <tr>
                                 <th>No. Dokumen</th>
@@ -145,15 +145,14 @@
                                 <td>
                                     <!-- Tombol untuk membuka modal detail -->
                                     <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#modalDetail" 
-                                            onclick="loadDetail('{{ $r->id }}')">Detail</button>
-                                    <button class="btn btn-sm btn-primary" onclick="window.open('{{ route('cetak-nota', $r->id) }}', '_blank')">Print</button>
+                                            onclick="loadDetail('{{ $r->id }}')"><i class="bi bi-list-ul"></i></button>
                                 </td>
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
-            </div>
+            
             
             <!-- Modal Detail -->
             <div class="modal fade" id="modalDetail" tabindex="-1" aria-labelledby="modalDetailLabel" aria-hidden="true">
@@ -170,7 +169,7 @@
                 </div>
             </div> 
             <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                    <table class="table table-sm">
+                    <table class="table datatable">
                         <thead>
                             <tr>
                                 <th>No. Dokumen</th>
@@ -178,6 +177,7 @@
                                 <th>Nilai Transaksi</th>
                                 <th>Penerima</th>
                                 <th>Tujuan</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -188,20 +188,23 @@
                                 <td>{{ number_format($pengeluaran->Total, 0, ',', '.') }}</td>
                                 <td>{{ $pengeluaran->Nama_Penerima }}</td>
                                 <td>{{ $pengeluaran->Tujuan }}</td>
-                                
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal{{ $pengeluaran->ID_Pengeluaran }}">
+                                        <i class="bi bi-list-ul"></i>
+                                    </button>
+                                </td>
                         @endforeach
                         </tbody>
                     </table>
                 </div>
                 <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-                    <table class="table table-sm">
+                    <table class="table datatable">
                         <thead>
                             <tr>
                                 <th>No. Dokumen</th>
                                 <th>Tanggal</th>
-                                {{-- <th>Nilai Transaksi</th>
-                                <th>Barang Diterima</th> --}}
                                 <th>Nama Supplier</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -210,6 +213,11 @@
                                 <td>{{ $penerimaan->No_Faktur }}</td>
                                 <td>{{ $penerimaan->Tanggal_Penerimaan }}</td>
                                 <td>{{ $penerimaan->supplier->Nama_Supplier }}</td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal{{ $penerimaan->ID_Penerimaan }}">
+                                        <i class="bi bi-list-ul"></i>
+                                    </button>
+                                </td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -433,6 +441,72 @@
     </div>
 
 </div> --}}
+@foreach ($data_pengeluaran as $pengeluaran)
+<div class="modal fade" id="detailModal{{ $pengeluaran->ID_Pengeluaran }}" tabindex="-1" aria-labelledby="detailModalLabel{{ $pengeluaran->ID_Pengeluaran }}" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="detailModalLabel{{ $pengeluaran->ID_Pengeluaran }}">Detail Barang - No Faktur {{ $pengeluaran->No_Faktur }}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <table class="table">
+                  <thead>
+                      <tr>
+                          <th>Nama Barang</th>
+                          <th>Jumlah</th>
+                          <th>Harga</th>
+                          <th>Diskon</th>
+                          <th>Total</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                  @foreach ($pengeluaran->details as $detail)
+                  <tr>
+                      <td>{{ $detail->barang->Nama_Barang }}</td>
+                      <td>{{ $detail->qty }}</td>
+                      <td>{{ $detail->Harga_Jual }}</td>
+                      <td>{{ $detail->Diskon }}</td>
+                      <td>{{ $detail->Total }}</td>
+                  </tr>
+                  @endforeach
+                  </tbody>
+              </table>
+          </div>
+      </div>
+  </div>
+</div>
+@endforeach
+@foreach ($data_penerimaan as $penerimaan)
+<div class="modal fade" id="detailModal{{ $penerimaan->ID_Penerimaan }}" tabindex="-1" aria-labelledby="detailModalLabel{{ $penerimaan->ID_Penerimaan }}" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailModalLabel{{ $penerimaan->ID_Penerimaan }}">Detail Barang - No Faktur {{ $penerimaan->No_Faktur }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nama Barang</th>
+                            <th>Jumlah</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach ($penerimaan->details as $detail)
+                    <tr>
+                        <td>{{ $detail->barang->Nama_Barang }}</td>
+                        <td>{{ $detail->qty }}</td>
+                    </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@endforeach
 @endsection
 <script>
     function loadDetail(id) {

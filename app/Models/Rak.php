@@ -13,8 +13,6 @@ class Rak extends Model
     protected $fillable = [
         'Nomor_Rak',
         'Lokasi_Rak',
-        'Kapasitas_Rak',
-        'Status_Rak',
         'ID_Gudang',
     ];
 

@@ -198,8 +198,6 @@
                     alert("Pilih metode pembayaran terlebih dahulu.");
                     return;
                 }
-    
-                // Isi nilai pada form fallback
                 document.getElementById("nomor_nota_form").value = orderId; // Ganti nomor_nota_form dengan ID
                 document.getElementById("metode_pembayaran_form").value = metode;
                 document.getElementById("uang_masuk_form").value = uangMasukValue;
@@ -211,10 +209,13 @@
                 // Setelah form disubmit, buka tab baru untuk cetak nota menggunakan ID
                 const printUrl = "{{ route('cetak-nota', ':id') }}".replace(':id', orderId);
                 window.open(printUrl, '_blank');
+                
             }
     
             // Event Listener untuk tombol bayar
             document.getElementById('btnBayar').addEventListener('click', fallbackFormSubmission);
+            // Isi nilai pada form fallback
+            
         });
     </script>    
 @endsection

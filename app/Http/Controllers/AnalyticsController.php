@@ -12,9 +12,9 @@ class AnalyticsController extends Controller
 {
     public function analytics(Request $request)
 {
-    $data_penerimaan = Penerimaan::with('details.barang')->get();
-    $data_order = Order::all();
-    $data_pengeluaran = Pengeluaran::with('details.barang')->get();
+    $data_penerimaan = Penerimaan::with('details.barang')->orderBy('created_at', 'desc')->get();
+    $data_order = Order::orderBy('created_at', 'desc')->get();
+    $data_pengeluaran = Pengeluaran::with('details.barang')->orderBy('created_at', 'desc')->get();
 
         // Data untuk Dominasi Metode Pembayaran
         $metode_order = Order::select('Metode_Pembayaran', DB::raw('count(*) as count'))

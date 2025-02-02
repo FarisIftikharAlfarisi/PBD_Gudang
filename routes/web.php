@@ -26,6 +26,11 @@ Route::get('/login', [AuthenticationController::class,'login_view'])->name('logi
 Route::post('/login-process', [AuthenticationController::class,'login'])->name('login-process');
 Route::get('/logout', [AuthenticationController::class,'logout'])->name('logout');
 
+Route::get('/dashboard/karyawan', [KaryawanController::class,'index'])->name('karyawan-index-page');
+Route::get('/dashboard/karyawan/karyawan-baru', [KaryawanController::class,'create'])->name('karyawan-create-page');
+Route::put('/dashboard/karyawan/update/{id}', [KaryawanController::class, 'update'])->name('karyawan-update');
+Route::delete('/dashboard/karyawan/delete/{id}', [KaryawanController::class,'destroy'])->name('karyawan-delete');
+Route::post('/dashboard/karyawan/create-process', [KaryawanController::class,'store'])->name('karyawan-store-process');
 
 
 //route untuk yang sudah login
@@ -33,9 +38,10 @@ Route::get('/logout', [AuthenticationController::class,'logout'])->name('logout'
 //route untuk profil bagi semua karyawan, tapi harus sudah login
 Route::middleware([App\Http\Middleware\KaryawanAuth::class])->group(function (){
     Route::get('/profil', [KaryawanController::class,'profil'])->name('profil');
+    
 });
-
-Route::middleware([App\Http\Middleware\KaryawanAuth::class, 'cek_role:Staff'])->group(function (){
+   
+    Route::middleware([App\Http\Middleware\KaryawanAuth::class, 'cek_role:Staff'])->group(function (){
     //kasir routes
     Route::get('/dashboard-kasir', [KasirController::class,'index'])->name('kasir-index-page');
     Route::get('/get-loyal-customer', [KasirController::class,'daftar_customer'])->name('daftar-customer');
@@ -74,12 +80,7 @@ Route::middleware([App\Http\Middleware\KaryawanAuth::class, 'cek_role:Owner'])->
     Route::delete('/dashboard/barang/kategori/delete/{id}', [KategoriController::class,'destroy'])->name('kategori-delete');
 
     //karyawan routes
-    Route::get('/dashboard/karyawan', [KaryawanController::class,'index'])->name('karyawan-index-page');
-    Route::get('/dashboard/karyawan/karyawan-baru', [KaryawanController::class,'create'])->name('karyawan-create-page');
-    Route::post('/dashboard/karyawan/create-process', [KaryawanController::class,'store'])->name('karyawan-store-process');
-    Route::put('/dashboard/karyawan/update/{id}', [KaryawanController::class, 'update'])->name('karyawan-update');
-    Route::delete('/dashboard/karyawan/delete/{id}', [KaryawanController::class,'destroy'])->name('karyawan-delete');
-
+    
     //end karyawan routes
 
     //supplier routes

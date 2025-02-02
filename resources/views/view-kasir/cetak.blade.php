@@ -31,6 +31,8 @@
             <div>
                 <h4><strong>No. Nota: {{ $order->Nomor_Nota }}</strong></h4>
                 <p><strong>Kasir:</strong> {{ $karyawan->Nama_Karyawan }}</p>
+                <p><strong>Metode Pembayaran :</strong> {{ $order->Metode_Pembayaran }}</p>
+                
             </div>
             <div style="text-align: right;">
                 <h4><strong>Jadi Motor Bandung</strong></h4>
@@ -67,9 +69,11 @@
             <h3><strong>Total: Rp {{ number_format($order->Total_Pembayaran, 0, ',', '.') }}</strong></h3>
         </div>
 
+        @if ($order->Metode_Pembayaran == 'Tunai')
         <div class="text-right">
             <h3><strong>Kembalian: Rp {{ number_format($order->Kembalian, 0, ',', '.') }}</strong></h3>
         </div>
+    @endif
     </div>
 </body>
 </html>

@@ -23,8 +23,6 @@
                 <th>#</th>
                 <th>Nomor Rak</th>
                 <th>Lokasi Rak</th>
-                <th>Kapasitas Rak</th>
-                <th>Status Rak</th>
                 <th>Gudang</th>
                 <th>Aksi</th>
               </tr>
@@ -35,18 +33,16 @@
                    <td>{{ $loop->iteration }}</td>
                    <td>{{ $rak->Nomor_Rak }}</td>
                    <td>{{ $rak->Lokasi_Rak }}</td>
-                   <td>{{ $rak->Kapasitas_Rak }}</td>
-                   <td>{{ $rak->Status_Rak }}</td>
                    <td>{{ $rak->gudang->Nama_Gudang }}</td>
                    <td>
                      <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailRakModal-{{ $rak->ID_Rak }}">
-                         Lihat Detail
+                        <i class="bi bi-list-ul"></i> 
                      </button>
                      <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editRakModal-{{ $rak->ID_Rak }}">
-                         Edit
+                        <i class="bi bi-pencil-square"></i>
                      </button>
                      <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteRakModal-{{ $rak->ID_Rak }}">
-                         Hapus
+                        <i class="bi bi-trash3"></i>
                      </button>
                    </td>
                </tr>
