@@ -9,9 +9,11 @@
       </ol>
     </nav>
   </div>
+  @if (Auth::guard('karyawan')->user()->Jabatan == 'Owner')
   <div class="create-button">
     <a href="{{ route('barang-create-page') }}" class="btn btn-primary mb-3"> <i class="bi bi-file-earmark-plus"></i>  Barang Baru</a>
 </div>
+@endif
 <div class="card">
     <div class="card-body">
         <h5 class="card-title">Daftar Barang</h5>

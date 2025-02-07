@@ -202,8 +202,8 @@
             if (this.checked) {
                 pelangganBaruForm.innerHTML = `
             <div style='border: 1px solid #ccc; padding: 10px;'>
-                <label>Nama: <input type='text' id='namaPelangganBaru'></label>
-                <label>Nomor Telepon: <input type='text' id='noTelpPelangganBaru'></label>
+                <label>Nama: <input type='text' id='namaPelangganBaru' required ></label>
+                <label>Nomor Telepon: <input type='text' id='noTelpPelangganBaru' required ></label>
             </div>
         `;
                 pelangganContainer.appendChild(pelangganBaruForm);

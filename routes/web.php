@@ -110,6 +110,8 @@ Route::middleware([App\Http\Middleware\KaryawanAuth::class, 'cek_role:Owner'])->
     Route::get('/dashboard/penerimaan/update/{id}', [PenerimaanController::class, 'edit'])->name('penerimaan-edit-page');
     Route::put('/dashboard/penerimaan/{id}', [PenerimaanController::class, 'update'])->name('penerimaan-update-process');
     Route::delete('/dashboard/penerimaan/delete/{id}', [PenerimaanController::class,'destroy'])->name('penerimaan-delete');
+    Route::get('/dashbaord/penerimaan/{id}/store-to-rak', [PenerimaanController::class, 'storeToRak'])->name('penerimaan-store-to-rak');
+    Route::post('/dashboard/penerimaan/{id}/save-to-rak', [PenerimaanController::class, 'saveToRak'])->name('penerimaan-save-to-rak');    
 
 
     //pengeluaran routes

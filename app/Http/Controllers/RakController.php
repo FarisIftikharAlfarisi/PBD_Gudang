@@ -30,8 +30,6 @@ class RakController extends Controller
         $request->validate([
             'Nomor_Rak' => 'required|max:50',
             'Lokasi_Rak' => 'required',
-            'Kapasitas_Rak' => 'required|integer',
-            'Status_Rak' => 'required|in:Aktif,Tidak Aktif',
             'ID_Gudang' => 'required|exists:gudangs,ID_Gudang',
         ]);
 

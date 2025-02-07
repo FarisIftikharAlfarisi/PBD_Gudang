@@ -22,15 +22,4 @@ class Rak extends Model
         return $this->belongsTo(Gudang::class, 'ID_Gudang');
     }
 
-    // Scope untuk filter rak yang available
-    public function scopeAvailable($query)
-    {
-        return $query->where('Status_Rak', 'available');
-    }
-
-    // Scope untuk filter rak yang maintenance
-    public function scopeMaintenance($query)
-    {
-        return $query->where('Status_Rak', 'maintenance');
-    }
 }

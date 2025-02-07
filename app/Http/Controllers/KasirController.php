@@ -56,7 +56,7 @@ class KasirController extends Controller
             $loyal_customer = LoyalCustomer::create([
                 'Nama_Pelanggan' => $data_push['customer']['nama'],
                 'No_Telepon' => $data_push['customer']['telepon'],
-                'Tanggal_Berlangganan' => $date,
+                'Tanggal_Berlangganan' => now(),
             ]);
 
             // Step 2: Buat data order di tabel Order, sertakan ID pelanggan baru

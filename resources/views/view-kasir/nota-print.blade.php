@@ -149,7 +149,7 @@
                     return;
                 }
     
-                const uangMasukValue = parseInt(rawValue, 10) || 0;
+                const uangMasukValue = parseInt(rawValue, 100) || 0;
                 this.value = formatNumber(rawValue);
     
                 const hasilKembalian = uangMasukValue - totalBayar;

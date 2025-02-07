@@ -58,8 +58,6 @@
                            <div class="modal-body">
                                <p><strong>Nomor Rak:</strong> {{ $rak->Nomor_Rak }}</p>
                                <p><strong>Lokasi Rak:</strong> {{ $rak->Lokasi_Rak }}</p>
-                               <p><strong>Kapasitas Rak:</strong> {{ $rak->Kapasitas_Rak }}</p>
-                               <p><strong>Status Rak:</strong> {{ $rak->Status_Rak }}</p>
                                <p><strong>Gudang:</strong> {{ $rak->gudang->Nama_Gudang }}</p>
                            </div>
                            <div class="modal-footer">
@@ -88,17 +86,6 @@
                                     <div class="mb-3">
                                         <label for="Lokasi_Rak" class="form-label">Lokasi Rak</label>
                                         <input type="text" name="Lokasi_Rak" class="form-control" value="{{ $rak->Lokasi_Rak }}" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="Kapasitas_Rak" class="form-label">Kapasitas Rak</label>
-                                        <input type="number" name="Kapasitas_Rak" class="form-control" value="{{ $rak->Kapasitas_Rak }}" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="Status_Rak" class="form-label">Status Rak</label>
-                                        <select name="Status_Rak" class="form-select" required>
-                                            <option value="Aktif" {{ $rak->Status_Rak == 'Aktif' ? 'selected' : '' }}>Aktif</option>
-                                            <option value="Tidak Aktif" {{ $rak->Status_Rak == 'Tidak Aktif' ? 'selected' : '' }}>Tidak Aktif</option>
-                                        </select>
                                     </div>
                                     <div class="mb-3">
                                         <label for="ID_Gudang" class="form-label">Gudang</label>

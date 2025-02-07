@@ -24,18 +24,7 @@
             <div class="mb-3">
                 <label for="Lokasi_Rak" class="form-label">Lokasi Rak</label>
                 <input type="text" name="Lokasi_Rak" class="form-control" required>
-            </div>
-            {{-- <div class="mb-3">
-                <label for="Kapasitas_Rak" class="form-label">Kapasitas Rak</label>
-                <input type="number" name="Kapasitas_Rak" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label for="Status_Rak" class="form-label">Status Rak</label>
-                <select name="Status_Rak" class="form-select" required>
-                    <option value="Aktif">Aktif</option>
-                    <option value="Tidak Aktif">Tidak Aktif</option>
-                </select>
-            </div> --}}
+            </div> 
             <div class="mb-3">
                 <label for="ID_Gudang" class="form-label">Gudang</label>
                 <select name="ID_Gudang" class="form-select" required>
