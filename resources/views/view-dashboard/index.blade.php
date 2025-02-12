@@ -8,6 +8,7 @@
             <li class="breadcrumb-item active">Analisis Penjualan</li>
         </ol>
     </nav>
+
 </div>
 
 <div class="row">
@@ -18,20 +19,24 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Dominasi Metode Pembayaran</h5>
+
                         <div id="customerPieChart"></div>
                         <script>
                             document.addEventListener("DOMContentLoaded", () => {
                                 new ApexCharts(document.querySelector("#customerPieChart"), {
+
                                     series: @json($metode_chart_data->pluck('count')),
                                     chart: { type: 'pie', height: 350 },
                                     labels: @json($metode_chart_data->pluck('label')),
                                     colors: ['#2eca6a', '#ff771d', '#ff455f'],
+
                                 }).render();
                             });
                         </script>
                     </div>
                 </div>
             </div>
+
 
             <!-- Line Chart: Revenue Penjualan -->
             <div class="col-xxl-8 col-md-6">
@@ -50,10 +55,12 @@
                         <div id="revenueLineChart"></div>
                         <script>
                             const revenueData = {
+
                                 daily: @json($revenue_daily->pluck('revenue')),
                                 monthly: @json($revenue_monthly->pluck('revenue')),
                                 yearly: @json($revenue_yearly->pluck('revenue'))
                             };
+
                             document.addEventListener("DOMContentLoaded", () => {
                                 window.revenueChart = new ApexCharts(document.querySelector("#revenueLineChart"), {
                                     series: [{ name: 'Revenue', data: revenueData.daily }],
@@ -66,8 +73,10 @@
                             });
 
                             function updateRevenueChart(filter) {
+
                                 const categories = filter === 'daily' ? @json($revenue_daily->pluck('date')) :
                                     filter === 'monthly' ? ['Jan', 'Feb', 'Mar', 'Apr', 'Mei'] : @json($revenue_yearly->pluck('year'));
+
                                 window.revenueChart.updateOptions({
                                     series: [{ name: 'Revenue', data: revenueData[filter] }],
                                     xaxis: { categories }
@@ -78,6 +87,7 @@
                 </div>
             </div>
 
+
             <!-- Bar Chart: Barang Terlaris -->
             <div class="col-xxl-12 col-md-12">
                 <div class="card">
@@ -85,6 +95,7 @@
                         <h5 class="card-title">Barang Terlaris</h5>
                         <div id="bestSellingBarChart"></div>
                         <script>
+
                            document.addEventListener("DOMContentLoaded", () => {
                             new ApexCharts(document.querySelector("#bestSellingBarChart"), {
                                 series: [{
@@ -105,6 +116,7 @@
         </div>
     </div>
 </div>
+
 
     <div class="col-lg-12">
         <div class="card">

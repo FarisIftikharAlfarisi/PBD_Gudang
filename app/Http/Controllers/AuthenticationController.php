@@ -32,6 +32,9 @@ class AuthenticationController extends Controller
             }else if( Auth::guard('karyawan')->user()->Jabatan === "Owner" ){
                 //route untuk Owner
                 return redirect()->route('analisis');
+            }else if( Auth::guard('karyawan')->user()->Jabatan === "Manager" ){
+                //route untuk Owner
+                return redirect()->route('barang-index-page');
             }else{
                 return redirect()->route('analisis');
             }
