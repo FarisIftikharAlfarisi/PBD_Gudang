@@ -33,6 +33,43 @@
         </a>
     </li>
 
+    <li class="nav-item">
+      <a class="nav-link {{ in_array(Route::currentRouteName(), ['laporan-kasir', 'laporan-pengeluaran', 'laporan-penerimaan']) ? '' : 'collapsed' }}" 
+        data-bs-target="#components-nav-laporan" 
+        data-bs-toggle="collapse" 
+        href="#">
+          <i class="bi bi-file-earmark-bar-graph"></i><span>Laporan</span><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul id="components-nav-laporan" 
+          class="nav-content collapse {{ in_array(Route::currentRouteName(), ['laporan-order-page', 'laporan-pengeluaran-page', 'laporan-penerimaan-page']) ? 'show' : '' }}" 
+          data-bs-parent="#sidebar-nav">
+          
+          <!-- Submenu Laporan Kasir -->
+          <li class="nav-item">
+              <a class="nav-link {{ Route::currentRouteName() == 'laporan-order-page' ? 'active' : '' }}" 
+                href="{{ route('laporan-order-page') }}">
+                  <i class="bi bi-circle"></i><span>Laporan Kasir</span>
+              </a>
+          </li>
+
+          <!-- Submenu Laporan Pengeluaran -->
+          <li class="nav-item">
+              <a class="nav-link {{ Route::currentRouteName() == 'laporan-pengeluaran-page' ? 'active' : '' }}" 
+                href="{{ route('laporan-pengeluaran-page') }}">
+                  <i class="bi bi-circle"></i><span>Laporan Pengeluaran</span>
+              </a>
+          </li>
+
+          <!-- Submenu Laporan Penerimaan -->
+          <li class="nav-item">
+              <a class="nav-link {{ Route::currentRouteName() == 'laporan-penerimaan-page' ? 'active' : '' }}" 
+                href="{{ route('laporan-penerimaan-page') }}">
+                  <i class="bi bi-circle"></i><span>Laporan Penerimaan</span>
+              </a>
+          </li>
+      </ul>
+  </li>
+
     <!-- Barang -->
     <li class="nav-item">
         <a class="nav-link {{ in_array(Route::currentRouteName(), ['barang-index-page', 'barang-create-page','kategori-index-page', 'kategori-create-page']) ? '' : 'collapsed' }}" data-bs-target="#components-nav-barang" data-bs-toggle="collapse" href="#">

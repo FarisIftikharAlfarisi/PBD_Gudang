@@ -17,10 +17,21 @@
             <h5 class="card-title">Form Tambah Barang</h5>
             <form action="{{ route('barang-store-process') }}" method="POST">
                 @csrf
-                <!-- Nama Barang Input -->
+        <!-- Kode Part Input -->
+        <div class="mb-3">
+            <label for="Kode_Part" class="form-label">Kode Part</label>
+            <input type="text" class="form-control" name="Kode_Part" required>
+        </div>
+        <!-- Nama Barang Input -->
+        
         <div class="mb-3">
             <label for="Nama_Barang" class="form-label">Nama Barang</label>
             <input type="text" class="form-control" name="Nama_Barang" required>
+        </div>
+        <!-- Merek Input -->
+        <div class="mb-3">
+            <label for="Merek" class="form-label">Merek</label>
+            <input type="text" class="form-control" name="Merek" required>
         </div>
 
         <!-- Deskripsi Input -->
@@ -47,17 +58,9 @@
             <input type="number" class="form-control" name="Harga_Jual" step="0.01" min="0" required>
         </div>
 
-        <!-- Kode Part Input -->
-        <div class="mb-3">
-            <label for="Kode_Part" class="form-label">Kode Part</label>
-            <input type="text" class="form-control" name="Kode_Part" required>
-        </div>
+        
 
-        <!-- Merek Input -->
-        <div class="mb-3">
-            <label for="Merek" class="form-label">Merek</label>
-            <input type="text" class="form-control" name="Merek" required>
-        </div>
+        
 
             <div class="mb-3">
                 <label for="ID_Kategori" class="form-label">Kategori</label>

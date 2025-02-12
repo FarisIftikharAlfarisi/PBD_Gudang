@@ -46,7 +46,7 @@
                                                 <select class="form-select" name="ID_Barang[]" required>
                                                     <option selected disabled>Pilih Barang</option>
                                                     @foreach($barangs as $barang)
-                                                        <option value="{{ $barang->ID_Barang }}" data-satuan="{{ $barang->Satuan }}" >{{ $barang->Nama_Barang }}</option>
+                                                        <option value="{{ $barang->ID_Barang }}" data-satuan="{{ $barang->Satuan }}" > {{ $barang->Kode_Part }} | {{ $barang->Nama_Barang }} </option>
                                                     @endforeach
                                                 </select>
                                             </div>

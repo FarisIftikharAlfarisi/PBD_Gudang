@@ -16,13 +16,12 @@
 <body>
     <div class="header">
         <h1>Invoice Pengeluaran</h1>
-        <p>No Faktur: {{ $pengeluaran->No_Faktur }}</p>
-        <p>Tanggal: {{ $pengeluaran->Tanggal_Pengeluaran }}</p>
     </div>
     <div>
-        <h3>Info Kasir</h3>
-        <p>Nama Kasir: {{ $karyawan->Nama_Karyawan }}</p>
-        <p>ID Karyawan: {{ $karyawan->ID_Karyawan }}</p>
+            <p>No Faktur: {{ $pengeluaran->No_Faktur }}</p>
+            <p>Tanggal: {{ \Carbon\Carbon::parse($pengeluaran->Tanggal_Pengeluaran)->format('d-m-Y') }}</p>
+            <p>Nama Penerima: {{ $pengeluaran->Nama_Penerima }}</p>
+            <p>Kasir: {{ $karyawan->Nama_Karyawan }}</p>
     </div>
 
     <div>

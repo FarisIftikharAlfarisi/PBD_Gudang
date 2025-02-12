@@ -131,41 +131,50 @@
             const kembalian = document.getElementById('kembalian');
             const kembalianDisplay = document.getElementById('kembalian-display');
     
-            // Fungsi untuk menghapus format angka
+            // Fungsi untuk membersihkan format angka
             function unformatNumber(value) {
-                return value.replace(/[^0-9]/g, ''); // Hapus semua kecuali angka
+                return value.replace(/\./g, ''); // Hapus semua titik (pemisah ribuan)
             }
-    
-            // Fungsi untuk memformat angka dengan tanda ribuan
+
+            // Fungsi untuk memformat angka dengan pemisah ribuan
             function formatNumber(value) {
-                return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                return new Intl.NumberFormat('id-ID').format(value);
             }
-    
-            // Event untuk memformat input uang masuk
+
+            // Event listener untuk input uang masuk
             uangMasuk.addEventListener('input', function() {
-                const rawValue = unformatNumber(this.value);
+                const rawValue = unformatNumber(this.value); // Bersihkan format angka
                 if (rawValue === "") {
-                    this.value = "";
+                    this.value = ""; // Kosongkan field jika input kosong
+                    kembalian.value = "0"; // Reset kembalian ke 0
+                    kembalianDisplay.textContent = "0";
                     return;
                 }
-    
-                const uangMasukValue = parseInt(rawValue, 100) || 0;
-                this.value = formatNumber(rawValue);
-    
-                const hasilKembalian = uangMasukValue - totalBayar;
-                const formattedKembalian = hasilKembalian >= 0 ? formatNumber(hasilKembalian.toString()) :
-                    "0";
-    
-                kembalian.value = formattedKembalian;
-                kembalianDisplay.textContent = formattedKembalian;
+
+                const uangMasukValue = parseInt(rawValue, 10) || 0; // Parse angka dengan basis 10
+                if (isNaN(uangMasukValue) || uangMasukValue < 0) {
+                    alert("Input tidak valid. Masukkan angka positif.");
+                    this.value = "";
+                    kembalian.value = "0";
+                    kembalianDisplay.textContent = "0";
+                    return;
+                }
+
+                this.value = formatNumber(rawValue); // Format ulang angka untuk ditampilkan
+
+                const hasilKembalian = uangMasukValue - totalBayar; // Hitung kembalian
+                const formattedKembalian = hasilKembalian >= 0 ? formatNumber(hasilKembalian.toString()) : "0";
+
+                kembalian.value = formattedKembalian; // Update field kembalian
+                kembalianDisplay.textContent = formattedKembalian; // Update tampilan kembalian
             });
-    
+
             // Event untuk menyesuaikan field berdasarkan metode pembayaran
             metodePembayaran.addEventListener('change', function() {
                 tunaiFields.style.display = 'none';
                 transferFields.style.display = 'none';
                 qrisFields.style.display = 'none';
-    
+
                 if (this.value === 'Tunai') {
                     tunaiFields.style.display = 'block';
                 } else if (this.value === 'Transfer') {
@@ -179,7 +188,7 @@
             function fallbackFormSubmission() {
                 const orderId = {{ $order->id }}; // Ganti dengan ID dari order
                 const metode = metodePembayaran.value;
-    
+                
                 let uangMasukValue = 0;
                 let kembalianValue = 0;
     
@@ -210,6 +219,10 @@
                 const printUrl = "{{ route('cetak-nota', ':id') }}".replace(':id', orderId);
                 window.open(printUrl, '_blank');
                 
+                // Tambahkan refresh otomatis setelah 2 detik (opsional)
+                setTimeout(() => {
+                    location.reload(); // Refresh halaman secara otomatis
+                }, 2000); // 2000 ms = 2 detik
             }
     
             // Event Listener untuk tombol bayar

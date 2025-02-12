@@ -16,4 +16,9 @@ class Supplier extends Model
         'Email',
         'Spesialisasi',
     ];
+
+    public function penerimaans()
+    {
+        return $this->hasMany(Penerimaan::class, 'ID_Supplier', 'ID_Supplier');
+    }
 }

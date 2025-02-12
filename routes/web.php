@@ -14,6 +14,7 @@ use App\Http\Controllers\PenerimaanController;
 use App\Http\Controllers\PengeluaranController;
 use App\Http\Controllers\KasirController;
 use App\Http\Controllers\RakController;
+use App\Http\Controllers\ReportController;
 
 // Route::get('/', function () {
 //     if (Auth::check()) {
@@ -124,6 +125,10 @@ Route::middleware([App\Http\Middleware\KaryawanAuth::class, 'cek_role:Owner'])->
     Route::get('dashboard/pengeluaran/{id}/invoice', [PengeluaranController::class, 'generateInvoice'])->name('pengeluaran-invoice');
     Route::get('dashboard/pengeluaran/{id}/surat-jalan', [PengeluaranController::class, 'generateSuratJalan'])->name('pengeluaran-surat-jalan');
 
+    //Laporan Routes
+    Route::get('dashboard/laporan/kasir', [ReportController::class, 'order'])->name('laporan-order-page');
+    Route::get('dashboard/laporan/penerimaan', [ReportController::class, 'penerimaan'])->name('laporan-penerimaan-page');
+    Route::get('dashboard/laporan/pengeluaran', [ReportController::class, 'pengeluaran'])->name('laporan-pengeluaran-page');
 
 });
 
