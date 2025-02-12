@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id('ID_Rak');
             $table->string('Nomor_Rak', 50);
             $table->text('Lokasi_Rak');
-            $table->integer('Kapasitas_Rak');
             $table->string('Status_Rak', 50);
             $table->unsignedBigInteger('ID_Gudang');
             $table->foreign('ID_Gudang')->references('ID_Gudang')->on('gudangs')->onDelete('cascade');

@@ -4,19 +4,67 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\Penerimaan;
+use App\Models\Pengeluaran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class AnalyticsController extends Controller
 {
-    public function analytics(Request $request){
+    public function analytics(Request $request)
+{
+    $data_penerimaan = Penerimaan::with('details.barang')->orderBy('created_at', 'desc')->get();
+    $data_order = Order::orderBy('created_at', 'desc')->get();
+    $data_pengeluaran = Pengeluaran::with('details.barang')->orderBy('created_at', 'desc')->get();
 
-        $data_penerimaan = Penerimaan::all();
-        $data_order = Order::all();
-
-        $data_pengeluaran = DB::table('pengeluarans')->get();
-
-        return view('view-dashboard.index', compact('data_penerimaan', 'data_order'));
+        // Data untuk Dominasi Metode Pembayaran
+        $metode_order = Order::select('Metode_Pembayaran', DB::raw('count(*) as count'))
+            ->groupBy('Metode_Pembayaran')
+            ->get();
+    
+        $metode_chart_data = $metode_order->map(function ($item) {
+            return [
+                'label' => $item->Metode_Pembayaran,
+                'count' => $item->count
+            ];
+        });
+    
+        // Data untuk Revenue Penjualan
+        $revenue_daily = Order::select(DB::raw('SUM(Uang_Masuk) as revenue, DATE(created_at) as date'))
+            ->groupBy('date')
+            ->orderBy('date')
+            ->take(7)
+            ->get();
+    
+        $revenue_monthly = Order::select(DB::raw('SUM(Uang_Masuk) as revenue, MONTH(created_at) as month'))
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+    
+        $revenue_yearly = Order::select(DB::raw('SUM(Uang_Masuk) as revenue, YEAR(created_at) as year'))
+            ->groupBy('year')
+            ->orderBy('year')
+            ->get();
+    
+        // Data untuk Barang Terlaris
+        $best_selling_items = Order::join('order_details', 'orders.Nomor_Nota', '=', 'order_details.Nomor_Nota')
+            ->join('barangs', 'order_details.ID_Barang', '=', 'barangs.ID_Barang')  // Join the barang table
+            ->select('order_details.ID_Barang', 'barangs.Nama_Barang', DB::raw('SUM(order_details.Jumlah) as total_sold'))
+            ->groupBy('order_details.ID_Barang', 'barangs.Nama_Barang')  // Group by both ID_Barang and Nama_Barang
+            ->orderByDesc('total_sold')
+            ->limit(5)
+            ->get();
+    
+        return view('view-dashboard.index', compact(
+            'metode_chart_data', 
+            'revenue_daily', 
+            'revenue_monthly', 
+            'revenue_yearly',
+            'data_order',
+            'data_penerimaan',
+            'data_pengeluaran' ,
+            'best_selling_items'
+        ));
+    
 
     // // Ambil filter dari request, jika tidak ada gunakan nilai default (misalnya tahun saat ini)
     // $tahun = $request->input('tahun', date('Y'));

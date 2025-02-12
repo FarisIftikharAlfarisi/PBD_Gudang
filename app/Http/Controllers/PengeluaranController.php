@@ -31,8 +31,8 @@ class PengeluaranController extends Controller
         $formattedDate = date('dmY'); // Format tanggal untuk nomor faktur
 
         // Hitung jumlah pengeluaran pada tanggal tersebut
-        $count = Pengeluaran::whereDate('created_at', $date)->count();
-        $count = $count + 1; // Tambahkan 1 untuk faktur berikutnya
+        $odfd = Pengeluaran::whereDate('created_at', $date)->count();
+        $count = $odfd + 2; // Tambahkan 1 untuk faktur berikutnya
         $count = str_pad($count, 4, '0', STR_PAD_LEFT); // Tambahkan padding jika perlu
 
         // Buat nomor faktur
@@ -81,13 +81,21 @@ class PengeluaranController extends Controller
 
     // Simpan detail pengeluaran langsung ke tabel `detail_pengeluarans`
     $details = [];
+
     foreach ($request->ID_Barang as $index => $ID_Barang) {
+
+        if (!$request->Diskon[$index] ) {
+            $diskon = 0;
+        } else {
+            $diskon = $request->Diskon;
+        }
+
         $details[] = [
             'ID_Pengeluaran' => $pengeluaranId, // ID dari pengeluaran yang baru dibuat
             'ID_Barang' => $ID_Barang,
             'qty' => $request->Jumlah[$index], // Menambahkan qty (Jumlah)
             'Harga_Jual' => $request->Harga[$index],
-            'Diskon' => $request->Diskon[$index],
+            'Diskon' => $diskon,
             'Total' => $request->Subtotal[$index],
             'created_at' => now(),
             'updated_at' => now(),

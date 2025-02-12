@@ -35,17 +35,17 @@
                    <td>
                      <!-- Tombol Detail dengan Modal -->
                      <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailSupplierModal-{{ $supplier->ID_Supplier }}">
-                         Lihat Detail
+                        <i class="bi bi-list-ul"></i> 
                      </button>
 
                      <!-- Tombol Edit dengan Modal -->
                      <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editSupplierModal-{{ $supplier->ID_Supplier }}">
-                         Edit
+                        <i class="bi bi-pencil-square"></i>
                      </button>
 
                      <!-- Tombol Hapus dengan Modal -->
                      <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteSupplierModal-{{ $supplier->ID_Supplier }}">
-                         Hapus
+                        <i class="bi bi-trash3"></i>
                      </button>
                    </td>
                </tr>

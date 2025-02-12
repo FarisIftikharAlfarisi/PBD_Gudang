@@ -35,17 +35,17 @@
                    <td>
                      <!-- Tombol Detail Gudang dengan Modal -->
                      <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailGudangModal-{{ $gudang->ID_Gudang }}">
-                         Lihat Detail Gudang
+                        <i class="bi bi-list-ul"></i> 
                      </button>
 
                      <!-- Tombol Edit Gudang dengan Modal -->
                      <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editGudangModal-{{ $gudang->ID_Gudang }}">
-                         Edit
+                        <i class="bi bi-pencil-square"></i>
                      </button>
 
                      <!-- Tombol Hapus Gudang dengan Modal -->
                      <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteGudangModal-{{ $gudang->ID_Gudang }}">
-                         Hapus
+                         <i class="bi bi-trash3"></i>
                      </button>
                    </td>
                </tr>

@@ -56,25 +56,23 @@ class BarangController extends Controller
     }
 
     // Menampilkan form edit barang
-    public function edit($id)
-    {
-        $barang = Barang::findOrFail($id);
-        $kategoris = Kategori::all(); // Retrieve all categories
-        $raks = Rak::all(); // Retrieve all racks
-        return view('barang-update', compact('barang', 'kategoris', 'raks'));
-    }
+    // public function edit($id)
+    // {
+    //     $barang = Barang::findOrFail($id);
+    //     $kategoris = Kategori::all(); // Retrieve all categories
+    //     $raks = Rak::all(); // Retrieve all racks
+    //     return view('barang-update', compact('barang', 'kategoris', 'raks'));
+    // }
 
     // Mengupdate barang
     public function update(Request $request, $id)
     {
+    
         // Validasi input
         $request->validate([
             'ID_Kategori' => 'required|exists:kategoris,ID_Kategori',
             'ID_Rak' => 'required|exists:raks,ID_Rak',
             'Nama_Barang' => 'required|max:255',
-            'Deskripsi' => 'required',
-            'Satuan' => 'required|max:50',
-            'Harga_Pokok' => 'required|numeric|min:0',
             'Harga_Jual' => 'required|numeric|min:0',
             'Kode_Part' => 'required|max:100',
             'Merek' => 'required|max:100',

@@ -69,11 +69,6 @@
                         </div>
 
                     </div>
-
-                    <!-- Tombol untuk Print Nota -->
-                    <div class="text-center mt-4">
-                        <button id="btnPrintNota" class="btn btn-primary" onclick="cetakNota()">Print Nota</button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -83,9 +78,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="card-title">Transaksi</div>
-                    <form action="{{ route('update-pesanan'['nomor_nota' => $order->Nomor_Nota]) }}">
-                        @csrf
-                        @method('put')
+                    <form>
                         <div class="form-group">
                             <label for="Metode_Pembayaran"> Metode Pembayaran </label>
                             <select name="Metode_Pembayaran" id="metodePembayaran" class="form-control">
@@ -111,8 +104,17 @@
                             <label for="qris_image" class="form-label">Scan QR Code</label>
                             <img id="qris_image" src="/path/to/qris.png" alt="QR Code" style="width: 200px;">
                         </div>
-                        <button type="submit" class="btn btn-primary">Bayar</button>
                     </form>
+                    <form id="fallbackForm" action="{{ route('update-pesanan', $order->Nomor_Nota) }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="_method" value="PUT"> <!-- Alternatif untuk @method('PUT') -->
+                        <input type="hidden" id="nomor_nota_form" name="nomor_nota" value="{{ $order->Nomor_Nota }}">
+                        <input type="hidden" id="metode_pembayaran_form" name="metode_pembayaran">
+                        <input type="hidden" id="uang_masuk_form" name="uang_masuk">
+                        <input type="hidden" id="kembalian_form" name="kembalian">
+                        {{-- <button type="submit" id="btnBayar" class="btn btn-primary">Bayar</button> --}}
+                    </form>
+                    <button type="submit" id="btnBayar" class="btn btn-primary">Bayar</button>
                 </div>
             </div>
         </div>
@@ -128,34 +130,43 @@
             const uangMasuk = document.getElementById('uang_masuk');
             const kembalian = document.getElementById('kembalian');
             const kembalianDisplay = document.getElementById('kembalian-display');
-
-            // Fungsi untuk menghapus format angka
+    
+            // Fungsi untuk membersihkan format angka
             function unformatNumber(value) {
-                return value.replace(/[^0-9]/g, ''); // Hapus semua kecuali angka
+                return value.replace(/\./g, ''); // Hapus semua titik (pemisah ribuan)
             }
 
-            // Fungsi untuk memformat angka dengan tanda ribuan
+            // Fungsi untuk memformat angka dengan pemisah ribuan
             function formatNumber(value) {
-                return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                return new Intl.NumberFormat('id-ID').format(value);
             }
 
-            // Event untuk memformat input uang masuk
+            // Event listener untuk input uang masuk
             uangMasuk.addEventListener('input', function() {
-                const rawValue = unformatNumber(this.value);
+                const rawValue = unformatNumber(this.value); // Bersihkan format angka
                 if (rawValue === "") {
-                    this.value = "";
+                    this.value = ""; // Kosongkan field jika input kosong
+                    kembalian.value = "0"; // Reset kembalian ke 0
+                    kembalianDisplay.textContent = "0";
                     return;
                 }
 
-                const uangMasukValue = parseInt(rawValue, 10) || 0;
-                this.value = formatNumber(rawValue);
+                const uangMasukValue = parseInt(rawValue, 10) || 0; // Parse angka dengan basis 10
+                if (isNaN(uangMasukValue) || uangMasukValue < 0) {
+                    alert("Input tidak valid. Masukkan angka positif.");
+                    this.value = "";
+                    kembalian.value = "0";
+                    kembalianDisplay.textContent = "0";
+                    return;
+                }
 
-                const hasilKembalian = uangMasukValue - totalBayar;
-                const formattedKembalian = hasilKembalian >= 0 ? formatNumber(hasilKembalian.toString()) :
-                    "0";
+                this.value = formatNumber(rawValue); // Format ulang angka untuk ditampilkan
 
-                kembalian.value = formattedKembalian;
-                kembalianDisplay.textContent = formattedKembalian;
+                const hasilKembalian = uangMasukValue - totalBayar; // Hitung kembalian
+                const formattedKembalian = hasilKembalian >= 0 ? formatNumber(hasilKembalian.toString()) : "0";
+
+                kembalian.value = formattedKembalian; // Update field kembalian
+                kembalianDisplay.textContent = formattedKembalian; // Update tampilan kembalian
             });
 
             // Event untuk menyesuaikan field berdasarkan metode pembayaran
@@ -172,19 +183,19 @@
                     qrisFields.style.display = 'block';
                 }
             });
-
-            // Fungsi untuk fallback form submission
+    
+            // Fungsi untuk fallback form submission dan buka tab baru untuk cetak nota
             function fallbackFormSubmission() {
-                const nomorNota = "{{ $order->Nomor_Nota }}"; // Ambil nomor nota dari backend
+                const orderId = {{ $order->id }}; // Ganti dengan ID dari order
                 const metode = metodePembayaran.value;
-
+                
                 let uangMasukValue = 0;
                 let kembalianValue = 0;
-
+    
                 if (metode === "Tunai") {
                     uangMasukValue = parseInt(unformatNumber(uangMasuk.value)) || 0;
                     kembalianValue = parseInt(unformatNumber(kembalian.value)) || 0;
-
+    
                     if (kembalianValue < 0) {
                         alert("Uang masuk tidak cukup untuk membayar total pesanan.");
                         return;
@@ -196,38 +207,28 @@
                     alert("Pilih metode pembayaran terlebih dahulu.");
                     return;
                 }
-
-            // Event Listener untuk tombol Print Nota
-            document.getElementById('btnPrintNota').addEventListener('click', printNota);
+                document.getElementById("nomor_nota_form").value = orderId; // Ganti nomor_nota_form dengan ID
+                document.getElementById("metode_pembayaran_form").value = metode;
+                document.getElementById("uang_masuk_form").value = uangMasukValue;
+                document.getElementById("kembalian_form").value = kembalianValue;
+    
+                // Submit form fallback
+                document.getElementById("fallbackForm").submit();
+    
+                // Setelah form disubmit, buka tab baru untuk cetak nota menggunakan ID
+                const printUrl = "{{ route('cetak-nota', ':id') }}".replace(':id', orderId);
+                window.open(printUrl, '_blank');
+                
+                // Tambahkan refresh otomatis setelah 2 detik (opsional)
+                setTimeout(() => {
+                    location.reload(); // Refresh halaman secara otomatis
+                }, 2000); // 2000 ms = 2 detik
+            }
+    
+            // Event Listener untuk tombol bayar
+            document.getElementById('btnBayar').addEventListener('click', fallbackFormSubmission);
+            // Isi nilai pada form fallback
+            
         });
-
-
-
-        // function cetakNota() {
-        //     // Ambil elemen yang akan dicetak
-        //     const printContent = document.getElementById('notaPrintArea');
-
-        //     if (!printContent) {
-        //         console.error("Elemen dengan ID 'notaPrintArea' tidak ditemukan!");
-        //         return;
-        //     }
-
-        //     // Simpan konten halaman asli untuk dikembalikan setelah print
-        //     const originalContent = document.body.innerHTML;
-
-        //     // Ganti isi halaman dengan elemen yang akan dicetak
-        //     document.body.innerHTML = printContent.innerHTML;
-
-        //     // Cetak halaman
-        //     window.print();
-
-        //     // Kembalikan isi halaman seperti semula
-        //     document.body.innerHTML = originalContent;
-
-        //     location.reload();
-
-        //     window.location.href = "{{ route('kasir-index-page') }}";
-
-        // };
-    </script>
+    </script>    
 @endsection

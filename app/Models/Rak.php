@@ -13,8 +13,6 @@ class Rak extends Model
     protected $fillable = [
         'Nomor_Rak',
         'Lokasi_Rak',
-        'Kapasitas_Rak',
-        'Status_Rak',
         'ID_Gudang',
     ];
 
@@ -24,15 +22,4 @@ class Rak extends Model
         return $this->belongsTo(Gudang::class, 'ID_Gudang');
     }
 
-    // Scope untuk filter rak yang available
-    public function scopeAvailable($query)
-    {
-        return $query->where('Status_Rak', 'available');
-    }
-
-    // Scope untuk filter rak yang maintenance
-    public function scopeMaintenance($query)
-    {
-        return $query->where('Status_Rak', 'maintenance');
-    }
 }

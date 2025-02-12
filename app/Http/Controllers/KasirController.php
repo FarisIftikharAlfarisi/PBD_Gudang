@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\LoyalCustomer;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class KasirController extends Controller
 {
@@ -17,7 +18,8 @@ class KasirController extends Controller
         $barang = Barang::all();
         $inventaris = Inventaris::all();
         $pelanggans = LoyalCustomer::all();
-        return view("view-kasir.index", compact('barang', 'pelanggans','inventaris'));
+        $data_order = Order::all();
+        return view("view-kasir.index", compact('barang', 'pelanggans','inventaris','data_order'));
     }
 
     public function storePesanan(Request $request) {
@@ -54,7 +56,7 @@ class KasirController extends Controller
             $loyal_customer = LoyalCustomer::create([
                 'Nama_Pelanggan' => $data_push['customer']['nama'],
                 'No_Telepon' => $data_push['customer']['telepon'],
-                'Tanggal_Berlangganan' => $date,
+                'Tanggal_Berlangganan' => now(),
             ]);
 
             // Step 2: Buat data order di tabel Order, sertakan ID pelanggan baru
@@ -88,7 +90,7 @@ class KasirController extends Controller
         // Redirect ke nota print
         return redirect()->route('kasir-nota-page');
     }
-
+    
     // Fungsi tambahan untuk proses pesanan
     private function prosesPesanan($nomor_nota, $pesanan) {
         $ID_Barang = $pesanan['id'];
@@ -190,11 +192,62 @@ class KasirController extends Controller
     return redirect()->route('kasir-index-page')->with('success', 'Pesanan berhasil diperbarui.');
 }
 
-    public function riwayat(){
-        $riwayat = Order::all();
-        $orderDetail = OrderDetail::all();
+public function riwayat()
+{
+    // Menampilkan data dengan urutan descending berdasarkan created_at atau id
+    $riwayat = Order::with('order_details')->orderBy('created_at', 'desc')->get(); // Eager load orderDetails dan urutkan berdasarkan created_at descending
+    return view('view-kasir.riwayat', compact('riwayat'));
+}
 
-        return view('view-kasir.riwayat', compact('riwayat', 'orderDetail'));
+
+
+    public function generateNota($id)
+{
+    // Ambil data order berdasarkan ID
+    $order = Order::with(['order_details.relasibarang'])->findOrFail($id); // Memuat relasi dengan detail barang
+
+    // Data tambahan, seperti karyawan yang sedang login
+    $karyawan = Auth::guard('karyawan')->user();
+
+    // Format nomor nota yang aman untuk digunakan dalam nama file
+    $safeNoNota = str_replace(['/', '\\'], '_', $order->Nomor_Nota);
+
+    // Render view ke PDF menggunakan DomPDF
+    $pdf = PDF::loadView('view-kasir.cetak', compact('order', 'karyawan'));
+
+    // Return file PDF untuk diunduh atau ditampilkan
+    return $pdf->stream("nota_pembayaran_{$safeNoNota}.pdf");
+}
+// App\Http\Controllers\TransaksiController.php
+
+public function getDetail($id)
+    {
+        $order = Order::with('order_details.relasibarang')->find($id);
+
+        if (!$order) {
+            return response()->json(['success' => false, 'message' => 'Transaksi tidak ditemukan.']);
+        }
+
+        return response()->json([
+            'success' => true,
+            'detail' => [
+                'Nomor_Nota' => $order->Nomor_Nota,
+                'Tanggal_Pembelian' => $order->Tanggal_Pembelian,
+                'Total_Pembayaran' => number_format($order->Total_Pembayaran, 0, ',', '.'),
+                'Uang_Masuk' => number_format($order->Uang_Masuk, 0, ',', '.'),
+                'Kembalian' => number_format($order->Kembalian, 0, ',', '.'),
+                'Metode_Pembayaran' => $order->Metode_Pembayaran,
+                'items' => $order->order_details->map(function ($item) {
+                    return [
+                        'nama_barang' => $item->relasibarang->Nama_Barang, // Asumsi ID_Barang adalah nama barang yang harus Anda ubah sesuai dengan model Anda
+                        'jumlah' => $item->Jumlah,
+                        'harga' => number_format($item->Harga_Jual, 0, ',', '.'),
+                        'diskon' => number_format($item->Diskon_Per_Items, 0, ',', '.'),
+                        'subtotal' => number_format($item->Subtotal, 0, ',', '.'),
+                    ];
+                }),
+            ],
+        ]);
     }
 
 }

@@ -14,6 +14,7 @@ use App\Http\Controllers\PenerimaanController;
 use App\Http\Controllers\PengeluaranController;
 use App\Http\Controllers\KasirController;
 use App\Http\Controllers\RakController;
+use App\Http\Controllers\ReportController;
 
 // Route::get('/', function () {
 //     if (Auth::check()) {
@@ -26,6 +27,11 @@ Route::get('/login', [AuthenticationController::class,'login_view'])->name('logi
 Route::post('/login-process', [AuthenticationController::class,'login'])->name('login-process');
 Route::get('/logout', [AuthenticationController::class,'logout'])->name('logout');
 
+Route::get('/dashboard/karyawan', [KaryawanController::class,'index'])->name('karyawan-index-page');
+Route::get('/dashboard/karyawan/karyawan-baru', [KaryawanController::class,'create'])->name('karyawan-create-page');
+Route::put('/dashboard/karyawan/update/{id}', [KaryawanController::class, 'update'])->name('karyawan-update');
+Route::delete('/dashboard/karyawan/delete/{id}', [KaryawanController::class,'destroy'])->name('karyawan-delete');
+Route::post('/dashboard/karyawan/create-process', [KaryawanController::class,'store'])->name('karyawan-store-process');
 
 
 //route untuk yang sudah login
@@ -33,9 +39,10 @@ Route::get('/logout', [AuthenticationController::class,'logout'])->name('logout'
 //route untuk profil bagi semua karyawan, tapi harus sudah login
 Route::middleware([App\Http\Middleware\KaryawanAuth::class])->group(function (){
     Route::get('/profil', [KaryawanController::class,'profil'])->name('profil');
+    
 });
-
-Route::middleware([App\Http\Middleware\KaryawanAuth::class, 'cek_role:Staff'])->group(function (){
+   
+    Route::middleware([App\Http\Middleware\KaryawanAuth::class, 'cek_role:Staff'])->group(function (){
     //kasir routes
     Route::get('/dashboard-kasir', [KasirController::class,'index'])->name('kasir-index-page');
     Route::get('/get-loyal-customer', [KasirController::class,'daftar_customer'])->name('daftar-customer');
@@ -44,8 +51,12 @@ Route::middleware([App\Http\Middleware\KaryawanAuth::class, 'cek_role:Staff'])->
     Route::get('/dashboard-kasir/nota', [KasirController::class,'printNota'])->name('kasir-nota-page');
     Route::get('/dashboard-kasir/riwayat', [KasirController::class,'riwayat'])->name('riwayat-pembelian-kasir');
     Route::get('/barang', [BarangController::class,'index'])->name('barang-index-page');
+    Route::get('/dashboard-kasir/cetak-nota/{id}', [KasirController::class, 'generateNota'])->name('cetak-nota');
+    Route::get('/transaksi/detail/{id}', [KasirController::class, 'getDetail'])->name('transaksi-detail');
 
-    //end kasir routes
+
+    
+
 });
 
 
@@ -70,12 +81,7 @@ Route::middleware([App\Http\Middleware\KaryawanAuth::class, 'cek_role:Owner'])->
     Route::delete('/dashboard/barang/kategori/delete/{id}', [KategoriController::class,'destroy'])->name('kategori-delete');
 
     //karyawan routes
-    Route::get('/dashboard/karyawan', [KaryawanController::class,'index'])->name('karyawan-index-page');
-    Route::get('/dashboard/karyawan/karyawan-baru', [KaryawanController::class,'create'])->name('karyawan-create-page');
-    Route::post('/dashboard/karyawan/create-process', [KaryawanController::class,'store'])->name('karyawan-store-process');
-    Route::put('/dashboard/karyawan/update/{id}', [KaryawanController::class, 'update'])->name('karyawan-update');
-    Route::delete('/dashboard/karyawan/delete/{id}', [KaryawanController::class,'destroy'])->name('karyawan-delete');
-
+    
     //end karyawan routes
 
     //supplier routes
@@ -105,6 +111,8 @@ Route::middleware([App\Http\Middleware\KaryawanAuth::class, 'cek_role:Owner'])->
     Route::get('/dashboard/penerimaan/update/{id}', [PenerimaanController::class, 'edit'])->name('penerimaan-edit-page');
     Route::put('/dashboard/penerimaan/{id}', [PenerimaanController::class, 'update'])->name('penerimaan-update-process');
     Route::delete('/dashboard/penerimaan/delete/{id}', [PenerimaanController::class,'destroy'])->name('penerimaan-delete');
+    Route::get('/dashbaord/penerimaan/{id}/store-to-rak', [PenerimaanController::class, 'storeToRak'])->name('penerimaan-store-to-rak');
+    Route::post('/dashboard/penerimaan/{id}/save-to-rak', [PenerimaanController::class, 'saveToRak'])->name('penerimaan-save-to-rak');    
 
 
     //pengeluaran routes
@@ -117,6 +125,10 @@ Route::middleware([App\Http\Middleware\KaryawanAuth::class, 'cek_role:Owner'])->
     Route::get('dashboard/pengeluaran/{id}/invoice', [PengeluaranController::class, 'generateInvoice'])->name('pengeluaran-invoice');
     Route::get('dashboard/pengeluaran/{id}/surat-jalan', [PengeluaranController::class, 'generateSuratJalan'])->name('pengeluaran-surat-jalan');
 
+    //Laporan Routes
+    Route::get('dashboard/laporan/kasir', [ReportController::class, 'order'])->name('laporan-order-page');
+    Route::get('dashboard/laporan/penerimaan', [ReportController::class, 'penerimaan'])->name('laporan-penerimaan-page');
+    Route::get('dashboard/laporan/pengeluaran', [ReportController::class, 'pengeluaran'])->name('laporan-pengeluaran-page');
 
 });
 
