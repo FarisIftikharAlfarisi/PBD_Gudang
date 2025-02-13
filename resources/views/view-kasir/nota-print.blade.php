@@ -1,6 +1,7 @@
 @extends('Partials.dashboard-template-main')
 
 @section('dashboard-content')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <div class="row">
         <div class="col-lg-8">
             <div class="card">
@@ -185,7 +186,7 @@
             });
     
             // Fungsi untuk fallback form submission dan buka tab baru untuk cetak nota
-            function fallbackFormSubmission() {
+            async function fallbackFormSubmission() {
                 const orderId = {{ $order->id }}; // Ganti dengan ID dari order
                 const metode = metodePembayaran.value;
                 
@@ -212,17 +213,36 @@
                 document.getElementById("uang_masuk_form").value = uangMasukValue;
                 document.getElementById("kembalian_form").value = kembalianValue;
     
-                // Submit form fallback
-                document.getElementById("fallbackForm").submit();
-    
-                // Setelah form disubmit, buka tab baru untuk cetak nota menggunakan ID
-                const printUrl = "{{ route('cetak-nota', ':id') }}".replace(':id', orderId);
-                window.open(printUrl, '_blank');
+                // Submit form fallback dan tunggu hingga selesai
+                const form = document.getElementById("fallbackForm");
+                const formData = new FormData(form);
                 
-                // Tambahkan refresh otomatis setelah 2 detik (opsional)
-                setTimeout(() => {
-                    location.reload(); // Refresh halaman secara otomatis
-                }, 2000); // 2000 ms = 2 detik
+                try {
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        // Setelah form berhasil disubmit, buka tab baru untuk cetak nota
+                        const printUrl = "{{ route('cetak-nota', ':id') }}".replace(':id', orderId);
+                        window.open(printUrl, '_blank');
+                        
+                        // Tambahkan refresh otomatis setelah 2 detik
+                        setTimeout(() => {
+                            location.reload();
+                        }, 2000);
+                    } else {
+                        alert('Terjadi kesalahan saat menyimpan data pembayaran.');
+                    }
+                } catch (error) {
+                    alert('Terjadi kesalahan saat menyimpan data pembayaran.');
+                    console.error('Error:', error);
+                }
             }
     
             // Event Listener untuk tombol bayar
