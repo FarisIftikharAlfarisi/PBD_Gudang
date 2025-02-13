@@ -22,6 +22,9 @@ use App\Http\Controllers\ReportController;
 //     }
 //     return redirect()->route('login-page');
 // });
+Route::get('/', function () {
+    return redirect('/login');
+});
 
 Route::get('/login', [AuthenticationController::class,'login_view'])->name('login-page');
 Route::post('/login-process', [AuthenticationController::class,'login'])->name('login-process');
