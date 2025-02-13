@@ -1,14 +1,12 @@
 <aside id="sidebar" class="sidebar">
   <ul class="sidebar-nav" id="sidebar-nav">
-
-    <!--Kasir-->
+    <!-- Kasir -->
     @if (Auth::guard('karyawan')->user()->Jabatan == 'Staff')
     <li class="nav-item">
         <a class="nav-link {{ Route::currentRouteName() == 'kasir-index-page' ? 'active' : 'collapsed' }}" href="{{ route('kasir-index-page') }}">
             <i class="bi bi-cart4"></i><span>Pemesanan</span>
         </a>
     </li>
-
     {{-- Barang --}}
     <li class="nav-item">
         <a class="nav-link {{ Route::currentRouteName() == 'barang-index-page' ? 'active' : 'collapsed' }}" href="{{ route('barang-index-page') }}">
@@ -21,10 +19,11 @@
           </a>
     </li>
     @endif
-    <!--End Kasir-->
 
-    @if(Auth::guard('karyawan')->user()->Jabatan == 'Owner') <!--Hak akses Owner : Analisis Penjualan -->
+    <!-- End Kasir -->
 
+    <!-- Owner -->
+    @if(Auth::guard('karyawan')->user()->Jabatan == 'Owner')
     <!-- Dashboard -->
     <li class="nav-item">
         <a class="nav-link {{ Route::currentRouteName() == 'analisis' ? 'active' : 'collapsed' }}" href="{{ route('analisis') }}">
@@ -32,7 +31,6 @@
             <span>Dashboard</span>
         </a>
     </li>
-
 
     <li class="nav-item">
       <a class="nav-link {{ in_array(Route::currentRouteName(), ['laporan-kasir', 'laporan-pengeluaran', 'laporan-penerimaan']) ? '' : 'collapsed' }}" 
@@ -52,7 +50,6 @@
                   <i class="bi bi-circle"></i><span>Laporan Kasir</span>
               </a>
           </li>
-
           <!-- Submenu Laporan Pengeluaran -->
           <li class="nav-item">
               <a class="nav-link {{ Route::currentRouteName() == 'laporan-pengeluaran-page' ? 'active' : '' }}" 
@@ -60,7 +57,6 @@
                   <i class="bi bi-circle"></i><span>Laporan Pengeluaran</span>
               </a>
           </li>
-
           <!-- Submenu Laporan Penerimaan -->
           <li class="nav-item">
               <a class="nav-link {{ Route::currentRouteName() == 'laporan-penerimaan-page' ? 'active' : '' }}" 
@@ -69,17 +65,14 @@
               </a>
           </li>
       </ul>
-  </li>
-
+    </li>
     <!-- Barang -->
-
     <li class="nav-item">
         <a class="nav-link {{ in_array(Route::currentRouteName(), ['supplier-index-page', 'supplier-create-page']) ? 'active' : 'collapsed' }}" href="{{ route('supplier-index-page') }}">
           <i class="bi bi-person-lines-fill"></i>
           <span>Supplier</span>
         </a>
       </li>
-
     <!-- Karyawan -->
     <li class="nav-item">
       <a class="nav-link {{ in_array(Route::currentRouteName(), ['karyawan-index-page', 'karyawan-create-page']) ? 'active' : 'collapsed' }}" href="{{ route('karyawan-index-page') }}">
@@ -89,7 +82,7 @@
     </li>
     @endif
 
-     {{-- owner & manager --}}
+    <!-- Owner & Manager -->
     @if (Auth::guard('karyawan')->user()->Jabatan == 'Owner' || Auth::guard('karyawan')->user()->Jabatan == 'Manager')
      <!-- Barang -->
      <li class="nav-item">
@@ -109,23 +102,19 @@
           </li>
         </ul>
       </li>
-
     <!-- Pengeluaran -->
     <li class="nav-item">
         <a class="nav-link {{ Route::currentRouteName() == 'pengeluaran-index-page' ? 'active' : 'collapsed' }}" href="{{ route('pengeluaran-index-page') }}">
           <i class="bi bi-box-seam"></i><span>Pengeluaran</span>
         </a>
       </li>
-    @endif
-
-     <!-- Penerimaan -->
-     <li class="nav-item">
+    <!-- Penerimaan -->
+    <li class="nav-item">
         <a class="nav-link {{ Route::currentRouteName() == 'penerimaan-index-page' ? 'active' : 'collapsed' }}" href="{{ route('penerimaan-index-page') }}">
           <i class="bi bi-truck"></i><span>Penerimaan</span>
         </a>
       </li>
-
-      <!-- Penyimpanan -->
+    <!-- Penyimpanan -->
     <li class="nav-item">
         <a class="nav-link {{ in_array(Route::currentRouteName(), ['gudang-index-page', 'gudang-create-page','rak-index-page', 'rak-create-page']) ? '' : 'collapsed' }}" data-bs-target="#components-nav-penyimpanan" data-bs-toggle="collapse" href="#">
           <i class="bi bi-menu-button-wide"></i><span>Penyimpanan</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -143,9 +132,7 @@
           </li>
         </ul>
       </li>
-
-
-    {{-- end owner & Manager --}}
-
+    @endif
+    <!-- End Owner & Manager -->
   </ul>
 </aside>
