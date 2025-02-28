@@ -29,6 +29,10 @@ class KaryawanController extends Controller
         return view('view-karyawan.create');
     }
 
+    public function tambahKaryawan(Request $request){
+        dd($request->all());
+    }
+
     // Menyimpan karyawan baru
     public function store(Request $request)
     {

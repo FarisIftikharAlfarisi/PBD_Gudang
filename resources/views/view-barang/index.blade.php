@@ -14,7 +14,7 @@
 </div>
 <div class="card">
     <div class="card-body">
-        <h5 class="card-title">Daftar Barang</h5>
+    <h5 class="card-title">Daftar Barang</h5>
         <table class="table datatable">
             <thead>
               <tr>

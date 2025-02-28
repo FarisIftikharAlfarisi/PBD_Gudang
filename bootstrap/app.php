@@ -24,13 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\KaryawanAuth::class,
-            \App\Http\Middleware\CheckJabatan::class,
         ]);
-
-        // Alias untuk penggunaan middleware di route
-        $middleware->alias(['karyawan_auth' => App\Http\Middleware\KaryawanAuth::class]);
-        $middleware->alias(['cek_role' => App\Http\Middleware\CheckJabatan::class]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

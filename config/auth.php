@@ -72,6 +72,11 @@ return [
         'karyawans' => [
             'driver' => 'eloquent',
             'model' => App\Models\Karyawan::class,
+        ],
+
+        'karyawans' => [
+            'driver' => 'database',
+            'table' => 'karyawans'
         ]
 
         // 'users' => [

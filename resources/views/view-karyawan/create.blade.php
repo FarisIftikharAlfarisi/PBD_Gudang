@@ -20,13 +20,12 @@
                     <h5 class="card-title">Form Tambah Karyawan</h5>
 
                     <!-- Form Tambah Karyawan -->
-                    <form method="POST" action="{{ route('karyawan-store-process') }}">
+                    <form method="POST" action="/dashboard/karyawan/create-process">
                         @csrf
-
                         <div class="row mb-3">
                             <label for="Nomor_karyawan" class="col-sm-3 col-form-label">Nomor Karyawan</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control @error('Nomor_karyawan') is-invalid @enderror" id="Nomor_karyawan" name="Nomor_karyawan" value="{{ old('Nomor_karyawan') }}" required>
+                                <input type="text" class="form-control @error('Nomor_karyawan') is-invalid @enderror" id="Nomor_karyawan" name="Nomor_karyawan" required>
                                 @error('Nomor_karyawan')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -36,7 +35,7 @@
                         <div class="row mb-3">
                             <label for="Nama_Karyawan" class="col-sm-3 col-form-label">Nama Karyawan</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control @error('Nama_Karyawan') is-invalid @enderror" id="Nama_Karyawan" name="Nama_Karyawan" value="{{ old('Nama_Karyawan') }}" required>
+                                <input type="text" class="form-control @error('Nama_Karyawan') is-invalid @enderror" id="Nama_Karyawan" name="Nama_Karyawan" required>
                                 @error('Nama_Karyawan')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -46,7 +45,7 @@
                         <div class="row mb-3">
                             <label for="email" class="col-sm-3 col-form-label">Email</label>
                             <div class="col-sm-9">
-                                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" required>
+                                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" required>
                                 @error('email')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -66,7 +65,7 @@
                         <div class="row mb-3">
                             <label for="Alamat" class="col-sm-3 col-form-label">Alamat</label>
                             <div class="col-sm-9">
-                                <textarea class="form-control @error('Alamat') is-invalid @enderror" id="Alamat" name="Alamat" rows="3" required>{{ old('Alamat') }}</textarea>
+                                <textarea class="form-control @error('Alamat') is-invalid @enderror" id="Alamat" name="Alamat" rows="3" required></textarea>
                                 @error('Alamat')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -76,7 +75,7 @@
                         <div class="row mb-3">
                             <label for="Nomor_Telepon" class="col-sm-3 col-form-label">Nomor Telepon</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control @error('Nomor_Telepon') is-invalid @enderror" id="Nomor_Telepon" name="Nomor_Telepon" value="{{ old('Nomor_Telepon') }}" required>
+                                <input type="text" class="form-control @error('Nomor_Telepon') is-invalid @enderror" id="Nomor_Telepon" name="Nomor_Telepon" required>
                                 @error('Nomor_Telepon')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -86,17 +85,15 @@
                         <div class="row mb-3">
                             <label for="Jabatan" class="col-sm-3 col-form-label">Jabatan</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control @error('Jabatan') is-invalid @enderror" id="Jabatan" name="Jabatan" value="{{ old('Jabatan') }}" required>
+                                <input type="text" class="form-control @error('Jabatan') is-invalid @enderror" id="Jabatan" name="Jabatan" required>
                                 @error('Jabatan')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
 
-                        <div class="text-center">
                             <button type="submit" class="btn btn-primary">Simpan</button>
                             <a href="{{ route('karyawan-index-page') }}" class="btn btn-secondary">Batal</a>
-                        </div>
                     </form><!-- End Form Tambah Karyawan -->
 
                 </div>

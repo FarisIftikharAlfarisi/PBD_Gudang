@@ -123,4 +123,15 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |
+    |--------------------------------------------------------------------------
+    | MODEL & API KEY for LLMs
+    |--------------------------------------------------------------------------
+    | model yang digunakan untuk konfigurasi ke Groq menggunakan groq-sdk dari
+    | javascript, dan nama model yang akan digunakan yang dimiliki oleh groq
+    |
+    */
+    'LLM_API_KEY' => env('LLM_API_KEY'),
+    'LLM_MODEL' => env('LLM_MODEL'),
 ];

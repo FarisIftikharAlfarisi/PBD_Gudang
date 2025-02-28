@@ -33,6 +33,13 @@
         </a>
     </li>
 
+    {{-- <li class="nav-item">
+        <a class="nav-link {{ Route::currentRouteName() == 'tanya-gpt' ? 'active' : 'collapsed' }}" href="{{ route('tanya-gpt') }}">
+            <i class="bi bi-slack"></i>
+            <span>JadiGPT</span>
+        </a>
+    </li> --}}
+
       <!-- Supplier -->
     <li class="nav-item">
         <a class="nav-link {{ in_array(Route::currentRouteName(), ['supplier-index-page', 'supplier-create-page']) ? 'active' : 'collapsed' }}" href="{{ route('supplier-index-page') }}">

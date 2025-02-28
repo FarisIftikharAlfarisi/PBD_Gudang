@@ -3,6 +3,7 @@
 use App\Http\Controllers\AnalyticsController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\SupplierController;
@@ -56,6 +57,12 @@ Route::middleware([App\Http\Middleware\KaryawanAuth::class, 'cek_role:Owner'])->
 
     Route::get('/dashboard', [AnalyticsController::class,'analytics'])->name('analisis');
 
+    // jadi gpt route
+    Route::get('/dashboard/analisis/JadiGPT',[ChatController::class,'chatpanel'])->name('tanya-gpt');
+    Route::post('/chat/send', [ChatController::class, 'sendMessage'])->name('chat.send');
+
+    //end route jadigpt
+
     Route::get('/dashboard/barang', [BarangController::class,'index'])->name('barang-index-page');
     Route::get('/dashboard/barang/barang-baru', [BarangController::class,'create'])->name('barang-create-page');
     Route::post('/dashboard/barang/create-process', [BarangController::class,'store'])->name('barang-store-process');
@@ -72,7 +79,7 @@ Route::middleware([App\Http\Middleware\KaryawanAuth::class, 'cek_role:Owner'])->
     //karyawan routes
     Route::get('/dashboard/karyawan', [KaryawanController::class,'index'])->name('karyawan-index-page');
     Route::get('/dashboard/karyawan/karyawan-baru', [KaryawanController::class,'create'])->name('karyawan-create-page');
-    Route::post('/dashboard/karyawan/create-process', [KaryawanController::class,'store'])->name('karyawan-store-process');
+    Route::post('/dashboard/karyawan/create-process', [KaryawanController::class,'tambahKaryawan'])->name('karyawan-store-process');
     Route::put('/dashboard/karyawan/update/{id}', [KaryawanController::class, 'update'])->name('karyawan-update');
     Route::delete('/dashboard/karyawan/delete/{id}', [KaryawanController::class,'destroy'])->name('karyawan-delete');
 
